@@ -1,0 +1,7 @@
+.vs
+.vscode
+*/bin/Debug
+*/bin/Release
+*/obj
+*/Images
+*/*/App.config
