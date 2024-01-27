@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ProjectMyShop.Config;
 using System.Configuration;
+using ProjectMyShop.SBUS;
 
 namespace ProjectMyShop.Views
 {
@@ -31,7 +32,7 @@ namespace ProjectMyShop.Views
 
         List<Category>? _categories = null;        
         CategoryViewModel CategoryViewModel = new CategoryViewModel();
-        private CategoryBUS _categoryBUS = new CategoryBUS();
+        private SCategoryBUS _categoryBUS = new SCategoryBUS();
         
 
         public ManageCategory()
@@ -39,7 +40,7 @@ namespace ProjectMyShop.Views
 
 
             InitializeComponent();
-            CategoryBUS catBUS = new CategoryBUS();
+            SCategoryBUS catBUS = new SCategoryBUS();
             CategoryViewModel.Categories = new BindingList<Category>(catBUS.getCategoryList());
 
 

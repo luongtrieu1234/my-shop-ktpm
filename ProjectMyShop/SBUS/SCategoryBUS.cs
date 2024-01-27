@@ -26,7 +26,7 @@ namespace ProjectMyShop.SBUS
 
         public Category GetCategoryById(int id)
         {
-            Category result = (Category)_categoryDAO.GetByID(id);
+            Category result= _categoryDAO.ExecuteMethod("GetByID",new {ID= id});
 
             return result;
         }
@@ -34,7 +34,7 @@ namespace ProjectMyShop.SBUS
         public List<Category> getCategoryList()
         {
             Console.WriteLine("getCategoryList:");
-            List<Data> datas = _categoryDAO.GetAll();
+            List<Data> datas = _categoryDAO.ExecuteMethod("GetAll", null);
             List<Category> result = new List<Category>();
             foreach (Data data in datas)
             {
@@ -66,7 +66,7 @@ namespace ProjectMyShop.SBUS
         public void updateCategory(int ID, Category category)
         {
 
-            _categoryDAO.Update(ID, category);
+            _categoryDAO.ExecuteMethod("Update", new { ID = ID, data = category });
 
         }
     }

@@ -24,9 +24,8 @@ namespace ProjectMyShop.SDAO
             return new SOrderDAO();
         }
 
-        public override bool ExecuteMethod(string methodName, string inputParams, ref string outputParams)
+        public override dynamic ExecuteMethod(string methodName, object inputParams)
         {
-            outputParams = String.Empty;
             return false;
         }
 

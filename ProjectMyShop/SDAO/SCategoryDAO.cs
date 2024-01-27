@@ -222,9 +222,25 @@ namespace ProjectMyShop.SDAO
             return ID;
         }
 
-        public override bool ExecuteMethod(string methodName, string inputParams, ref string outputParams)
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
-            outputParams = String.Empty;
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    return GetObjectType();
+                case "Clone":
+                    return Clone();
+                case "GetByID":
+                    return GetByID(inputParams.ID);
+                case "GetAll":
+                    return GetAll();
+                case "Add":
+                    return Add(inputParams);
+                case "Update":
+                    Update(inputParams.ID, inputParams.data);
+                    return true;
+
+            }
             return false;
         }
     }

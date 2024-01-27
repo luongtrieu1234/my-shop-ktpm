@@ -62,9 +62,8 @@ namespace ProjectMyShop
             return new SObject();
         }
 
-        public virtual bool ExecuteMethod(string methodName, string inputParams, ref string outputParams)
+        public virtual dynamic ExecuteMethod(string methodName, dynamic inputParams )
         {
-            outputParams = String.Empty;
             return false;
         }
 

@@ -32,12 +32,11 @@ namespace ProjectMyShop
             return value;
         }
 
-        public static bool ExecuteRemoteMethod(int ID, string methodName, string inputParams, ref string outputParams)
+        public static dynamic ExecuteRemoteMethod(int ID, string methodName, string inputParams)
         {
             SObject o = FindObjectByID(ID);
             if(o == null) return false;
-            o.ExecuteMethod(methodName, inputParams, ref outputParams);
-            return true;
+            return o.ExecuteMethod(methodName, inputParams);
         }
         public static int Register(SObject sObject)
         {
