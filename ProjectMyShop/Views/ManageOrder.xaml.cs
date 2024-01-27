@@ -1,6 +1,7 @@
 ﻿using ProjectMyShop.BUS;
 using ProjectMyShop.Config;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using ProjectMyShop.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace ProjectMyShop.Views
     /// </summary>
     public partial class ManageOrder : Page
     {
-        private OrderBUS _orderBUS;
+        private SOrderBUS _orderBUS;
 
         OrderViewModel _vm;
         DateTime FromDate;
@@ -38,7 +39,7 @@ namespace ProjectMyShop.Views
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             _vm = new OrderViewModel();
-            _orderBUS = new OrderBUS();
+            _orderBUS = new SOrderBUS();
 
             FromDate = DateTime.Parse("1/1/1970");
             ToDate = DateTime.MaxValue;

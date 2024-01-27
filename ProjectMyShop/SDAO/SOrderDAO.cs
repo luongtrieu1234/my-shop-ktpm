@@ -1,11 +1,13 @@
 ﻿using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
 using ProjectMyShop.Helpers;
+using ProjectMyShop.SBUS;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,17 +20,10 @@ namespace ProjectMyShop.SDAO
         {
             return "SOrderDAO";
         }
-
         public override SObject Clone()
         {
             return new SOrderDAO();
         }
-
-        public override dynamic ExecuteMethod(string methodName, object inputParams)
-        {
-            return false;
-        }
-
         public override void Add(Data data)
         {
             Order order = (Order)data;
@@ -52,7 +47,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Inserted {order.ID} Fail: " + ex.Message);
             }
         }
-        
         public override void Update(int orderID, Data data)
         {
             Order order = (Order)data;
@@ -78,7 +72,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Updated {orderID} Fail: " + ex.Message);
             }
         }
-
         public override void Remove(int orderID)
         {
             var sql = "delete from Orders where ID = @OrderID";
@@ -96,7 +89,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Deleted {orderID} Fail: " + ex.Message);
             }
         }
-
         public override List<Data> GetAll()
         {
             string sql = "select * from Orders" +
@@ -105,7 +97,6 @@ namespace ProjectMyShop.SDAO
             var command = new SqlCommand(sql, _connection);
             return new List<Data>(Select(command));
         }
-
         public override List<Data> GetObjects(int offset, int size)
         {
             string sql = "select * from Orders " +
@@ -120,7 +111,6 @@ namespace ProjectMyShop.SDAO
 
             return new List<Data>(Select(command));
         }
-
         public void AddDetailOrder(DetailOrder detail)
         {
             var sql = "insert into DetailOrder(OrderID, ProductID, Quantity) " +
@@ -180,7 +170,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Deleted {detail.OrderID} Fail: " + ex.Message);
             }
         }
-
         List<DetailOrder> GetDetailOrder(int orderID)
         {
             string sql = "select * from DetailOrder WHERE OrderID = @orderID";
@@ -190,31 +179,60 @@ namespace ProjectMyShop.SDAO
             
             var reader = command.ExecuteReader();
 
-            var result = new List<DetailOrder>();
+            //var result = new List<DetailOrder>();
 
-            var _productBUS = new ProductBUS();
-            while (reader.Read())
+            //var _productBUS = new SProductBUS();
+            //while (reader.Read())
+            //{
+            //    var OrderID = reader.GetInt32("OrderID");
+            //    var ProductID = reader.GetInt32("ProductID");
+            //    var Quantity = reader.GetInt32("Quantity");
+
+            //    var Product = _productBUS.getProductByID(ProductID);
+
+            //    DetailOrder _order = new DetailOrder()
+            //    {
+            //        OrderID = OrderID,
+            //        Product = Product,
+            //        Quantity = Quantity
+            //    };
+
+            //    result.Add(_order);
+            //}
+
+            //reader.Close();
+            //return result;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+            Debug.WriteLine("reader datatable ");
+            foreach (DataRow row in dataTable.Rows)
             {
-                var OrderID = reader.GetInt32("OrderID");
-                var ProductID = reader.GetInt32("ProductID");
-                var Quantity = reader.GetInt32("Quantity");
-
-                var Product = _productBUS.getProductByID(ProductID);
-
-                DetailOrder _order = new DetailOrder()
+                foreach (DataColumn col in dataTable.Columns)
                 {
-                    OrderID = OrderID,
-                    Product = Product,
-                    Quantity = Quantity
-                };
-
-                result.Add(_order);
+                    string columnName = col.ColumnName;
+                    Debug.WriteLine(columnName);
+                    Debug.WriteLine(row[columnName]);
+                }
             }
 
-            reader.Close();
+            // Use the helper to convert DataTable to List<DetailOrder>
+            var result = DataMappingHelper.MappingDataTableToObjectList<DetailOrder>(dataTable);
+            //var categoryNames = result.Select(c => c.ProductID).ToList();
+            //Debug.WriteLine("asdsadsada " + string.Join(", ", categoryNames));
+
+            var _productBUS = new SProductBUS();
+            foreach (var detailOrder in result)
+            {
+                Debug.WriteLine("ad " + detailOrder.ProductID.ToString());
+                var productID = detailOrder.ProductID;
+                var product = _productBUS.getProductByID(productID);
+                detailOrder.Product = product;
+                //Debug.WriteLine(product.GetType());
+            }
+
             return result;
         }
-
         Order ORMapping(SqlDataReader reader)
         {
             var ID = (int)reader["ID"];
@@ -235,7 +253,6 @@ namespace ProjectMyShop.SDAO
             };
             return order;
         }
-
         List<Order> Select(SqlCommand command)
         {
             var reader = command.ExecuteReader();
@@ -256,7 +273,6 @@ namespace ProjectMyShop.SDAO
 
             return result;
         } 
-
         internal List<Order> GetAllOrdersByDate(DateTime FromDate, DateTime ToDate)
         {
             string sql = "select * from Orders " +
@@ -268,7 +284,6 @@ namespace ProjectMyShop.SDAO
 
             return Select(command);
         }
-
         public List<Order> GetOrdersByDate(int offset, int size, DateTime fromDate, DateTime toDate)
         {
             string sql = "select * from Orders " +
@@ -286,7 +301,6 @@ namespace ProjectMyShop.SDAO
 
             return Select(command);
         }
-
         public int GetLastestInsertID()
         {
             string sql = "select ident_current('Orders')";
@@ -295,7 +309,6 @@ namespace ProjectMyShop.SDAO
             System.Diagnostics.Debug.WriteLine(resutl);
             return System.Convert.ToInt32(sqlCommand.ExecuteScalar());
         }
-
         public int CountOrders()
         {
             string sql = "select count(*) as c from Orders";
@@ -312,7 +325,6 @@ namespace ProjectMyShop.SDAO
             reader.Close();
             return result;
         }
-
         public int CountOrderByWeek()
         {
             string sql = "select count(*) as week from Orders where datediff(day, OrderDate, GETDATE()) < 7";
@@ -329,7 +341,6 @@ namespace ProjectMyShop.SDAO
             reader.Close();
             return result;
         }
-        
         public int CountOrderByMonth()
         {
             string sql = "select count(*) as month from Orders where datediff(day, OrderDate, GETDATE()) < 30";
@@ -345,6 +356,79 @@ namespace ProjectMyShop.SDAO
             }
             reader.Close();
             return result;
+        }
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
+        {
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    Debug.WriteLine("GetObjectType Order called");
+                    return GetObjectType();
+                case "Clone":
+                    Debug.WriteLine("Clone Order called");
+                    return Clone();
+                case "GetByID":
+                    Debug.WriteLine("GetByID Order called");
+                    return GetByID(inputParams.ID);
+                case "GetAll":
+                    Debug.WriteLine("GetAll Order called");
+                    return GetAll();
+                case "Add":
+                    Debug.WriteLine("Add Order called");
+                    Add(inputParams.data);
+                    return true;
+                case "Update":
+                    Debug.WriteLine("Update Order called");
+                    Update(inputParams.ID, inputParams.data);
+                    return true;
+                case "Remove":
+                    Debug.WriteLine("Remove Order called");
+                    return Remove(inputParams.ID);
+                case "GetObjects":
+                    Debug.WriteLine("GetObjects Order called");
+                    return GetObjects(inputParams.offset, inputParams.size);
+                case "AddDetailOrder":
+                    Debug.WriteLine("AddDetailOrder Order called");
+                    AddDetailOrder(inputParams.detail);
+                    return true;
+                case "UpdateDetailOrder":
+                    Debug.WriteLine("UpdateDetailOrder Order called");
+                    UpdateDetailOrder(inputParams.oldProductID, inputParams.detail);
+                    return true;
+                case "DeleteDetailOrder":
+                    Debug.WriteLine("DeleteDetailOrder Order called");
+                    DeleteDetailOrder(inputParams.detail);
+                    return true;
+                case "GetDetailOrder":
+                    Debug.WriteLine("GetDetailOrder Order called");
+                    return GetDetailOrder(inputParams.orderID);
+                case "ORMapping":
+                    Debug.WriteLine("ORMapping Order called");
+                    return ORMapping(inputParams.reader);
+                case "Select":
+                    Debug.WriteLine("Select Order called");
+                    return Select(inputParams.command);
+                case "GetAllOrdersByDate":
+                    Debug.WriteLine("GetAllOrdersByDate Order called");
+                    return GetAllOrdersByDate(inputParams.fromDate, inputParams.toDate);
+                case "GetOrdersByDate":
+                    Debug.WriteLine("GetOrdersByDate Order called");
+                    return GetOrdersByDate(inputParams.offset, inputParams.size, inputParams.fromDate, inputParams.toDate);
+                case "GetLastestInsertID":
+                    Debug.WriteLine("GetLastestInsertID Order called");
+                    return GetLastestInsertID();
+                case "CountOrders":
+                    Debug.WriteLine("CountOrders Order called");
+                    return CountOrders();
+                case "CountOrderByWeek":
+                    Debug.WriteLine("CountOrderByWeek Order called");
+                    return CountOrderByWeek();
+                case "CountOrderByMonth":
+                    Debug.WriteLine("CountOrderByMonth Order called");
+                    return CountOrderByMonth();
+
+            }
+            return false;
         }
     }
 }

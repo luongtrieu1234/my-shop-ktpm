@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using ProjectMyShop.BUS;
 using ProjectMyShop.Config;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using ProjectMyShop.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace ProjectMyShop.Views
         {
             InitializeComponent();
         }
-        private ProductBUS _ProductBus = new ProductBUS();
+        private SProductBUS _ProductBus = new SProductBUS();
         ProductViewModel _vm = new ProductViewModel();
         List<Category>? _categories = null;
         int _totalItems = 0;
@@ -90,8 +91,8 @@ namespace ProjectMyShop.Views
             nextButton.IsEnabled = false;
             _currentPage = 0;
             _totalPages = 0;
-            var catBUS = new CategoryBUS();
-            var ProductBUS = new ProductBUS();
+            var catBUS = new SCategoryBUS();
+            var ProductBUS = new SProductBUS();
             _categories = catBUS.getCategoryList();
             categoriesListView.ItemsSource = _categories;
             foreach (var category in _categories)
@@ -274,8 +275,8 @@ namespace ProjectMyShop.Views
                 string filename = screen.FileName;
 
                 var workbook = new Workbook(filename);
-                var _ProductBUS = new ProductBUS();
-                var _cateBUS = new CategoryBUS();
+                var _ProductBUS = new SProductBUS();
+                var _cateBUS = new SCategoryBUS();
 
                 var tabs = workbook.Worksheets;
                 // In ra các tab để d ebug
