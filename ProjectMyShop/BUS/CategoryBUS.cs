@@ -1,5 +1,6 @@
 ﻿using ProjectMyShop.DAO;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,11 +13,11 @@ namespace ProjectMyShop.BUS
     internal class CategoryBUS
     {
 
-        private CategoryDAO _categoryDAO;
+        private SCategoryDAO _categoryDAO;
 
         public CategoryBUS()
         {
-            _categoryDAO = new CategoryDAO();
+            _categoryDAO = new SCategoryDAO();
             if (_categoryDAO.CanConnect())
             {
                 _categoryDAO.Connect();

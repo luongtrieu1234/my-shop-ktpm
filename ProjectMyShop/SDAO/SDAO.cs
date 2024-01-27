@@ -1,22 +1,20 @@
 ﻿using ProjectMyShop.Config;
-using ProjectMyShop.DTO;
+using ProjectMyShop.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ProjectMyShop.Helpers
+namespace ProjectMyShop.SDAO
 {
-    public class SqlDataAccess
+    public class SDAO : SObject
     {
         public SqlConnection _connection;
         private string? username;
         private string password;
 
-        public SqlDataAccess() => ResetConnection();
+        public SDAO() => ResetConnection();
 
         public void ResetConnection()
         {
@@ -31,7 +29,7 @@ namespace ProjectMyShop.Helpers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message); 
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
 
 
@@ -52,7 +50,7 @@ namespace ProjectMyShop.Helpers
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message); 
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 result = false;
             }
             return result;
