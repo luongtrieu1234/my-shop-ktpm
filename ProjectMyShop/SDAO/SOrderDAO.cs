@@ -12,8 +12,176 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.SDAO
 {
-    internal class SOrderDAO: SDAO
+    public class SOrderDAO: SDAO
     {
+        public override string GetObjectType()
+        {
+            return "SOrderDAO";
+        }
+
+        public override SObject Clone()
+        {
+            return new SOrderDAO();
+        }
+
+        public override bool ExecuteMethod(string methodName, string inputParams, ref string outputParams)
+        {
+            outputParams = String.Empty;
+            return false;
+        }
+
+        public override void Add(Data data)
+        {
+            Order order = (Order)data;
+            // ID Auto Increment
+            var sql = "insert into Orders(CustomerName, OrderDate, Status, Address) " +
+                "values (@CustomerName, @OrderDate, @Status, @Address)"; // Them VoucherID sau
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@CustomerName", order.CustomerName);
+            sqlCommand.Parameters.AddWithValue("@OrderDate", DateTime.Parse(order.OrderDate.ToString()));
+            sqlCommand.Parameters.AddWithValue("@Status", order.Status);
+            sqlCommand.Parameters.AddWithValue("@Address", order.Address);
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Inserted {order.ID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Inserted {order.ID} Fail: " + ex.Message);
+            }
+        }
+        
+        public override void Update(int orderID, Data data)
+        {
+            Order order = (Order)data;
+            var sql = "update Orders " +
+                "SET CustomerName = @CustomerName, OrderDate = @OrderDate, Status =  @Status, Address = @Address " +
+                "where ID = @OrderID";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@OrderID", orderID);
+            sqlCommand.Parameters.AddWithValue("@CustomerName", order.CustomerName);
+            sqlCommand.Parameters.AddWithValue("@OrderDate", DateTime.Parse(order.OrderDate.ToString()));
+            sqlCommand.Parameters.AddWithValue("@Status", order.Status);
+            sqlCommand.Parameters.AddWithValue("@Address", order.Address);
+
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Updated {orderID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Updated {orderID} Fail: " + ex.Message);
+            }
+        }
+
+        public override void Remove(int orderID)
+        {
+            var sql = "delete from Orders where ID = @OrderID";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@OrderID", orderID);
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Deleted {orderID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Deleted {orderID} Fail: " + ex.Message);
+            }
+        }
+
+        public override List<Data> GetAll()
+        {
+            string sql = "select * from Orders" +
+                "Order by OrderDate DESC, ID ASC ";
+
+            var command = new SqlCommand(sql, _connection);
+            return new List<Data>(Select(command));
+        }
+
+        public override List<Data> GetObjects(int offset, int size)
+        {
+            string sql = "select * from Orders " +
+                "Order by OrderDate DESC, ID ASC " +
+                "offset @Off rows " +
+                "fetch first @Size rows only";
+
+            var command = new SqlCommand(sql, _connection);
+
+            command.Parameters.AddWithValue("@Off", offset);
+            command.Parameters.AddWithValue("@Size", size);
+
+            return new List<Data>(Select(command));
+        }
+
+        public void AddDetailOrder(DetailOrder detail)
+        {
+            var sql = "insert into DetailOrder(OrderID, ProductID, Quantity) " +
+                "values (@OrderID, @ProductID, @Quantity)";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@OrderID", detail.OrderID);
+            sqlCommand.Parameters.AddWithValue("@ProductID", detail.Product.ID);
+            sqlCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Inserted {detail.OrderID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Inserted {detail.OrderID} Fail: " + ex.Message);
+            }
+        }
+        public void UpdateDetailOrder(int oldProductID, DetailOrder detail)
+        {
+            var sql = "update DetailOrder set Quantity = @Quantity, ProductID = @ProductID where OrderID = @OrderID and ProductID = @oldProductID";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@OrderID", detail.OrderID);
+            sqlCommand.Parameters.AddWithValue("@ProductID", detail.Product.ID);
+            sqlCommand.Parameters.AddWithValue("@oldProductID", oldProductID);
+            sqlCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Updated {detail.OrderID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Updated {detail.OrderID} Fail: " + ex.Message);
+            }
+        }
+        public void DeleteDetailOrder(DetailOrder detail)
+        {
+            var sql = "delete from DetailOrder where OrderID = @OrderID and ProductID = @ProductID and Quantity = @Quantity";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@OrderID", detail.OrderID);
+            sqlCommand.Parameters.AddWithValue("@ProductID", detail.Product.ID);
+            sqlCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Deleted {detail.OrderID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Deleted {detail.OrderID} Fail: " + ex.Message);
+            }
+        }
+
         List<DetailOrder> GetDetailOrder(int orderID)
         {
             string sql = "select * from DetailOrder WHERE OrderID = @orderID";
@@ -90,30 +258,6 @@ namespace ProjectMyShop.SDAO
             return result;
         } 
 
-        public List<Order> GetOrders(int offset, int size)
-        {
-            string sql = "select * from Orders " +
-                "Order by OrderDate DESC, ID ASC " +
-                "offset @Off rows " +
-                "fetch first @Size rows only";
-
-            var command = new SqlCommand(sql, _connection);
-
-            command.Parameters.AddWithValue("@Off", offset);
-            command.Parameters.AddWithValue("@Size", size);
-
-            return Select(command);
-        }
-
-        public List<Order> GetAllOrders()
-        {
-            string sql = "select * from Orders" +
-                "Order by OrderDate DESC, ID ASC ";
-
-            var command = new SqlCommand(sql, _connection);
-            return Select(command);
-        }
-
         internal List<Order> GetAllOrdersByDate(DateTime FromDate, DateTime ToDate)
         {
             string sql = "select * from Orders " +
@@ -125,7 +269,6 @@ namespace ProjectMyShop.SDAO
 
             return Select(command);
         }
-
 
         public List<Order> GetOrdersByDate(int offset, int size, DateTime fromDate, DateTime toDate)
         {
@@ -145,89 +288,6 @@ namespace ProjectMyShop.SDAO
             return Select(command);
         }
 
-        public void AddDetailOrder(DetailOrder detail)
-        {
-            var sql = "insert into DetailOrder(OrderID, ProductID, Quantity) " +
-                "values (@OrderID, @ProductID, @Quantity)";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@OrderID", detail.OrderID);
-            sqlCommand.Parameters.AddWithValue("@ProductID", detail.Product.ID);
-            sqlCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Inserted {detail.OrderID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Inserted {detail.OrderID} Fail: " + ex.Message);
-            }
-        }
-        public void UpdateDetailOrder(int oldProductID, DetailOrder detail)
-        {
-            var sql = "update DetailOrder set Quantity = @Quantity, ProductID = @ProductID where OrderID = @OrderID and ProductID = @oldProductID";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@OrderID", detail.OrderID);
-            sqlCommand.Parameters.AddWithValue("@ProductID", detail.Product.ID);
-            sqlCommand.Parameters.AddWithValue("@oldProductID", oldProductID);
-            sqlCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Updated {detail.OrderID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Updated {detail.OrderID} Fail: " + ex.Message);
-            }
-        }
-        public void DeleteDetailOrder(DetailOrder detail)
-        {
-            var sql = "delete from DetailOrder where OrderID = @OrderID and ProductID = @ProductID and Quantity = @Quantity";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@OrderID", detail.OrderID);
-            sqlCommand.Parameters.AddWithValue("@ProductID", detail.Product.ID);
-            sqlCommand.Parameters.AddWithValue("@Quantity", detail.Quantity);
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Deleted {detail.OrderID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Deleted {detail.OrderID} Fail: " + ex.Message);
-            }
-        }
-        
-        public void AddOrder(Order order)
-        {
-            // ID Auto Increment
-            var sql = "insert into Orders(CustomerName, OrderDate, Status, Address) " +
-                "values (@CustomerName, @OrderDate, @Status, @Address)"; // Them VoucherID sau
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@CustomerName", order.CustomerName);
-            sqlCommand.Parameters.AddWithValue("@OrderDate", DateTime.Parse(order.OrderDate.ToString()));
-            sqlCommand.Parameters.AddWithValue("@Status", order.Status);
-            sqlCommand.Parameters.AddWithValue("@Address", order.Address);
-            
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Inserted {order.ID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Inserted {order.ID} Fail: " + ex.Message);
-            }
-        }
-
         public int GetLastestInsertID()
         {
             string sql = "select ident_current('Orders')";
@@ -235,48 +295,6 @@ namespace ProjectMyShop.SDAO
             var resutl = sqlCommand.ExecuteScalar();
             System.Diagnostics.Debug.WriteLine(resutl);
             return System.Convert.ToInt32(sqlCommand.ExecuteScalar());
-        }
-        public void UpdateOrder(int orderID,Order order)
-        {
-            var sql = "update Orders " +
-                "SET CustomerName = @CustomerName, OrderDate = @OrderDate, Status =  @Status, Address = @Address " +
-                "where ID = @OrderID";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@OrderID", orderID);
-            sqlCommand.Parameters.AddWithValue("@CustomerName", order.CustomerName);
-            sqlCommand.Parameters.AddWithValue("@OrderDate", DateTime.Parse(order.OrderDate.ToString()));
-            sqlCommand.Parameters.AddWithValue("@Status", order.Status);
-            sqlCommand.Parameters.AddWithValue("@Address", order.Address);
-
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Updated {orderID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Updated {orderID} Fail: " + ex.Message);
-            }
-        }
-
-        public void DeleteOrder(int orderID)
-        {
-            var sql = "delete from Orders where ID = @OrderID";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@OrderID", orderID);
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Deleted {orderID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Deleted {orderID} Fail: " + ex.Message);
-            }
         }
 
         public int CountOrders()
@@ -312,6 +330,7 @@ namespace ProjectMyShop.SDAO
             reader.Close();
             return result;
         }
+        
         public int CountOrderByMonth()
         {
             string sql = "select count(*) as month from Orders where datediff(day, OrderDate, GETDATE()) < 30";

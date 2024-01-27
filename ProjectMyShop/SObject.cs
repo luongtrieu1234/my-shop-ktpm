@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProjectMyShop.DTO;
 
 namespace ProjectMyShop
 {
@@ -51,7 +52,6 @@ namespace ProjectMyShop
                 Attributes[attributeName] = value;
             }
         }
-
         public virtual string GetObjectType()
         {
             return String.Empty;
@@ -68,30 +68,30 @@ namespace ProjectMyShop
             return false;
         }
 
-        public virtual Data GetByID()
+        public virtual Data GetByID(int id)
         {
             return new Data();
         }
-        public virtual Data GetAll()
+        public virtual List<Data> GetAll()
         {
-            return new Data();
+            return new List<Data>();
         }
-        public virtual Data GetObjects(int offset, int size)
+        public virtual List<Data> GetObjects(int offset, int size)
         {
-            return new Data();
+            return new List<Data>();
         }
-        public virtual Data Add()
+        public virtual void Add(Data data)
         {
-            return new Data();
         }
-        public virtual Data Remove()
+        public virtual void Remove(int ID)
         {
-            return new Data();
+           
         }
-        public virtual Data Update()
+        public virtual void Update(int ID, Data data)
         {
-            return new Data();
+            
         }
+
 
     }
 }

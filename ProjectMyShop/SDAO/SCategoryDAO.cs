@@ -15,7 +15,17 @@ namespace ProjectMyShop.SDAO
 {
     public class SCategoryDAO : SDAO
     {
-        public Category GetCategoryById(int id)
+        public override string GetObjectType()
+        {
+            return "SCategoryDAO";
+        }
+
+        public override SObject Clone()
+        {
+            return new SCategoryDAO();
+        }
+
+        public override Data GetByID(int id)
         {
             var sql = "select * from Category where ID=@CatId";
             var command = new SqlCommand(sql, _connection);
@@ -42,7 +52,7 @@ namespace ProjectMyShop.SDAO
             return result;
         }
 
-        public List<Category> getCategoryList()
+        public override List<Data> GetAll()
         {
             var sql = "select * from Category;";
 
@@ -83,10 +93,12 @@ namespace ProjectMyShop.SDAO
                 resultList.Add(category);
             }
             reader.Close();
-            return resultList;
+            return new List<Data>(resultList);
         }
-        public void AddCategory(Category cat)
+
+        public override void Add(Data data)
         {
+            Category cat = (Category)data;
             var sql = "";
             if(cat.Avatar != null)
             { 
@@ -124,34 +136,11 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Inserted {cat.ID} Fail: " + ex.Message);
             }
 
-            
-        }
-        public int GetLastestInsertID()
-        {
-            string sql = "select ident_current('Category')";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-            var resutl = sqlCommand.ExecuteScalar();
-            System.Diagnostics.Debug.WriteLine(resutl);
-            return System.Convert.ToInt32(sqlCommand.ExecuteScalar());
-        }
-        public int isExisted(Category cat)
-        {
-            string sql = "select ID from Category where CatName = @CatName";
-            SqlCommand command = new SqlCommand(sql, _connection);
-            command.Parameters.AddWithValue("@CatName", cat.CatName);
-
-            var reader = command.ExecuteReader();
-            int ID = 0;
-            while (reader.Read())
-            {
-                ID = (int)reader["ID"];
-            }
-            reader.Close();
-            return ID;
         }
 
-        public void updateCategory(int ID, Category category)
+        public override void Update(int ID, Data data)
         {
+            Category category = (Category)data;
             string sql;
             if (category.Avatar != null)
             {
@@ -188,7 +177,7 @@ namespace ProjectMyShop.SDAO
             }
         }
 
-        public void removeCategory(int ID)
+        public override void Remove(int ID)
         {
             string sql = "delete from Category where ID = @ID";
             SqlCommand sqlCommand = new SqlCommand(sql, _connection);
@@ -206,6 +195,37 @@ namespace ProjectMyShop.SDAO
             {
                 System.Diagnostics.Debug.WriteLine($"Deleted {ID} Fail: " + ex.Message);
             }
+        }
+        
+        public int GetLastestInsertID()
+        {
+            string sql = "select ident_current('Category')";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+            var resutl = sqlCommand.ExecuteScalar();
+            System.Diagnostics.Debug.WriteLine(resutl);
+            return System.Convert.ToInt32(sqlCommand.ExecuteScalar());
+        }
+       
+        public int isExisted(Category cat)
+        {
+            string sql = "select ID from Category where CatName = @CatName";
+            SqlCommand command = new SqlCommand(sql, _connection);
+            command.Parameters.AddWithValue("@CatName", cat.CatName);
+
+            var reader = command.ExecuteReader();
+            int ID = 0;
+            while (reader.Read())
+            {
+                ID = (int)reader["ID"];
+            }
+            reader.Close();
+            return ID;
+        }
+
+        public override bool ExecuteMethod(string methodName, string inputParams, ref string outputParams)
+        {
+            outputParams = String.Empty;
+            return false;
         }
     }
 }

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectMyShop
+namespace ProjectMyShop.DTO
 {
-    public class Data
+    public class Data:ICloneable
     {
         public static Dictionary<string, object> Attributes = new Dictionary<string, object>();
         public bool SetAttributeValue(string attributeName, object attributeValue)
@@ -45,9 +45,9 @@ namespace ProjectMyShop
                 Attributes[attributeName] = value;
             }
         }
-        public virtual Data Clone()
+        public object Clone()
         {
-            return new Data();
+            return MemberwiseClone();
         }
     }
 }

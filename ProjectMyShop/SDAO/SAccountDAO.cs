@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.SDAO
 {
-     public class SAccountDAO : SqlDataAccess
+     public class SAccountDAO :SDAO
     {
     }
 }

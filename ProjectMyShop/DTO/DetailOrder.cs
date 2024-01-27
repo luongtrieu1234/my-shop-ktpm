@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.DTO
 {
-    public class DetailOrder : ICloneable
+    public class DetailOrder : Data
     {
         public int OrderID { get; set; }
         public Product Product { get; set; }

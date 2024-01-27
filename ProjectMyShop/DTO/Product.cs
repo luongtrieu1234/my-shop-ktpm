@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace ProjectMyShop.DTO
 {
-    public class Product: ICloneable
+    public class Product: Data
     {
         public int ID { get; set; }
         public string ProductName { get; set; } = "";

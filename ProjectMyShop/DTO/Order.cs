@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.DTO
 {
-    public class Order
+    public class Order:Data
     {
 
         public enum OrderStatusEnum

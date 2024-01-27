@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace ProjectMyShop.DTO
 {
-    public class Category: ICloneable
+    public class Category: Data
     {
         public int ID { get; set; }
         public string? CatName { get; set; }

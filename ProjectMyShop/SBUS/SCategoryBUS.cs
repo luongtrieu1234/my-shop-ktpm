@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectMyShop.BUS
+namespace ProjectMyShop.SBUS
 {
-    internal class CategoryBUS
+    internal class SCategoryBUS
     {
 
         private SCategoryDAO _categoryDAO;
 
-        public CategoryBUS()
+        public SCategoryBUS()
         {
             _categoryDAO = new SCategoryDAO();
             if (_categoryDAO.CanConnect())

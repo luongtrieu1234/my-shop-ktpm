@@ -10,22 +10,23 @@ namespace ProjectMyShop.SDAO
 {
     internal class SProductDAO : SDAO
     {
-        public int getTotalProduct()
+        public override bool ExecuteMethod(string methodName, string inputParams, ref string outputParams)
         {
-            var sql = "select count(*) as total from Product";
-            var command = new SqlCommand(sql, _connection);
-            var reader = command.ExecuteReader();
-
-            int result = 0;
-            if (reader.Read())
-            {
-                result = (int)reader["total"];
-            }
-            reader.Close();
-            return result;
+            outputParams = String.Empty;
+            return false;
         }
 
-        public Product? getProductByID(int productID)
+        public override string GetObjectType()
+        {
+            return "SProductDAO";
+        }
+
+        public override SObject Clone()
+        {
+            return new SProductDAO();
+        }
+
+        public override Data GetByID(int productID)
         {
             var sql = "select * from Product WHERE ID = @productID";
             var command = new SqlCommand(sql, _connection);
@@ -76,6 +77,129 @@ namespace ProjectMyShop.SDAO
             }
             reader.Close();
             return product;
+        }
+        
+        public override void Add(Data data)
+        {
+            Product product = (Product)data;
+            // ID Auto Increment
+            var sql = "";
+            if (product.Avatar != null)
+            {
+                sql = "insert into Product(ProductName, Manufacturer, BoughtPrice, SoldPrice, Stock, UploadDate, Description, CatID, Avatar) " +
+                    "values (@ProductName, @Manufacturer, @BoughtPrice, @SoldPrice, @Stock, @UploadDate, @Description, @CatID, @Avatar)"; //
+            }
+            else
+            {
+                sql = "insert into Product(ProductName, Manufacturer, BoughtPrice, SoldPrice, Stock, UploadDate, Description, CatID) " +
+                    "values (@ProductName, @Manufacturer, @BoughtPrice, @SoldPrice, @Stock, @UploadDate, @Description, @CatID)"; //
+            }
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+
+            sqlCommand.Parameters.AddWithValue("@ProductName", product.ProductName);
+            sqlCommand.Parameters.AddWithValue("@Manufacturer", product.Manufacturer);
+            sqlCommand.Parameters.AddWithValue("@BoughtPrice", product.BoughtPrice);
+            sqlCommand.Parameters.AddWithValue("@SoldPrice", product.SoldPrice);
+            sqlCommand.Parameters.AddWithValue("@Stock", product.Stock);
+            sqlCommand.Parameters.AddWithValue("@UploadDate", product.UploadDate);
+            sqlCommand.Parameters.AddWithValue("@Description", product.Description);
+            sqlCommand.Parameters.AddWithValue("@CatID", product.Category.ID);
+            if(product.Avatar != null)
+            {
+                var encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(product.Avatar));
+                using (var stream = new MemoryStream())
+                {
+                    encoder.Save(stream);
+                    sqlCommand.Parameters.AddWithValue("@Avatar", stream.ToArray());
+                }
+            }
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Inserted {product.ID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Inserted {product.ID} Fail: " + ex.Message);
+            }
+        }
+
+        public override void Update(int id, Data data)
+        {
+            Product product = (Product)data;
+            string sql;
+            if (product.Avatar != null)
+            {
+                sql = "update Product set ProductName = @ProductName, Manufacturer = @Manufacturer, Description = @Description, " +
+                "BoughtPrice = @BoughtPrice, Stock = @Stock, SoldPrice = @SoldPrice, Avatar = @Avatar where ID = @ID";
+            }
+            else
+            {
+                sql = "update Product set ProductName = @ProductName, Manufacturer = @Manufacturer, Description = @Description, " +
+                "BoughtPrice = @BoughtPrice, Stock = @Stock, SoldPrice = @SoldPrice where ID = @ID";
+            }
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+            sqlCommand.Parameters.AddWithValue("@ID", id);
+            sqlCommand.Parameters.AddWithValue("@ProductName", product.ProductName);
+            sqlCommand.Parameters.AddWithValue("@Manufacturer", product.Manufacturer);
+            sqlCommand.Parameters.AddWithValue("@BoughtPrice", product.BoughtPrice);
+            sqlCommand.Parameters.AddWithValue("@SoldPrice", product.SoldPrice);
+            sqlCommand.Parameters.AddWithValue("@Stock", product.Stock);
+            sqlCommand.Parameters.AddWithValue("@Description", product.Description);
+
+            if (product.Avatar != null)
+            {
+                var encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(product.Avatar));
+                using (var stream = new MemoryStream())
+                {
+                    encoder.Save(stream);
+                    sqlCommand.Parameters.AddWithValue("@Avatar", stream.ToArray());
+                }
+            }
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Updated {product.ID} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Updated {product.ID} Fail: " + ex.Message);
+            }
+        }
+
+        public override void Remove(int productid)
+        {
+            string sql = "delete from Product where ID = @ID";
+            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
+            sqlCommand.Parameters.AddWithValue("@ID", productid);
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine($"Deleted {productid} OK");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Deleted {productid} Fail: " + ex.Message);
+            }
+        }
+
+        public int getTotalProduct()
+        {
+            var sql = "select count(*) as total from Product";
+            var command = new SqlCommand(sql, _connection);
+            var reader = command.ExecuteReader();
+
+            int result = 0;
+            if (reader.Read())
+            {
+                result = (int)reader["total"];
+            }
+            reader.Close();
+            return result;
         }
 
         public List<Product> GetTop5OutStock()
@@ -169,52 +293,6 @@ namespace ProjectMyShop.SDAO
             return list;
         }
 
-        public void addProduct(Product product)
-        {
-            // ID Auto Increment
-            var sql = "";
-            if (product.Avatar != null)
-            {
-                sql = "insert into Product(ProductName, Manufacturer, BoughtPrice, SoldPrice, Stock, UploadDate, Description, CatID, Avatar) " +
-                    "values (@ProductName, @Manufacturer, @BoughtPrice, @SoldPrice, @Stock, @UploadDate, @Description, @CatID, @Avatar)"; //
-            }
-            else
-            {
-                sql = "insert into Product(ProductName, Manufacturer, BoughtPrice, SoldPrice, Stock, UploadDate, Description, CatID) " +
-                    "values (@ProductName, @Manufacturer, @BoughtPrice, @SoldPrice, @Stock, @UploadDate, @Description, @CatID)"; //
-            }
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-
-            sqlCommand.Parameters.AddWithValue("@ProductName", product.ProductName);
-            sqlCommand.Parameters.AddWithValue("@Manufacturer", product.Manufacturer);
-            sqlCommand.Parameters.AddWithValue("@BoughtPrice", product.BoughtPrice);
-            sqlCommand.Parameters.AddWithValue("@SoldPrice", product.SoldPrice);
-            sqlCommand.Parameters.AddWithValue("@Stock", product.Stock);
-            sqlCommand.Parameters.AddWithValue("@UploadDate", product.UploadDate);
-            sqlCommand.Parameters.AddWithValue("@Description", product.Description);
-            sqlCommand.Parameters.AddWithValue("@CatID", product.Category.ID);
-            if(product.Avatar != null)
-            {
-                var encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(product.Avatar));
-                using (var stream = new MemoryStream())
-                {
-                    encoder.Save(stream);
-                    sqlCommand.Parameters.AddWithValue("@Avatar", stream.ToArray());
-                }
-            }
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Inserted {product.ID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Inserted {product.ID} Fail: " + ex.Message);
-            }
-        }
-
         public int GetLastestInsertID()
         {
             string sql = "select ident_current('Product')";
@@ -223,65 +301,7 @@ namespace ProjectMyShop.SDAO
             System.Diagnostics.Debug.WriteLine(resutl);
             return System.Convert.ToInt32(sqlCommand.ExecuteScalar());
         }
-        public void deleteProduct(int productid)
-        {
-            string sql = "delete from Product where ID = @ID";
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-            sqlCommand.Parameters.AddWithValue("@ID", productid);
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Deleted {productid} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Deleted {productid} Fail: " + ex.Message);
-            }
-        }
-        public void updateProduct(int id, Product product)
-        {
-            string sql;
-            if (product.Avatar != null)
-            {
-                sql = "update Product set ProductName = @ProductName, Manufacturer = @Manufacturer, Description = @Description, " +
-                "BoughtPrice = @BoughtPrice, Stock = @Stock, SoldPrice = @SoldPrice, Avatar = @Avatar where ID = @ID";
-            }
-            else
-            {
-                sql = "update Product set ProductName = @ProductName, Manufacturer = @Manufacturer, Description = @Description, " +
-                "BoughtPrice = @BoughtPrice, Stock = @Stock, SoldPrice = @SoldPrice where ID = @ID";
-            }
-            SqlCommand sqlCommand = new SqlCommand(sql, _connection);
-            sqlCommand.Parameters.AddWithValue("@ID", id);
-            sqlCommand.Parameters.AddWithValue("@ProductName", product.ProductName);
-            sqlCommand.Parameters.AddWithValue("@Manufacturer", product.Manufacturer);
-            sqlCommand.Parameters.AddWithValue("@BoughtPrice", product.BoughtPrice);
-            sqlCommand.Parameters.AddWithValue("@SoldPrice", product.SoldPrice);
-            sqlCommand.Parameters.AddWithValue("@Stock", product.Stock);
-            sqlCommand.Parameters.AddWithValue("@Description", product.Description);
-
-            if (product.Avatar != null)
-            {
-                var encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(product.Avatar));
-                using (var stream = new MemoryStream())
-                {
-                    encoder.Save(stream);
-                    sqlCommand.Parameters.AddWithValue("@Avatar", stream.ToArray());
-                }
-            }
-
-            try
-            {
-                sqlCommand.ExecuteNonQuery();
-                System.Diagnostics.Debug.WriteLine($"Updated {product.ID} OK");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Updated {product.ID} Fail: " + ex.Message);
-            }
-        }
-
+ 
         public List<BestSellingProduct> getBestSellingProductsInWeek(DateTime src)
         {
             string sqlFormattedDate = src.ToString("yyyy-MM-dd");
@@ -466,5 +486,7 @@ namespace ProjectMyShop.SDAO
             reader.Close();
             return list;
         }
+
+
     }
 }

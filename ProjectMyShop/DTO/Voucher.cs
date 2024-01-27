@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.DTO
 {
-    public class Voucher
+    public class Voucher: Data
     {
         public int ID { get; set; }
         public DateOnly StartDate { get; set; }

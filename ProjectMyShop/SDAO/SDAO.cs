@@ -1,4 +1,5 @@
 ﻿using ProjectMyShop.Config;
+using ProjectMyShop.DTO;
 using ProjectMyShop.Helpers;
 using System;
 using System.Collections.Generic;
@@ -65,5 +66,6 @@ namespace ProjectMyShop.SDAO
         {
             _connection.Close();
         }
+        
     }
 }
