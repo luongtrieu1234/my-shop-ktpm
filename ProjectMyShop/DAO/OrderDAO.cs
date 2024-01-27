@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,35 +17,65 @@ namespace ProjectMyShop.DAO
     {
         List<DetailOrder> GetDetailOrder(int orderID)
         {
+            Debug.WriteLine("GetDetailOrder called");
             string sql = "select * from DetailOrder WHERE OrderID = @orderID";
 
             var command = new SqlCommand(sql, _connection);
             command.Parameters.AddWithValue("@orderID", orderID);
-            
+
             var reader = command.ExecuteReader();
 
-            var result = new List<DetailOrder>();
+            //var result = new List<DetailOrder>();
 
-            var _productBUS = new ProductBUS();
-            while (reader.Read())
+            //var _productBUS = new ProductBUS();
+            //while (reader.Read())
+            //{
+            //    var OrderID = reader.GetInt32("OrderID");
+            //    var ProductID = reader.GetInt32("ProductID");
+            //    var Quantity = reader.GetInt32("Quantity");
+
+            //    var Product = _productBUS.getProductByID(ProductID);
+
+            //    DetailOrder _order = new DetailOrder()
+            //    {
+            //        OrderID = OrderID,
+            //        Product = Product,
+            //        Quantity = Quantity
+            //    };
+
+            //    result.Add(_order);
+            //}
+
+            //reader.Close();
+            //return result;
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+            Debug.WriteLine("reader datatable ");
+            foreach (DataRow row in dataTable.Rows)
             {
-                var OrderID = reader.GetInt32("OrderID");
-                var ProductID = reader.GetInt32("ProductID");
-                var Quantity = reader.GetInt32("Quantity");
-
-                var Product = _productBUS.getProductByID(ProductID);
-
-                DetailOrder _order = new DetailOrder()
+                foreach (DataColumn col in dataTable.Columns)
                 {
-                    OrderID = OrderID,
-                    Product = Product,
-                    Quantity = Quantity
-                };
-
-                result.Add(_order);
+                    string columnName = col.ColumnName;
+                    Debug.WriteLine(columnName);
+                    Debug.WriteLine(row[columnName]);
+                }
             }
 
-            reader.Close();
+                // Use the helper to convert DataTable to List<DetailOrder>
+            var result = DataMappingHelper.MappingDataTableToObjectList<DetailOrder>(dataTable);
+            //var categoryNames = result.Select(c => c.ProductID).ToList();
+            //Debug.WriteLine("asdsadsada " + string.Join(", ", categoryNames));
+
+            var _productBUS = new ProductBUS();
+            foreach (var detailOrder in result)
+            {
+                Debug.WriteLine("ad " + detailOrder.ProductID.ToString());
+                var productID = detailOrder.ProductID;
+                var product = _productBUS.getProductByID(productID);
+                detailOrder.Product = product;
+                //Debug.WriteLine(product.GetType());
+            }
+
             return result;
         }
 
