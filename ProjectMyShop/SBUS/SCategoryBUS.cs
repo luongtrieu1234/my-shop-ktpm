@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SCategoryBUS
+    internal class SCategoryBUS:SBUS
     {
 
         private SCategoryDAO _categoryDAO;

@@ -239,9 +239,16 @@ namespace ProjectMyShop.SDAO
                 case "Update":
                     Update(inputParams.ID, inputParams.data);
                     return true;
-
+                case "Remove":
+                    Remove(inputParams.ID);
+                    return true;
+                case "GetLastestInsertID":
+                    return GetLastestInsertID();
+                case "isExisted":
+                    return isExisted(inputParams.isExisted);
+                default:
+                    return false;
             }
-            return false;
         }
     }
 }

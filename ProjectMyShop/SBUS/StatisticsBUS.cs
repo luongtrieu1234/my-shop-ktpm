@@ -7,7 +7,7 @@ using ProjectMyShop.DAO;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SStatisticsBUS
+    internal class SStatisticsBUS:SBUS
     {
         private StatisticsDAO _statisticsDAO;
 

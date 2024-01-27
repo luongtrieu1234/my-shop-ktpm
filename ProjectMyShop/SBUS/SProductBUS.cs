@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SProductBUS
+    internal class SProductBUS:SBUS
     {
         private ProductDAO _productDAO;
 

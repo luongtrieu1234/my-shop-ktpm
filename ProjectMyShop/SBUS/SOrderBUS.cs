@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SOrderBUS
+    internal class SOrderBUS:SBUS
     {
         private OrderDAO _orderDAO;
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SAccountBUS
+    internal class SAccountBUS:SBUS
     {
         private AccountDAO _accountDAO;
 
