@@ -2,29 +2,25 @@
 using ProjectMyShop.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Media.Imaging;
 
 namespace ProjectMyShop.SDAO
 {
     internal class SProductDAO : SDAO
     {
-        public override dynamic ExecuteMethod(string methodName, object inputParams)
-        {
-            return false;
-        }
-
         public override string GetObjectType()
         {
             return "SProductDAO";
         }
-
         public override SObject Clone()
         {
             return new SProductDAO();
         }
-
         public override Data GetByID(int productID)
         {
             var sql = "select * from Product WHERE ID = @productID";
@@ -35,49 +31,61 @@ namespace ProjectMyShop.SDAO
             var reader = command.ExecuteReader();
 
             Product? product = null;
-            if (reader.Read())
-            {
-                var ID = (int)reader["ID"];
-                var ProductName = (String)reader["ProductName"];
-                var Manufacturer = (String)reader["Manufacturer"];
+            //if (reader.Read())
+            //{
+            //    var ID = (int)reader["ID"];
+            //    var ProductName = (String)reader["ProductName"];
+            //    var Manufacturer = (String)reader["Manufacturer"];
 
-                var SoldPrice = (int)(decimal)reader["SoldPrice"];
-                //var SoldPrice = (int)reader["SoldPrice"];
-                var Stock = (int)reader["Stock"];
+            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
+            //    //var SoldPrice = (int)reader["SoldPrice"];
+            //    var Stock = (int)reader["Stock"];
 
-                product = new Product()
-                {
-                    ID = ID,
-                    ProductName = ProductName,
-                    Manufacturer = Manufacturer,
-                    SoldPrice = SoldPrice,
-                    Stock = Stock,
-                };
+            //    product = new Product()
+            //    {
+            //        ID = ID,
+            //        ProductName = ProductName,
+            //        Manufacturer = Manufacturer,
+            //        SoldPrice = SoldPrice,
+            //        Stock = Stock,
+            //    };
 
-                byte[] byteAvatar = new byte[5];
-                if (reader["Avatar"] != System.DBNull.Value)
-                {
+            //    byte[] byteAvatar = new byte[5];
+            //    if (reader["Avatar"] != System.DBNull.Value)
+            //    {
 
-                    byteAvatar = (byte[])reader["Avatar"];
+            //        byteAvatar = (byte[])reader["Avatar"];
 
-                    using (MemoryStream ms = new MemoryStream(byteAvatar))
-                    {
-                        var image = new BitmapImage();
-                        image.BeginInit();
-                        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.UriSource = null;
-                        image.StreamSource = ms;
-                        image.EndInit();
-                        image.Freeze();
-                        product.Avatar = image;
-                    }
-                }
-            }
+            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
+            //        {
+            //            var image = new BitmapImage();
+            //            image.BeginInit();
+            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            //            image.CacheOption = BitmapCacheOption.OnLoad;
+            //            image.UriSource = null;
+            //            image.StreamSource = ms;
+            //            image.EndInit();
+            //            image.Freeze();
+            //            product.Avatar = image;
+            //        }
+            //    }
+            //}
+            //reader.Close();
+            //return product;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            // Use the helper to convert DataTable to List<Product>
+            var productList = DataMappingHelper.MappingDataTableToObjectList<Product>(dataTable);
+            //var categoryNames = productList.Select(c => c.ProductName).ToList();
+            //Debug.WriteLine("asdsadsada " + string.Join(", ", categoryNames));
+
+            // Since it's a single record, get the first item from the list
+            product = productList.FirstOrDefault();
             reader.Close();
             return product;
         }
-        
         public override void Add(Data data)
         {
             Product product = (Product)data;
@@ -124,7 +132,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Inserted {product.ID} Fail: " + ex.Message);
             }
         }
-
         public override void Update(int id, Data data)
         {
             Product product = (Product)data;
@@ -169,7 +176,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Updated {product.ID} Fail: " + ex.Message);
             }
         }
-
         public override void Remove(int productid)
         {
             string sql = "delete from Product where ID = @ID";
@@ -185,7 +191,6 @@ namespace ProjectMyShop.SDAO
                 System.Diagnostics.Debug.WriteLine($"Deleted {productid} Fail: " + ex.Message);
             }
         }
-
         public int getTotalProduct()
         {
             var sql = "select count(*) as total from Product";
@@ -200,39 +205,49 @@ namespace ProjectMyShop.SDAO
             reader.Close();
             return result;
         }
-
         public List<Product> GetTop5OutStock()
         {
             var sql = "select top(5) * from Product where stock < 5 order by stock ";
             var command = new SqlCommand(sql, _connection);
             var reader = command.ExecuteReader();
 
-            List<Product> list = new List<Product>();
-            while (reader.Read())
-            {
-                var ID = (int)reader["ID"];
-                var ProductName = (String)reader["ProductName"];
-                var Manufacturer = (String)reader["Manufacturer"];
+            //List<Product> list = new List<Product>();
+            //while (reader.Read())
+            //{
+            //    var ID = (int)reader["ID"];
+            //    var ProductName = (String)reader["ProductName"];
+            //    var Manufacturer = (String)reader["Manufacturer"];
 
-                var SoldPrice = (int)(decimal)reader["SoldPrice"];
-                //var SoldPrice = (int)reader["SoldPrice"];
-                var Stock = (int)reader["Stock"];
+            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
+            //    //var SoldPrice = (int)reader["SoldPrice"];
+            //    var Stock = (int)reader["Stock"];
 
-                Product product = new Product()
-                {
-                    ID = ID,
-                    ProductName = ProductName,
-                    Manufacturer = Manufacturer,
-                    SoldPrice = SoldPrice,
-                    Stock = Stock,
-                };
-                if (product.ProductName != "")
-                    list.Add(product);
-            }
+            //    Product product = new Product()
+            //    {
+            //        ID = ID,
+            //        ProductName = ProductName,
+            //        Manufacturer = Manufacturer,
+            //        SoldPrice = SoldPrice,
+            //        Stock = Stock,
+            //    };
+            //    if (product.ProductName != "")
+            //        list.Add(product);
+            //}
+            //reader.Close();
+            //return list;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            // Use the helper to convert DataTable to List<Product>
+            var productList = DataMappingHelper.MappingDataTableToObjectList<Product>(dataTable);
+
+            // Filter out products with an empty product name
+            var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
+
             reader.Close();
-            return list;
+            return filteredList;
         }
-
         public List<Product> getProductsAccordingToSpecificCategory(int srcCategoryID)
         {
             var sql = "select * from Product where CatID = @CategoryID";
@@ -246,52 +261,63 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            List<Product> list = new List<Product>();
-            while (reader.Read())
-            {
-                var ID = (int)reader["ID"];
-                var ProductName = (String)reader["ProductName"];
-                var Manufacturer = (String)reader["Manufacturer"];
+            //List<Product> list = new List<Product>();
+            //while (reader.Read())
+            //{
+            //    var ID = (int)reader["ID"];
+            //    var ProductName = (String)reader["ProductName"];
+            //    var Manufacturer = (String)reader["Manufacturer"];
 
-                var SoldPrice = (int)(decimal)reader["SoldPrice"];
-                var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-                var Description = (String)reader["Description"];
-                //var SoldPrice = (int)reader["SoldPrice"];
-                var Stock = (int)reader["Stock"];
+            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
+            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
+            //    var Description = (String)reader["Description"];
+            //    //var SoldPrice = (int)reader["SoldPrice"];
+            //    var Stock = (int)reader["Stock"];
 
-                Product product = new Product()
-                {
-                    ID = ID,
-                    ProductName = ProductName,
-                    Manufacturer = Manufacturer,
-                    SoldPrice = SoldPrice,
-                    Stock = Stock,
-                    BoughtPrice = BoughtPrice,
-                    Description = Description
-                };
-                if(!reader["Avatar"].Equals(DBNull.Value))
-                {
-                    var byteAvatar = (byte[])reader["Avatar"];
-                    using (MemoryStream ms = new MemoryStream(byteAvatar))
-                    {
-                        var image = new BitmapImage();
-                        image.BeginInit();
-                        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.UriSource = null;
-                        image.StreamSource = ms;
-                        image.EndInit();
-                        image.Freeze();
-                        product.Avatar = image;
-                    }
-                }
-                if (product.ProductName != "")
-                    list.Add(product);
-            }
+            //    Product product = new Product()
+            //    {
+            //        ID = ID,
+            //        ProductName = ProductName,
+            //        Manufacturer = Manufacturer,
+            //        SoldPrice = SoldPrice,
+            //        Stock = Stock,
+            //        BoughtPrice = BoughtPrice,
+            //        Description = Description
+            //    };
+            //    if(!reader["Avatar"].Equals(DBNull.Value))
+            //    {
+            //        var byteAvatar = (byte[])reader["Avatar"];
+            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
+            //        {
+            //            var image = new BitmapImage();
+            //            image.BeginInit();
+            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            //            image.CacheOption = BitmapCacheOption.OnLoad;
+            //            image.UriSource = null;
+            //            image.StreamSource = ms;
+            //            image.EndInit();
+            //            image.Freeze();
+            //            product.Avatar = image;
+            //        }
+            //    }
+            //    if (product.ProductName != "")
+            //        list.Add(product);
+            //}
+            //reader.Close();
+            //return list;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            // Use the helper to convert DataTable to List<Product>
+            var productList = DataMappingHelper.MappingDataTableToObjectList<Product>(dataTable);
+
+            // Filter out products with an empty product name
+            var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
+
             reader.Close();
-            return list;
+            return filteredList;
         }
-
         public int GetLastestInsertID()
         {
             string sql = "select ident_current('Product')";
@@ -300,7 +326,6 @@ namespace ProjectMyShop.SDAO
             System.Diagnostics.Debug.WriteLine(resutl);
             return System.Convert.ToInt32(sqlCommand.ExecuteScalar());
         }
- 
         public List<BestSellingProduct> getBestSellingProductsInWeek(DateTime src)
         {
             string sqlFormattedDate = src.ToString("yyyy-MM-dd");
@@ -316,53 +341,64 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            List<BestSellingProduct> list = new List<BestSellingProduct>();
-            while (reader.Read())
-            {
-                var ID = (int)reader["ID"];
-                var ProductName = (String)reader["ProductName"];
-                var Manufacturer = (String)reader["Manufacturer"];
+            //List<BestSellingProduct> list = new List<BestSellingProduct>();
+            //while (reader.Read())
+            //{
+            //    var ID = (int)reader["ID"];
+            //    var ProductName = (String)reader["ProductName"];
+            //    var Manufacturer = (String)reader["Manufacturer"];
 
-                var SoldPrice = (int)(decimal)reader["SoldPrice"];
-                var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-                var Description = (String)reader["Description"];
-                var Stock = (int)reader["Stock"];
-                var Quantity = (int)reader["Quantity"];
+            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
+            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
+            //    var Description = (String)reader["Description"];
+            //    var Stock = (int)reader["Stock"];
+            //    var Quantity = (int)reader["Quantity"];
 
-                BestSellingProduct product = new BestSellingProduct()
-                {
-                    ID = ID,
-                    ProductName = ProductName,
-                    Manufacturer = Manufacturer,
-                    SoldPrice = SoldPrice,
-                    Stock = Stock,
-                    BoughtPrice = BoughtPrice,
-                    Description = Description,
-                    Quantity = Quantity
-                };
-                if (!reader["Avatar"].Equals(DBNull.Value))
-                {
-                    var byteAvatar = (byte[])reader["Avatar"];
-                    using (MemoryStream ms = new MemoryStream(byteAvatar))
-                    {
-                        var image = new BitmapImage();
-                        image.BeginInit();
-                        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.UriSource = null;
-                        image.StreamSource = ms;
-                        image.EndInit();
-                        image.Freeze();
-                        product.Avatar = image;
-                    }
-                }
-                if (product.ProductName != "")
-                    list.Add(product);
-            }
+            //    BestSellingProduct product = new BestSellingProduct()
+            //    {
+            //        ID = ID,
+            //        ProductName = ProductName,
+            //        Manufacturer = Manufacturer,
+            //        SoldPrice = SoldPrice,
+            //        Stock = Stock,
+            //        BoughtPrice = BoughtPrice,
+            //        Description = Description,
+            //        Quantity = Quantity
+            //    };
+            //    if (!reader["Avatar"].Equals(DBNull.Value))
+            //    {
+            //        var byteAvatar = (byte[])reader["Avatar"];
+            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
+            //        {
+            //            var image = new BitmapImage();
+            //            image.BeginInit();
+            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            //            image.CacheOption = BitmapCacheOption.OnLoad;
+            //            image.UriSource = null;
+            //            image.StreamSource = ms;
+            //            image.EndInit();
+            //            image.Freeze();
+            //            product.Avatar = image;
+            //        }
+            //    }
+            //    if (product.ProductName != "")
+            //        list.Add(product);
+            //}
+            //reader.Close();
+            //return list;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            // Use the helper to convert DataTable to List<BestSellingProduct>
+            var productList = DataMappingHelper.MappingDataTableToObjectList<BestSellingProduct>(dataTable);
+
+            // Filter out products with an empty product name
+            var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
+
             reader.Close();
-            return list;
+            return filteredList;
         }
-
         public List<BestSellingProduct> getBestSellingProductsInMonth(DateTime src)
         {
             string sqlFormattedDate = src.ToString("yyyy-MM-dd");
@@ -378,53 +414,64 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            List<BestSellingProduct> list = new List<BestSellingProduct>();
+            //List<BestSellingProduct> list = new List<BestSellingProduct>();
 
-            while (reader.Read())
-            {
-                var ID = (int)reader["ID"];
-                var ProductName = (String)reader["ProductName"];
-                var Manufacturer = (String)reader["Manufacturer"];
-                var SoldPrice = (int)(decimal)reader["SoldPrice"];
-                var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-                var Description = (String)reader["Description"];
-                var Stock = (int)reader["Stock"];
-                var Quantity = (int)reader["Quantity"];
+            //while (reader.Read())
+            //{
+            //    var ID = (int)reader["ID"];
+            //    var ProductName = (String)reader["ProductName"];
+            //    var Manufacturer = (String)reader["Manufacturer"];
+            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
+            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
+            //    var Description = (String)reader["Description"];
+            //    var Stock = (int)reader["Stock"];
+            //    var Quantity = (int)reader["Quantity"];
 
-                BestSellingProduct product = new BestSellingProduct()
-                {
-                    ID = ID,
-                    ProductName = ProductName,
-                    Manufacturer = Manufacturer,
-                    SoldPrice = SoldPrice,
-                    Stock = Stock,
-                    BoughtPrice = BoughtPrice,
-                    Description = Description,
-                    Quantity = Quantity
-                };
-                if (!reader["Avatar"].Equals(DBNull.Value))
-                {
-                    var byteAvatar = (byte[])reader["Avatar"];
-                    using (MemoryStream ms = new MemoryStream(byteAvatar))
-                    {
-                        var image = new BitmapImage();
-                        image.BeginInit();
-                        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.UriSource = null;
-                        image.StreamSource = ms;
-                        image.EndInit();
-                        image.Freeze();
-                        product.Avatar = image;
-                    }
-                }
-                if (product.ProductName != "")
-                    list.Add(product);
-            }
+            //    BestSellingProduct product = new BestSellingProduct()
+            //    {
+            //        ID = ID,
+            //        ProductName = ProductName,
+            //        Manufacturer = Manufacturer,
+            //        SoldPrice = SoldPrice,
+            //        Stock = Stock,
+            //        BoughtPrice = BoughtPrice,
+            //        Description = Description,
+            //        Quantity = Quantity
+            //    };
+            //    if (!reader["Avatar"].Equals(DBNull.Value))
+            //    {
+            //        var byteAvatar = (byte[])reader["Avatar"];
+            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
+            //        {
+            //            var image = new BitmapImage();
+            //            image.BeginInit();
+            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            //            image.CacheOption = BitmapCacheOption.OnLoad;
+            //            image.UriSource = null;
+            //            image.StreamSource = ms;
+            //            image.EndInit();
+            //            image.Freeze();
+            //            product.Avatar = image;
+            //        }
+            //    }
+            //    if (product.ProductName != "")
+            //        list.Add(product);
+            //}
+            //reader.Close();
+            //return list;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            // Use the helper to convert DataTable to List<BestSellingProduct>
+            var productList = DataMappingHelper.MappingDataTableToObjectList<BestSellingProduct>(dataTable);
+
+            // Filter out products with an empty product name
+            var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
+
             reader.Close();
-            return list;
+            return filteredList;
         }
-
         public List<BestSellingProduct> getBestSellingProductsInYear(DateTime src)
         {
             string sqlFormattedDate = src.ToString("yyyy-MM-dd");
@@ -440,52 +487,113 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            List<BestSellingProduct> list = new List<BestSellingProduct>();
-            while (reader.Read())
-            {
-                var ID = (int)reader["ID"];
-                var ProductName = (String)reader["ProductName"];
-                var Manufacturer = (String)reader["Manufacturer"];
-                var SoldPrice = (int)(decimal)reader["SoldPrice"];
-                var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-                var Description = (String)reader["Description"];
-                var Stock = (int)reader["Stock"];
-                var Quantity = (int)reader["Quantity"];
+            //List<BestSellingProduct> list = new List<BestSellingProduct>();
+            //while (reader.Read())
+            //{
+            //    var ID = (int)reader["ID"];
+            //    var ProductName = (String)reader["ProductName"];
+            //    var Manufacturer = (String)reader["Manufacturer"];
+            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
+            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
+            //    var Description = (String)reader["Description"];
+            //    var Stock = (int)reader["Stock"];
+            //    var Quantity = (int)reader["Quantity"];
 
-                BestSellingProduct product = new BestSellingProduct()
-                {
-                    ID = ID,
-                    ProductName = ProductName,
-                    Manufacturer = Manufacturer,
-                    SoldPrice = SoldPrice,
-                    Stock = Stock,
-                    BoughtPrice = BoughtPrice,
-                    Description = Description,
-                    Quantity = Quantity
-                };
-                if (!reader["Avatar"].Equals(DBNull.Value))
-                {
-                    var byteAvatar = (byte[])reader["Avatar"];
-                    using (MemoryStream ms = new MemoryStream(byteAvatar))
-                    {
-                        var image = new BitmapImage();
-                        image.BeginInit();
-                        image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.UriSource = null;
-                        image.StreamSource = ms;
-                        image.EndInit();
-                        image.Freeze();
-                        product.Avatar = image;
-                    }
-                }
-                if (product.ProductName != "")
-                    list.Add(product);
-            }
+            //    BestSellingProduct product = new BestSellingProduct()
+            //    {
+            //        ID = ID,
+            //        ProductName = ProductName,
+            //        Manufacturer = Manufacturer,
+            //        SoldPrice = SoldPrice,
+            //        Stock = Stock,
+            //        BoughtPrice = BoughtPrice,
+            //        Description = Description,
+            //        Quantity = Quantity
+            //    };
+            //    if (!reader["Avatar"].Equals(DBNull.Value))
+            //    {
+            //        var byteAvatar = (byte[])reader["Avatar"];
+            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
+            //        {
+            //            var image = new BitmapImage();
+            //            image.BeginInit();
+            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+            //            image.CacheOption = BitmapCacheOption.OnLoad;
+            //            image.UriSource = null;
+            //            image.StreamSource = ms;
+            //            image.EndInit();
+            //            image.Freeze();
+            //            product.Avatar = image;
+            //        }
+            //    }
+            //    if (product.ProductName != "")
+            //        list.Add(product);
+            //}
+            //reader.Close();
+            //return list;
+
+            var dataTable = new DataTable();
+            dataTable.Load(reader);
+
+            // Use the helper to convert DataTable to List<BestSellingProduct>
+            var productList = DataMappingHelper.MappingDataTableToObjectList<BestSellingProduct>(dataTable);
+
+            // Filter out products with an empty product name
+            var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
+
             reader.Close();
-            return list;
+            return filteredList;
         }
-
-
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
+        {
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    Debug.WriteLine("GetObjectType Product called");
+                    return GetObjectType();
+                case "Clone":
+                    Debug.WriteLine("Clone Product called");
+                    return Clone();
+                case "GetByID":
+                    Debug.WriteLine("GetByID Product called");
+                    return GetByID(inputParams.productID);
+                case "Add":
+                    Debug.WriteLine("Add Product called");
+                    Add(inputParams.data);
+                    return true;
+                case "Update":
+                    Debug.WriteLine("Update Product called");
+                    Update(inputParams.id, inputParams.data);
+                    return true;
+                case "Remove":
+                    Debug.WriteLine("Remove Product called");
+                    return Remove(inputParams.productid);
+                case "GetObjects":
+                    Debug.WriteLine("GetObjects Product called");
+                    return GetObjects(inputParams.offset, inputParams.size);
+                case "getTotalProduct":
+                    Debug.WriteLine("getTotalProduct Product called");
+                    return getTotalProduct();
+                case "GetTop5OutStock":
+                    Debug.WriteLine("GetTop5OutStock Product called");
+                    return GetTop5OutStock();
+                case "getProductsAccordingToSpecificCategory":
+                    Debug.WriteLine("getProductsAccordingToSpecificCategory Product called");
+                    return getProductsAccordingToSpecificCategory(inputParams.srcCategoryID);
+                case "GetLastestInsertID":
+                    Debug.WriteLine("GetLastestInsertID Product called");
+                    return GetLastestInsertID();
+                case "getBestSellingProductsInWeek":
+                    Debug.WriteLine("getBestSellingProductsInWeek Product called");
+                    return getBestSellingProductsInWeek(inputParams.src);
+                case "getBestSellingProductsInMonth":
+                    Debug.WriteLine("getBestSellingProductsInMonth Product called");
+                    return getBestSellingProductsInMonth(inputParams.src);
+                case "getBestSellingProductsInYear":
+                    Debug.WriteLine("getBestSellingProductsInYear Product called");
+                    return getBestSellingProductsInYear(inputParams.src);
+            }
+            return false;
+        }
     }
 }

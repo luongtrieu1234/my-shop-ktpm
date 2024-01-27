@@ -18,6 +18,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 
 namespace ProjectMyShop.Views
 {
@@ -35,7 +36,7 @@ namespace ProjectMyShop.Views
 
             _statisticsBUS = new StatisticsBUS();
             _categoryBUS = new CategoryBUS();
-            _ProductBUS = new ProductBUS();
+            _ProductBUS = new SProductBUS();
 
             categories = _categoryBUS.getCategoryList();
             categoriesCombobox.ItemsSource = categories;
@@ -67,7 +68,7 @@ namespace ProjectMyShop.Views
 
         private StatisticsBUS _statisticsBUS;
         private CategoryBUS _categoryBUS;
-        private ProductBUS _ProductBUS;
+        private SProductBUS _ProductBUS;
         public int statisticsFigureIndex { get; set; } = 1;
         public int bargraphFigureIndex { get; set; } = 0;
         public int tabSelectedIndex { get; set; } = 0;

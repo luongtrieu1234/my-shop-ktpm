@@ -1,5 +1,6 @@
 ﻿using ProjectMyShop.DAO;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,11 +13,11 @@ namespace ProjectMyShop.SBUS
 {
     internal class SProductBUS
     {
-        private ProductDAO _productDAO;
+        private SProductDAO _productDAO;
 
         public SProductBUS()
         {
-            _productDAO = new ProductDAO();
+            _productDAO = new SProductDAO();
             if (_productDAO.CanConnect())
             {
                 _productDAO.Connect();
@@ -25,16 +26,16 @@ namespace ProjectMyShop.SBUS
 
         public int GetTotalProduct()
         {
-            return _productDAO.getTotalProduct();
+            return _productDAO.ExecuteMethod("getTotalProduct", null);
         }
         public List<Product> Top5OutStock()
         {
-            return _productDAO.GetTop5OutStock();
+            return _productDAO.ExecuteMethod("GetTop5OutStock", null);
         }
 
         public List<Product> getProductsAccordingToSpecificCategory(int srcCategoryID)
         {
-            return _productDAO.getProductsAccordingToSpecificCategory(srcCategoryID);
+            return _productDAO.ExecuteMethod("getProductsAccordingToSpecificCategory", new { srcCategoryID = srcCategoryID });
         }
 
         public void addProduct(Product product)
@@ -50,13 +51,13 @@ namespace ProjectMyShop.SBUS
             else
             {
                 product.UploadDate = DateTime.Now.Date;
-                _productDAO.addProduct(product);
+                _productDAO.ExecuteMethod("Add", new { data = product });
                 product.ID = _productDAO.GetLastestInsertID();
             }
         }
         public void removeProduct(Product product)
         {
-            _productDAO.deleteProduct(product.ID);
+            _productDAO.ExecuteMethod("Remove", new { productid = product.ID });
         }
         public void updateProduct(int ID, Product product)
         {
@@ -71,27 +72,27 @@ namespace ProjectMyShop.SBUS
             }
             else
             {
-                _productDAO.updateProduct(ID, product);
+                _productDAO.ExecuteMethod("Update", new { id = ID, data = product });
             }
         }
 
         public List<BestSellingProduct> getBestSellingProductsInWeek(DateTime src)
         {
-            return _productDAO.getBestSellingProductsInWeek(src);
+            return _productDAO.ExecuteMethod("getBestSellingProductsInWeek", new { src = src });
         }
 
         public List<BestSellingProduct> getBestSellingProductsInMonth(DateTime src)
         {
-            return _productDAO.getBestSellingProductsInMonth(src);
+            return _productDAO.ExecuteMethod("getBestSellingProductsInMonth", new { src = src });
         }
 
         public List<BestSellingProduct> getBestSellingProductsInYear(DateTime src)
         {
-            return _productDAO.getBestSellingProductsInYear(src);
+            return _productDAO.ExecuteMethod("getBestSellingProductsInYear", new { src = src });
         }
         public Product? getProductByID(int ProductID)
         {
-            return _productDAO.getProductByID(ProductID);
+            return _productDAO.ExecuteMethod("GetByID", new { productID = ProductID });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using ProjectMyShop.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace ProjectMyShop.Views
     public partial class ManageDetailOrder : Window
     {
         public Order order;
-        private OrderBUS _orderBUS;
+        private SOrderBUS _orderBUS;
 
         DetailOrderViewModel _vm;
 
@@ -61,7 +62,7 @@ namespace ProjectMyShop.Views
                 ProductDataGrid.ItemsSource = order.DetailOrderList;
             }
 
-            _orderBUS = new OrderBUS();
+            _orderBUS = new SOrderBUS();
             detailOrder = new DetailOrder();
             detailOrder.OrderID = order.ID;
         }

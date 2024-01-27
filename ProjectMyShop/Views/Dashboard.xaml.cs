@@ -1,6 +1,7 @@
 ﻿using ProjectMyShop.BUS;
 using ProjectMyShop.Config;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,8 +21,8 @@ namespace ProjectMyShop.Views
         public int monthOrder { get; set; } = 0;
 
         List<Product>? _products = null;
-        ProductBUS _productBUS = new ProductBUS();
-        OrderBUS _orderBUS = new OrderBUS();
+        SProductBUS _productBUS = new SProductBUS();
+        SOrderBUS _orderBUS = new SOrderBUS();
         public Dashboard()
         {
             InitializeComponent();

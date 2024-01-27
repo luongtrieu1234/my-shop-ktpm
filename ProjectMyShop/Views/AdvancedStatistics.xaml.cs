@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ProjectMyShop.DTO;
 using ProjectMyShop.BUS;
+using ProjectMyShop.SBUS;
 
 namespace ProjectMyShop.Views
 {
@@ -60,7 +61,7 @@ namespace ProjectMyShop.Views
         public List<BestSellingProduct> Products;
         private Statistics _statisticsPage;
         private SpecificStatistics _specificPage;
-        ProductBUS _ProductBUS = new ProductBUS();
+        SProductBUS _ProductBUS = new SProductBUS();
 
         private void statisticsCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

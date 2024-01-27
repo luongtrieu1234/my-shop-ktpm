@@ -1,5 +1,6 @@
 ﻿using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace ProjectMyShop.Views
     /// </summary>
     public partial class AddProductOrder : Window
     {
-        ProductBUS _ProductBus;
+        SProductBUS _ProductBus;
         CategoryBUS _categoryBus;
         List<Category> _categories;
         List<Product> _selectedProducts;
@@ -54,7 +55,7 @@ namespace ProjectMyShop.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _ProductBus = new ProductBUS();
+            _ProductBus = new SProductBUS();
             _categoryBus = new CategoryBUS();
 
             _categories = _categoryBus.getCategoryList();

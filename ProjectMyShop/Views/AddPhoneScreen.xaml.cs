@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ProjectMyShop.SBUS;
 
 namespace ProjectMyShop.Views
 {
@@ -24,7 +25,7 @@ namespace ProjectMyShop.Views
     {
         public Product newProduct { get; set; }
         public int catIndex { get; set; } = -1;
-        ProductBUS _ProductBUS { get; set; }
+        SProductBUS _ProductBUS { get; set; }
         
 
         public AddProductScreen(List<Category> category)
