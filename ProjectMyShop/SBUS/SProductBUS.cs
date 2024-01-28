@@ -12,7 +12,7 @@ namespace ProjectMyShop.SBUS
 
         public SProductBUS()
         {
-            _productDAO = new SProductDAO();
+            _productDAO = (SProductDAO)SOjectManager.Prototypes["SProductDAO"];
             if (_productDAO.CanConnect())
             {
                 _productDAO.Connect();

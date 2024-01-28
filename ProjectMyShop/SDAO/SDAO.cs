@@ -1,11 +1,6 @@
 ﻿using ProjectMyShop.Config;
-using ProjectMyShop.DTO;
-using ProjectMyShop.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 
 namespace ProjectMyShop.SDAO
 {
@@ -22,7 +17,7 @@ namespace ProjectMyShop.SDAO
             try
             {
                 username = AppConfig.GetValue(AppConfig.Username);
-                password = AppConfig.GetPassword();
+                password = AppConfig.GetValue(AppConfig.Password);
 
                 string? connectionString = AppConfig.ConnectionString(username, password);
                 _connection = new SqlConnection(connectionString);

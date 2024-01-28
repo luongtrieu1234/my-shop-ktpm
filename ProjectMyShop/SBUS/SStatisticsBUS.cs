@@ -10,7 +10,7 @@ namespace ProjectMyShop.SBUS
 
         public SStatisticsBUS()
         {
-            _statisticsDAO = new SStatisticsDAO();
+            _statisticsDAO = (SStatisticsDAO)SOjectManager.Prototypes["SStatisticsDAO"];
             if (_statisticsDAO.CanConnect())
             {
                 _statisticsDAO.Connect();

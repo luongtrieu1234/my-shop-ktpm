@@ -1,11 +1,4 @@
-﻿using Microsoft.Graph;
-using ProjectMyShopClient.CBUS;
-using ProjectMyShop.SDAO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Collections.Generic;
 using ProjectMyShop;
 
 namespace ProjectMyShopClient

@@ -11,7 +11,7 @@ namespace ProjectMyShop.SBUS
 
         public SCategoryBUS()
         {
-            _categoryDAO = new SCategoryDAO();
+            _categoryDAO = (SCategoryDAO)SOjectManager.Prototypes["SCategoryDAO"];
             if (_categoryDAO.CanConnect())
             {
                 _categoryDAO.Connect();

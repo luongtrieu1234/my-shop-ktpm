@@ -12,7 +12,7 @@ namespace ProjectMyShop.SBUS
 
         public SOrderBUS()
         {
-            _orderDAO = new SOrderDAO();
+            _orderDAO = (SOrderDAO)SOjectManager.Prototypes["SOrderDAO"];
             if (_orderDAO.CanConnect())
             {
                 _orderDAO.Connect();
