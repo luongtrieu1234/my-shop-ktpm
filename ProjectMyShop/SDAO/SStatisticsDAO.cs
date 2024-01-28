@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace ProjectMyShop.SDAO
 {
-    internal class SStatisticsDAO : SDAO
+    public class SStatisticsDAO : SDAO
     {
 
         public override SObject Clone()

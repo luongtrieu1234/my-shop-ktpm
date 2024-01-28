@@ -1,5 +1,5 @@
 ﻿using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +51,7 @@ namespace ProjectMyShopClient.Views
         public List<BestSellingProduct> Products;
         private Statistics _statisticsPage;
         private SpecificStatistics _specificPage;
-        SProductBUS _ProductBUS = new SProductBUS();
+        CProductBUS _ProductBUS = new CProductBUS();
 
         private void statisticsCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

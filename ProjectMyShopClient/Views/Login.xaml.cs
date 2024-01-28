@@ -1,5 +1,5 @@
 ﻿using ProjectMyShopClient.Config;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,7 +11,7 @@ namespace ProjectMyShopClient.Views
     public partial class Login : Window
     {
 
-        SAccountBUS _accountBUS = new SAccountBUS();
+        CAccountBUS _accountBUS = new CAccountBUS();
 
         private string _username;
         private string _password;

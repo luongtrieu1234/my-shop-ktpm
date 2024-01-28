@@ -39,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProjectMyShop\ProjectMyShop.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Aspose.Cells">
       <HintPath>C:\dll\Aspose.Cells.dll</HintPath>
     </Reference>

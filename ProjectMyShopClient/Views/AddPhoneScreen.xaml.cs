@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -16,7 +16,7 @@ namespace ProjectMyShopClient.Views
     {
         public Product newProduct { get; set; }
         public int catIndex { get; set; } = -1;
-        SProductBUS _ProductBUS { get; set; }
+        CProductBUS _ProductBUS { get; set; }
 
 
         public AddProductScreen(List<Category> category)

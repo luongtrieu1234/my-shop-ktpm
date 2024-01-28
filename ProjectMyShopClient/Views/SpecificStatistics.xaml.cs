@@ -1,7 +1,7 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
 using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +22,11 @@ namespace ProjectMyShopClient.Views
             _statisticsPage = srcPage;
             _advancedPage = new AdvancedStatistics(srcPage);
 
-            _statisticsBUS = new SStatisticsBUS();
-            _categoryBUS = new SCategoryBUS();
-            _ProductBUS = new SProductBUS();
+            _statisticsBUS = new CStatisticsBUS();
+            _categoryBUS = new CCategoryBUS();
+            _ProductBUS = new CProductBUS();
 
-            categories = SObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
+            categories = CObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
             categoriesCombobox.ItemsSource = categories;
 
             if (categories.Count() > 0)
@@ -54,9 +54,9 @@ namespace ProjectMyShopClient.Views
             _advancedPage = srcAdvancedStatistics;
         }
 
-        private SStatisticsBUS _statisticsBUS;
-        private SCategoryBUS _categoryBUS;
-        private SProductBUS _ProductBUS;
+        private CStatisticsBUS _statisticsBUS;
+        private CCategoryBUS _categoryBUS;
+        private CProductBUS _ProductBUS;
         public int statisticsFigureIndex { get; set; } = 1;
         public int bargraphFigureIndex { get; set; } = 0;
         public int tabSelectedIndex { get; set; } = 0;

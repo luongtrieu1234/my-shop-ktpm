@@ -1,6 +1,6 @@
 ﻿using ProjectMyShopClient.Config;
 using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using ProjectMyShopClient.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace ProjectMyShopClient.Views
 
         List<Category>? _categories = null;
         CategoryViewModel CategoryViewModel = new CategoryViewModel();
-        private SCategoryBUS _categoryBUS = new SCategoryBUS();
+        private CCategoryBUS _categoryBUS = new CCategoryBUS();
 
 
         public ManageCategory()
@@ -27,8 +27,8 @@ namespace ProjectMyShopClient.Views
 
 
             InitializeComponent();
-            SCategoryBUS catBUS = new SCategoryBUS();
-            List<Category> categories = SObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
+            CCategoryBUS catBUS = new CCategoryBUS();
+            //List<Category> categories = CObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
             CategoryViewModel.Categories = new BindingList<Category>();
 
 
@@ -60,7 +60,7 @@ namespace ProjectMyShopClient.Views
 
         void loadCategory()
         {
-            _categories = SObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
+            _categories = CObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
             categoriesListView.ItemsSource = _categories;
 
         }

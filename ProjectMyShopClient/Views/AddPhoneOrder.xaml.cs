@@ -1,5 +1,5 @@
 ﻿using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -13,8 +13,8 @@ namespace ProjectMyShopClient.Views
     /// </summary>
     public partial class AddProductOrder : Window
     {
-        SProductBUS _ProductBus;
-        SCategoryBUS _categoryBus;
+        CProductBUS _ProductBus;
+        CCategoryBUS _categoryBus;
         List<Category> _categories;
         List<Product> _selectedProducts;
         public DetailOrder detailOrder;
@@ -45,10 +45,10 @@ namespace ProjectMyShopClient.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _ProductBus = new SProductBUS();
-            _categoryBus = new SCategoryBUS();
+            _ProductBus = new CProductBUS();
+            _categoryBus = new CCategoryBUS();
 
-            _categories = SObject.ConvertData<Category>(_categoryBus.ExecuteMethod("GetAll", null));
+            _categories = CObject.ConvertData<Category>(_categoryBus.ExecuteMethod("GetAll", null));
 
             categoryCombobox.ItemsSource = _categories;
 

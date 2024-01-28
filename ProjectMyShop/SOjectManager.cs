@@ -54,7 +54,7 @@ namespace ProjectMyShop
             return value;
         }
 
-        public static dynamic ExecuteRemoteMethod(int ID, string methodName, string inputParams)
+        public static dynamic ExecuteRemoteMethod(int ID, string methodName, dynamic inputParams)
         {
             SObject o = FindObjectByID(ID);
             if (o == null) return false;

@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using ProjectMyShopClient.Config;
 using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using ProjectMyShopClient.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace ProjectMyShopClient.Views
         {
             InitializeComponent();
         }
-        private SProductBUS _ProductBus = new SProductBUS();
+        private CProductBUS _ProductBus = new CProductBUS();
         ProductViewModel _vm = new ProductViewModel();
         List<Category>? _categories = null;
         int _totalItems = 0;
@@ -82,9 +82,9 @@ namespace ProjectMyShopClient.Views
             nextButton.IsEnabled = false;
             _currentPage = 0;
             _totalPages = 0;
-            var catBUS = new SCategoryBUS();
-            var ProductBUS = new SProductBUS();
-            _categories = SObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
+            var catBUS = new CCategoryBUS();
+            var ProductBUS = new CProductBUS();
+            _categories = CObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
             categoriesListView.ItemsSource = _categories;
             foreach (var category in _categories)
             {
@@ -266,8 +266,8 @@ namespace ProjectMyShopClient.Views
                 string filename = screen.FileName;
 
                 var workbook = new Workbook(filename);
-                var _ProductBUS = new SProductBUS();
-                var _cateBUS = new SCategoryBUS();
+                var _ProductBUS = new CProductBUS();
+                var _cateBUS = new CCategoryBUS();
 
                 var tabs = workbook.Worksheets;
                 // In ra các tab để d ebug
@@ -318,7 +318,7 @@ namespace ProjectMyShopClient.Views
                         cell = tab.Cells[$"{column}{row}"];
                     }
                 }
-                _categories = SObject.ConvertData<Category>(_cateBUS.ExecuteMethod("GetAll", null));
+                _categories = CObject.ConvertData<Category>(_cateBUS.ExecuteMethod("GetAll", null));
                 Debug.WriteLine(_categories.Count);
                 foreach (var category in _categories)
                 {

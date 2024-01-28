@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -21,7 +21,7 @@ namespace ProjectMyShopClient.Views
 
         public Category newCategory { get; set; }
         public int catIndex { get; set; } = -1;
-        SCategoryBUS _categoryBUS { get; set; }
+        CCategoryBUS _categoryBUS { get; set; }
 
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
         {

@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 namespace ProjectMyShop.SDAO
 {
-    internal class SProductDAO : SDAO
+    public class SProductDAO : SDAO
     {
         public override string GetObjectType()
         {

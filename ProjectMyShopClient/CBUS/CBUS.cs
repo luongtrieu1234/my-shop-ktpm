@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ProjectMyShopClient.SBUS
+namespace ProjectMyShopClient.CBUS
 {
-    public class SBUS : SObject
+    public class CBUS : CObject
     {
 
     }

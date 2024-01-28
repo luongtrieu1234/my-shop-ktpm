@@ -1,6 +1,6 @@
 ﻿using ProjectMyShopClient.Config;
 using ProjectMyShopClient.DTO;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -19,8 +19,8 @@ namespace ProjectMyShopClient.Views
         public int monthOrder { get; set; } = 0;
 
         List<Product>? _products = null;
-        SProductBUS _productBUS = new SProductBUS();
-        SOrderBUS _orderBUS = new SOrderBUS();
+        CProductBUS _productBUS = new CProductBUS();
+        COrderBUS _orderBUS = new COrderBUS();
         public Dashboard()
         {
             InitializeComponent();

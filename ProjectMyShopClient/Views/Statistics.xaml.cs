@@ -1,7 +1,7 @@
 ﻿using LiveCharts;
 using LiveCharts.Wpf;
 using ProjectMyShopClient.Config;
-using ProjectMyShopClient.SBUS;
+using ProjectMyShopClient.CBUS;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -19,7 +19,7 @@ namespace ProjectMyShopClient.Views
         {
             InitializeComponent();
 
-            _statisticsBUS = new SStatisticsBUS();
+            _statisticsBUS = new CStatisticsBUS();
 
             statisticsCombobox.ItemsSource = statisticsFigureValues;
             statisticsCombobox.SelectedIndex = statisticsFigureIndex;
@@ -45,7 +45,7 @@ namespace ProjectMyShopClient.Views
             DataContext = this;
         }
 
-        private SStatisticsBUS _statisticsBUS;
+        private CStatisticsBUS _statisticsBUS;
         public SpecificStatistics _specificStatistics;
         public AdvancedStatistics _advancedStatistics;
         public List<string> figureValues = new List<string>() { "Daily", "Weekly", "Monthly", "Yearly" };
@@ -59,7 +59,7 @@ namespace ProjectMyShopClient.Views
 
         public void configureGeneral()
         {
-            TotalRevenueTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalRevenueUntilDate", new { src = selectedDate }).ToString();
+            TotalRevenueTextBlock.Text = _statisticsBUS.getTotalRevenueUntilDate(selectedDate).ToString();
             TotalProfitTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalProfitUntilDate", new { src = selectedDate }).ToString();
             TotalOrdersTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalOrdersUntilDate", new { src = selectedDate }).ToString();
         }
