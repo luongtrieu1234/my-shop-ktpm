@@ -225,8 +225,8 @@ namespace ProjectMyShop.SDAO
             {
                 Debug.WriteLine("ad " + detailOrder.ProductID.ToString());
                 var productID = detailOrder.ProductID;
-                var product = _productBUS.getProductByID(productID);
-                detailOrder.Product = product;
+                var product = _productBUS.GetByID(productID);
+                detailOrder.Product = (Product)product;
                 //Debug.WriteLine(product.GetType());
             }
 
