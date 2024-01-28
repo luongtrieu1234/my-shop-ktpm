@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using Aspose.Cells;
-using Microsoft.Win32;
-using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
 using ProjectMyShop.ViewModels;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using ProjectMyShop.Config;
-using System.Configuration;
 using ProjectMyShop.SBUS;
 
 namespace ProjectMyShop.Views

@@ -1,12 +1,5 @@
 ﻿using ProjectMyShop.Config;
-using ProjectMyShop.DAO;
-using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {

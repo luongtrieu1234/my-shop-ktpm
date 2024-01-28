@@ -1,24 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
-using ProjectMyShop.BUS;
 using ProjectMyShop.Config;
 using ProjectMyShop.SBUS;
-using ProjectMyShop.Views;
 
 namespace ProjectMyShop.Views
 {
@@ -71,9 +59,9 @@ namespace ProjectMyShop.Views
 
         public void configureGeneral()
         {
-            TotalRevenueTextBlock.Text = _statisticsBUS.getTotalRevenueUntilDate(selectedDate).ToString();
-            TotalProfitTextBlock.Text = _statisticsBUS.getTotalProfitUntilDate(selectedDate).ToString();
-            TotalOrdersTextBlock.Text = _statisticsBUS.getTotalOrdersUntilDate(selectedDate).ToString();
+            TotalRevenueTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalRevenueUntilDate", new { src = selectedDate }).ToString();
+            TotalProfitTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalProfitUntilDate", new { src = selectedDate }).ToString();
+            TotalOrdersTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalOrdersUntilDate", new { src = selectedDate }).ToString();
         }
 
         public void configureRevenueCharts()
@@ -81,7 +69,7 @@ namespace ProjectMyShop.Views
             switch (figureIndex)
             {
                 case 0:
-                    var revenueResult = _statisticsBUS.getDailyRevenue(selectedDate);
+                    var revenueResult = _statisticsBUS.ExecuteMethod("getDailyRevenue", new { src = selectedDate });
 
                     var revenues = new ChartValues<double>();
                     var dates = new List<string>();
@@ -121,7 +109,7 @@ namespace ProjectMyShop.Views
                     break;
 
                 case 1:
-                    var weeklyRevenueResult = _statisticsBUS.getWeeklyRevenue(selectedDate);
+                    var weeklyRevenueResult = _statisticsBUS.ExecuteMethod("getWeeklyRevenue",new {src= selectedDate });
 
                     var weeklyRevenues = new ChartValues<double>();
                     var weeks = new List<string>();
@@ -160,7 +148,7 @@ namespace ProjectMyShop.Views
                     break;
 
                 case 2:
-                    var monthlyRevenueResult = _statisticsBUS.getMonthlyRevenue(selectedDate);
+                    var monthlyRevenueResult = _statisticsBUS.ExecuteMethod("getMonthlyRevenue", new { src = selectedDate });
 
                     var monthlyRevenues = new ChartValues<double>();
                     var months = new List<string>();
@@ -199,7 +187,7 @@ namespace ProjectMyShop.Views
 
                     break;
                 case 3:
-                    var yearlyRevenueResult = _statisticsBUS.getYearlyRevenue();
+                    var yearlyRevenueResult = _statisticsBUS.ExecuteMethod("getYearlyRevenue",null);
 
                     var yearlyRevenues = new ChartValues<double>();
                     var years = new List<string>();
@@ -246,7 +234,7 @@ namespace ProjectMyShop.Views
             switch (profitFigureIndex)
             {
                 case 0:
-                    var profitResult = _statisticsBUS.getDailyProfit(selectedDate);
+                    var profitResult = _statisticsBUS.ExecuteMethod("getDailyProfit",new { src = selectedDate });
 
                     var profits = new ChartValues<double>();
                     var dates = new List<string>();
@@ -286,7 +274,7 @@ namespace ProjectMyShop.Views
                     break;
 
                 case 1:
-                    var weeklyProfitResult = _statisticsBUS.getWeeklyProfit(selectedDate);
+                    var weeklyProfitResult = _statisticsBUS.ExecuteMethod("getWeeklyProfit",new { src = selectedDate });
 
                     var weeklyProfits = new ChartValues<double>();
                     var weeks = new List<string>();
@@ -327,7 +315,7 @@ namespace ProjectMyShop.Views
                     break;
 
                 case 2:
-                    var monthlyProfitResult = _statisticsBUS.getMonthlyProfit(selectedDate);
+                    var monthlyProfitResult = _statisticsBUS.ExecuteMethod("getMonthlyProfit", new { src = selectedDate });
 
                     var monthlyProfits = new ChartValues<double>();
                     var months = new List<string>();
@@ -367,7 +355,7 @@ namespace ProjectMyShop.Views
 
                     break;
                 case 3:
-                    var yearlyProfitResult = _statisticsBUS.getYearlyProfit();
+                    var yearlyProfitResult = _statisticsBUS.ExecuteMethod("getYearlyProfit",null);
 
                     var yearlyProfits = new ChartValues<double>();
                     var years = new List<string>();

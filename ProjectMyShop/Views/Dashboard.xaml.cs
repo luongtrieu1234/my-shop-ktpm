@@ -1,10 +1,8 @@
-﻿using ProjectMyShop.BUS;
-using ProjectMyShop.Config;
+﻿using ProjectMyShop.Config;
 using ProjectMyShop.DTO;
 using ProjectMyShop.SBUS;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;

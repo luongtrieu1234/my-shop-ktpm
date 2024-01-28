@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectMyShop.DAO;
 using ProjectMyShop.SDAO;
 
 namespace ProjectMyShop.SBUS
@@ -20,7 +16,59 @@ namespace ProjectMyShop.SBUS
                 _statisticsDAO.Connect();
             }
         }
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
+        {
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    return GetObjectType();
+                case "Clone":
+                    return Clone();
+                case "getTotalRevenueUntilDate":
+                    return getTotalRevenueUntilDate(inputParams.src);
+                case "getTotalProfitUntilDate":
+                    return getTotalProfitUntilDate(inputParams.src);
+                case "getTotalOrdersUntilDate":
+                    return getTotalOrdersUntilDate(inputParams.src);
+                case "getDailyRevenue":
+                    return getDailyRevenue(inputParams.src);
+                case "getWeeklyRevenue":
+                    return getWeeklyRevenue(inputParams.src);
+                case "getMonthlyRevenue":
+                    return getMonthlyRevenue(inputParams.src);
+                case "getYearlyRevenue":
+                    return getYearlyRevenue();
+                case "getDailyProfit":
+                    return getDailyProfit(inputParams.src);
+                case "getWeeklyProfit":
+                    return getWeeklyProfit(inputParams.src);
+                case "getMonthlyProfit":
+                    return getMonthlyProfit(inputParams.src);
+                case "getYearlyProfit":
+                    return getYearlyProfit();
+                case "getDailyQuantityOfSpecificProduct":
+                    return getDailyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                case "getWeeklyQuantityOfSpecificProduct":
+                    return getWeeklyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                case "getMonthlyQuantityOfSpecificProduct":
+                    return getMonthlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                case "getYearlyQuantityOfSpecificProduct":
+                    return getYearlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID);
+                case "getProductQuantityInCategory":
+                    return getProductQuantityInCategory(inputParams.srcCategoryID);
+                default:
+                    return false;
+            }
+        }
+        public override string GetObjectType()
+        {
+            return "SStatisticsBUS";
+        }
 
+        public override SObject Clone()
+        {
+            return new SStatisticsBUS();
+        }
         public string getTotalRevenueUntilDate(DateTime src)
         {
             return _statisticsDAO.getTotalRevenueUntilDate(src);

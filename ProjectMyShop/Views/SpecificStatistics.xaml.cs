@@ -1,22 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
-using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
 using ProjectMyShop.SBUS;
 
@@ -90,7 +78,8 @@ namespace ProjectMyShop.Views
                 case 0:
                     if (Products.Count() > 0 && categories.Count() > 0)
                     {
-                        var productResult = _statisticsBUS.getDailyQuantityOfSpecificProduct(Products[productFigureIndex].ID, categories[categoriesFigureIndex].ID, selectedDate);
+                        var productResult = _statisticsBUS.ExecuteMethod("getDailyQuantityOfSpecificProduct",
+                            new { srcProductID = Products[productFigureIndex].ID, srcCategoryID = categories[categoriesFigureIndex].ID, srcDate = selectedDate });
 
                         var quantity = new ChartValues<int>();
                         var dates = new List<string>();
@@ -132,8 +121,13 @@ namespace ProjectMyShop.Views
                 case 1:
                     if (Products.Count() > 0 && categories.Count() > 0)
                     {
-                        var weeklyProductResult = _statisticsBUS.getMonthlyQuantityOfSpecificProduct(Products[productFigureIndex].ID, categories[categoriesFigureIndex].ID, selectedDate);
-
+                        var weeklyProductResult = _statisticsBUS.ExecuteMethod("getMonthlyQuantityOfSpecificProduct",
+                            new
+                            {
+                                srcProductID = Products[productFigureIndex].ID,
+                                srcCategoryID = categories[categoriesFigureIndex].ID,
+                                srcDate = selectedDate
+                            });
                         var weeklyQuantity = new ChartValues<int>();
                         var weeks = new List<string>();
 
@@ -173,8 +167,14 @@ namespace ProjectMyShop.Views
                 case 2:
                     if (Products.Count() > 0 && categories.Count() > 0)
                     {
-                        var monthlyProductResult = _statisticsBUS.getMonthlyQuantityOfSpecificProduct(Products[productFigureIndex].ID, categories[categoriesFigureIndex].ID, selectedDate);
 
+                        var monthlyProductResult = _statisticsBUS.ExecuteMethod("getMonthlyQuantityOfSpecificProduct",
+                            new
+                            {
+                                srcProductID = Products[productFigureIndex].ID,
+                                srcCategoryID = categories[categoriesFigureIndex].ID,
+                                srcDate = selectedDate
+                            });
                         var monthlyQuantity = new ChartValues<int>();
                         var months = new List<string>();
 
@@ -215,8 +215,11 @@ namespace ProjectMyShop.Views
                 case 3:
                     if (Products.Count() > 0 && categories.Count() > 0)
                     {
-                        var yearlyProductResult = _statisticsBUS.getYearlyQuantityOfSpecificProduct(Products[productFigureIndex].ID, categories[categoriesFigureIndex].ID);
-
+                        var yearlyProductResult = _statisticsBUS.ExecuteMethod("getYearlyQuantityOfSpecificProduct", new
+                        {
+                            srcProductID = Products[productFigureIndex].ID,
+                            srcCategoryID = categories[categoriesFigureIndex].ID
+                        });
                         var yearlyQuantity = new ChartValues<int>();
                         var years = new List<string>();
 
@@ -259,8 +262,10 @@ namespace ProjectMyShop.Views
         {
             if (Products.Count() > 0 && categories.Count() > 0)
             {
-                var ProductResult = _statisticsBUS.getProductQuantityInCategory(categories[categoriesFigureIndex].ID);
-
+                var ProductResult = _statisticsBUS.ExecuteMethod("getProductQuantityInCategory", new
+                {
+                    srcCategoryID = categories[categoriesFigureIndex].ID
+                });
                 var ProductQuantityCollection = new SeriesCollection();
 
                 foreach (var item in ProductResult)

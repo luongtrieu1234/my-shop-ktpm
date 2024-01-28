@@ -1,12 +1,7 @@
-﻿using ProjectMyShop.DAO;
-using ProjectMyShop.DTO;
+﻿using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {

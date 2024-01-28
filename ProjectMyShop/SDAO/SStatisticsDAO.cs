@@ -10,6 +10,7 @@ namespace ProjectMyShop.SDAO
 {
     internal class SStatisticsDAO : SDAO
     {
+
         public override SObject Clone()
         {
             return new SStatisticsDAO();
