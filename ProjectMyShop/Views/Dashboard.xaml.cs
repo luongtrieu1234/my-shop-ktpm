@@ -33,7 +33,7 @@ namespace ProjectMyShop.Views
             totalProduct = _productBUS.GetTotalProduct();
             weekOrder = _orderBUS.CountOrderByWeek();
             monthOrder = _orderBUS.CountOrderByMonth();
-            _products = _productBUS.Top5OutStock();
+            _products = _productBUS.GetTop5OutStock();
 
             ProductDataGrid.ItemsSource = _products;
             DataContext = this;
@@ -59,10 +59,10 @@ namespace ProjectMyShop.Views
                     try
                     {
                         var newProduct = screen.newProduct;
-                        _productBUS.updateProduct(p.ID, newProduct);
+                        _productBUS.Update(p.ID, newProduct);
 
                         // reload page
-                        _products = _productBUS.Top5OutStock();
+                        _products = _productBUS.GetTop5OutStock();
                         ProductDataGrid.ItemsSource = _products;
                     }
                     catch (Exception ex)

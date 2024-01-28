@@ -28,7 +28,7 @@ namespace ProjectMyShop.SBUS
         {
             return _productDAO.ExecuteMethod("getTotalProduct", null);
         }
-        public List<Product> Top5OutStock()
+        public List<Product> GetTop5OutStock()
         {
             return _productDAO.ExecuteMethod("GetTop5OutStock", null);
         }
@@ -38,8 +38,9 @@ namespace ProjectMyShop.SBUS
             return _productDAO.ExecuteMethod("getProductsAccordingToSpecificCategory", new { srcCategoryID = srcCategoryID });
         }
 
-        public void addProduct(Product product)
+        public override void Add(Data data)
         {
+            Product product = (Product)data;
             if (product.Stock < 0)
             {
                 throw new Exception("Invalid stock");
@@ -55,12 +56,13 @@ namespace ProjectMyShop.SBUS
                 product.ID = _productDAO.GetLastestInsertID();
             }
         }
-        public void removeProduct(Product product)
+        public override void Remove(int ID)
         {
-            _productDAO.ExecuteMethod("Remove", new { productid = product.ID });
+            _productDAO.ExecuteMethod("Remove", new { productid = ID });
         }
-        public void updateProduct(int ID, Product product)
+        public override void Update(int ID, Data data)
         {
+            Product product = (Product)data;
             Debug.WriteLine(product.Stock);
             if (product.Stock < 0)
             {
@@ -90,9 +92,57 @@ namespace ProjectMyShop.SBUS
         {
             return _productDAO.ExecuteMethod("getBestSellingProductsInYear", new { src = src });
         }
-        public Product? getProductByID(int ProductID)
+        public override Data GetByID(int ProductID)
         {
             return _productDAO.ExecuteMethod("GetByID", new { productID = ProductID });
+        }
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
+        {
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    Debug.WriteLine("GetObjectType Product called");
+                    return GetObjectType();
+                case "Clone":
+                    Debug.WriteLine("Clone Product called");
+                    return Clone();
+                case "GetByID":
+                    Debug.WriteLine("GetByID Product called");
+                    return GetByID(inputParams.productID);
+                case "Add":
+                    Debug.WriteLine("Add Product called");
+                    Add(inputParams.data);
+                    return true;
+                case "Update":
+                    Debug.WriteLine("Update Product called");
+                    Update(inputParams.id, inputParams.data);
+                    return true;
+                case "Remove":
+                    Debug.WriteLine("Remove Product called");
+                    return Remove(inputParams.productid);
+                case "GetObjects":
+                    Debug.WriteLine("GetObjects Product called");
+                    return GetObjects(inputParams.offset, inputParams.size);
+                case "GetTotalProduct":
+                    Debug.WriteLine("GetTotalProduct Product called");
+                    return GetTotalProduct();
+                case "GetTop5OutStock":
+                    Debug.WriteLine("GetTop5OutStock Product called");
+                    return GetTop5OutStock();
+                case "getProductsAccordingToSpecificCategory":
+                    Debug.WriteLine("getProductsAccordingToSpecificCategory Product called");
+                    return getProductsAccordingToSpecificCategory(inputParams.srcCategoryID);
+                case "getBestSellingProductsInWeek":
+                    Debug.WriteLine("getBestSellingProductsInWeek Product called");
+                    return getBestSellingProductsInWeek(inputParams.src);
+                case "getBestSellingProductsInMonth":
+                    Debug.WriteLine("getBestSellingProductsInMonth Product called");
+                    return getBestSellingProductsInMonth(inputParams.src);
+                case "getBestSellingProductsInYear":
+                    Debug.WriteLine("getBestSellingProductsInYear Product called");
+                    return getBestSellingProductsInYear(inputParams.src);
+            }
+            return false;
         }
     }
 }

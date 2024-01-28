@@ -95,7 +95,7 @@ namespace ProjectMyShop.Views
 
                 if (result == true)
                 {
-                    _orderBUS.UpdateOrder(_vm.SelectedOrders[index].ID, order);
+                    _orderBUS.Update(_vm.SelectedOrders[index].ID, order);
                     Reload();
                 }
                 else
@@ -115,7 +115,7 @@ namespace ProjectMyShop.Views
             var screen = new ManageDetailOrder(order);
             if (screen.ShowDialog() == true)
             {
-                _orderBUS.AddOrder(order);
+                _orderBUS.Add(order);
                 Reload();
             }
             else
@@ -134,7 +134,7 @@ namespace ProjectMyShop.Views
                 var res = MessageBox.Show($"Are you sure to delete this order: {order.ID} - {order.CustomerName}?", "Delete order", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (res == MessageBoxResult.Yes)
                 {
-                    _orderBUS.DeleteOrder(order.ID);
+                    _orderBUS.Remove(order.ID);
                     Reload();
                     if (_vm.SelectedOrders.Count == 0)
                     {
@@ -181,7 +181,7 @@ namespace ProjectMyShop.Views
 
                 if (result == true)
                 {
-                    _orderBUS.UpdateOrder(_vm.SelectedOrders[index].ID, order);
+                    _orderBUS.Update(_vm.SelectedOrders[index].ID, order);
                     Reload();
                 }
                 else

@@ -173,7 +173,7 @@ namespace ProjectMyShop.Views
                 p.Stock = info.Stock;
                 try
                 {
-                    _ProductBus.updateProduct(p.ID, p);
+                    _ProductBus.Update(p.ID, p);
                     searchTextBox_TextChanged(sender, null);
                 }
                 catch (Exception ex)
@@ -201,7 +201,7 @@ namespace ProjectMyShop.Views
                 //_products.Remove(p);
                 _vm.Products.Remove(p);
                 _categories[i].Products.Remove(p);
-                _ProductBus.removeProduct(p);
+                _ProductBus.Remove(p.ID);
                 searchTextBox_TextChanged(sender, null);
                 //_vm.SelectedProducts.Remove(p);
 
@@ -322,7 +322,7 @@ namespace ProjectMyShop.Views
                             Avatar = new BitmapImage(new Uri(avaURL, UriKind.Absolute)),
                             Category = cat,
                         };
-                        _ProductBUS.addProduct(p);
+                        _ProductBUS.Add(p);
                         row++;
                         cell = tab.Cells[$"{column}{row}"];
                     }
@@ -352,7 +352,7 @@ namespace ProjectMyShop.Views
                     try
                     {
                     newProduct.Category = _categories[catIndex];
-                    _ProductBus.addProduct(newProduct);
+                    _ProductBus.Add(newProduct);
                     _categories[catIndex].Products.Add(newProduct);
                     loadProducts();
                     }
