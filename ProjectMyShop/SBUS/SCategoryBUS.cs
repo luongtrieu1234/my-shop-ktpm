@@ -4,15 +4,15 @@ using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SCategoryBUS:SBUS
+    internal class SCategoryBUS : SBUS
     {
-
         private SCategoryDAO _categoryDAO;
 
         public SCategoryBUS()
@@ -23,27 +23,61 @@ namespace ProjectMyShop.SBUS
                 _categoryDAO.Connect();
             }
         }
-
-        public Category GetCategoryById(int id)
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
-            Category result= _categoryDAO.ExecuteMethod("GetByID",new {ID= id});
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    return GetObjectType();
+                case "Clone":
+                    return Clone();
+                case "GetByID":
+                    return GetByID(inputParams.id);
+                case "GetAll":
+                    return GetAll();
+                case "Add":
+                    Add(inputParams.data);
+                    return true;
+                case "Remove":
+                    Remove(inputParams.id); 
+                    return true;
+                case "Update":
+                    Update(inputParams.id, inputParams.data);
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        public override string GetObjectType()
+        {
+            return "SCategoryBUS";
+        }
 
+        public override SObject Clone()
+        {
+            return new SCategoryBUS();
+        }
+
+        public override Data GetByID(int id)
+        {
+            Category result = _categoryDAO.ExecuteMethod("GetByID", new { ID = id });
             return result;
         }
 
-        public List<Category> getCategoryList()
+        public override List<Data> GetAll()
         {
-            Console.WriteLine("getCategoryList:");
+            Debug.WriteLine("getCategoryList:");
             List<Data> datas = _categoryDAO.ExecuteMethod("GetAll", null);
             List<Category> result = new List<Category>();
             foreach (Data data in datas)
             {
                 result.Add((Category)data);
             }
-            return result;
+            return new List<Data>(result);
         }
-        public void AddCategory(Category cat)
+        public override void Add(Data data)
         {
+            Category cat = (Category)data;
             int ID = _categoryDAO.isExisted(cat);
             if (ID > 0)
             {
@@ -58,16 +92,15 @@ namespace ProjectMyShop.SBUS
             }
         }
 
-        public void removeCategory(Category cat)
+        public override void Remove(int id)
         {
-            _categoryDAO.Remove(cat.ID);
+            _categoryDAO.Remove(id);
         }
 
-        public void updateCategory(int ID, Category category)
+        public override void Update(int id, Data data)
         {
-
-            _categoryDAO.ExecuteMethod("Update", new { ID = ID, data = category });
-
+            Category category = (Category)data;
+            _categoryDAO.ExecuteMethod("Update", new { ID = id, data = category });
         }
     }
 }

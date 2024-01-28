@@ -90,7 +90,11 @@ namespace ProjectMyShop
         {
             
         }
-
+        public static List<T> ConvertData<T>(List<Data> dataList) where T : Data
+        {
+            List<T> list = dataList.ConvertAll(item => (T)item);
+            return list;
+        }
 
     }
 }

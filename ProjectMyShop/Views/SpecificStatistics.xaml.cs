@@ -34,11 +34,11 @@ namespace ProjectMyShop.Views
             _statisticsPage = srcPage;
             _advancedPage = new AdvancedStatistics(srcPage);
 
-            _statisticsBUS = new StatisticsBUS();
-            _categoryBUS = new CategoryBUS();
+            _statisticsBUS = new SStatisticsBUS();
+            _categoryBUS = new SCategoryBUS();
             _ProductBUS = new SProductBUS();
 
-            categories = _categoryBUS.getCategoryList();
+            categories = SObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
             categoriesCombobox.ItemsSource = categories;
 
             if (categories.Count() > 0)
@@ -66,8 +66,8 @@ namespace ProjectMyShop.Views
             _advancedPage = srcAdvancedStatistics;
         }
 
-        private StatisticsBUS _statisticsBUS;
-        private CategoryBUS _categoryBUS;
+        private SStatisticsBUS _statisticsBUS;
+        private SCategoryBUS _categoryBUS;
         private SProductBUS _ProductBUS;
         public int statisticsFigureIndex { get; set; } = 1;
         public int bargraphFigureIndex { get; set; } = 0;

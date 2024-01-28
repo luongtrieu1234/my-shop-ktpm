@@ -93,7 +93,7 @@ namespace ProjectMyShop.Views
             _totalPages = 0;
             var catBUS = new SCategoryBUS();
             var ProductBUS = new SProductBUS();
-            _categories = catBUS.getCategoryList();
+            _categories = SObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
             categoriesListView.ItemsSource = _categories;
             foreach (var category in _categories)
             {
@@ -287,7 +287,7 @@ namespace ProjectMyShop.Views
                         CatName = tab.Name,
                         Products = new BindingList<Product>()
                     };
-                    _cateBUS.AddCategory(cat);
+                    _cateBUS.ExecuteMethod("Add",new{data=cat });
 
                     // Bắt đầu từ ô B3
                     var column = 'C';
@@ -327,7 +327,7 @@ namespace ProjectMyShop.Views
                         cell = tab.Cells[$"{column}{row}"];
                     }
                 }
-                _categories = _cateBUS.getCategoryList();
+                _categories = SObject.ConvertData<Category>(_cateBUS.ExecuteMethod("GetAll", null));
                 Debug.WriteLine(_categories.Count);
                 foreach(var category in _categories)
                 {

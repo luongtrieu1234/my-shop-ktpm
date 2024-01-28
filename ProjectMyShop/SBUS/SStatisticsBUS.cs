@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ProjectMyShop.DAO;
+using ProjectMyShop.SDAO;
 
 namespace ProjectMyShop.SBUS
 {
     internal class SStatisticsBUS:SBUS
     {
-        private StatisticsDAO _statisticsDAO;
+        private SStatisticsDAO _statisticsDAO;
 
         public SStatisticsBUS()
         {
-            _statisticsDAO = new StatisticsDAO();
+            _statisticsDAO = new SStatisticsDAO();
             if (_statisticsDAO.CanConnect())
             {
                 _statisticsDAO.Connect();

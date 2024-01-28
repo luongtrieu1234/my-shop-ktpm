@@ -17,6 +17,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using ProjectMyShop.BUS;
 using ProjectMyShop.Config;
+using ProjectMyShop.SBUS;
 using ProjectMyShop.Views;
 
 namespace ProjectMyShop.Views
@@ -30,7 +31,7 @@ namespace ProjectMyShop.Views
         {
             InitializeComponent();
 
-            _statisticsBUS = new StatisticsBUS();
+            _statisticsBUS = new SStatisticsBUS();
 
             statisticsCombobox.ItemsSource = statisticsFigureValues;
             statisticsCombobox.SelectedIndex = statisticsFigureIndex;
@@ -56,7 +57,7 @@ namespace ProjectMyShop.Views
             DataContext = this;
         }
 
-        private StatisticsBUS _statisticsBUS;
+        private SStatisticsBUS _statisticsBUS;
         public SpecificStatistics _specificStatistics;
         public AdvancedStatistics _advancedStatistics;
         public List<string> figureValues = new List<string>() { "Daily", "Weekly", "Monthly", "Yearly" };

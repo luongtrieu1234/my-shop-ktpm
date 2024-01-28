@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using ProjectMyShop.BUS;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace ProjectMyShop.Views
 
         public Category newCategory { get; set; }
         public int catIndex { get; set; } = -1;
-        CategoryBUS _categoryBUS { get; set; }
+        SCategoryBUS _categoryBUS { get; set; }
 
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
         {

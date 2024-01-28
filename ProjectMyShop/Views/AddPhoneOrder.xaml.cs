@@ -24,7 +24,7 @@ namespace ProjectMyShop.Views
     public partial class AddProductOrder : Window
     {
         SProductBUS _ProductBus;
-        CategoryBUS _categoryBus;
+        SCategoryBUS _categoryBus;
         List<Category> _categories;
         List<Product> _selectedProducts;
         public DetailOrder detailOrder;
@@ -56,9 +56,9 @@ namespace ProjectMyShop.Views
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _ProductBus = new SProductBUS();
-            _categoryBus = new CategoryBUS();
+            _categoryBus = new SCategoryBUS();
 
-            _categories = _categoryBus.getCategoryList();
+            _categories = SObject.ConvertData<Category>(_categoryBus.ExecuteMethod("GetAll",null));
 
             categoryCombobox.ItemsSource = _categories;
 

@@ -2,6 +2,7 @@
 using ProjectMyShop.Config;
 using ProjectMyShop.DAO;
 using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace ProjectMyShop.Views
     public partial class Login : Window
     {
 
-        AccountBUS _accountBUS = new AccountBUS();
+        SAccountBUS _accountBUS = new SAccountBUS();
 
         private string _username;
         private string _password;

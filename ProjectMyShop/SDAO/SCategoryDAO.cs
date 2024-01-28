@@ -16,6 +16,34 @@ namespace ProjectMyShop.SDAO
 {
     public class SCategoryDAO : SDAO
     {
+        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
+        {
+            switch (methodName)
+            {
+                case "GetObjectType":
+                    return GetObjectType();
+                case "Clone":
+                    return Clone();
+                case "GetByID":
+                    return GetByID(inputParams.ID);
+                case "GetAll":
+                    return GetAll();
+                case "Add":
+                    return Add(inputParams);
+                case "Update":
+                    Update(inputParams.ID, inputParams.data);
+                    return true;
+                case "Remove":
+                    Remove(inputParams.ID);
+                    return true;
+                case "GetLastestInsertID":
+                    return GetLastestInsertID();
+                case "isExisted":
+                    return isExisted(inputParams.isExisted);
+                default:
+                    return false;
+            }
+        }
         public override string GetObjectType()
         {
             return "SCategoryDAO";
@@ -244,33 +272,6 @@ namespace ProjectMyShop.SDAO
             return ID;
         }
 
-        public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
-        {
-            switch (methodName)
-            {
-                case "GetObjectType":
-                    return GetObjectType();
-                case "Clone":
-                    return Clone();
-                case "GetByID":
-                    return GetByID(inputParams.ID);
-                case "GetAll":
-                    return GetAll();
-                case "Add":
-                    return Add(inputParams);
-                case "Update":
-                    Update(inputParams.ID, inputParams.data);
-                    return true;
-                case "Remove":
-                    Remove(inputParams.ID);
-                    return true;
-                case "GetLastestInsertID":
-                    return GetLastestInsertID();
-                case "isExisted":
-                    return isExisted(inputParams.isExisted);
-                default:
-                    return false;
-            }
-        }
+
     }
 }
