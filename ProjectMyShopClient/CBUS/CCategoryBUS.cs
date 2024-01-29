@@ -1,16 +1,12 @@
 ﻿using ProjectMyShopClient.DTO;
-using ProjectMyShop.SDAO;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ProjectMyShopClient.CBUS
 {
     internal class CCategoryBUS : CBUS
     {
-        private SCategoryDAO _categoryDAO;
 
-        public CCategoryBUS()
+        public  CCategoryBUS()
         {
             this.ID = CObjectManager.CreateRemoteObject("SCategoryBUS");
         }

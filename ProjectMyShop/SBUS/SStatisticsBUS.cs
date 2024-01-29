@@ -18,6 +18,7 @@ namespace ProjectMyShop.SBUS
         }
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
+
             switch (methodName)
             {
                 case "GetObjectType":
@@ -25,33 +26,33 @@ namespace ProjectMyShop.SBUS
                 case "Clone":
                     return Clone();
                 case "getTotalRevenueUntilDate":
-                    return getTotalRevenueUntilDate(inputParams.src);
+                    return getTotalRevenueUntilDate((DateTime)inputParams.src);
                 case "getTotalProfitUntilDate":
-                    return getTotalProfitUntilDate(inputParams.src);
+                    return getTotalProfitUntilDate((DateTime)inputParams.src);
                 case "getTotalOrdersUntilDate":
-                    return getTotalOrdersUntilDate(inputParams.src);
+                    return getTotalOrdersUntilDate((DateTime)inputParams.src);
                 case "getDailyRevenue":
-                    return getDailyRevenue(inputParams.src);
+                    return getDailyRevenue((DateTime)inputParams.src);
                 case "getWeeklyRevenue":
-                    return getWeeklyRevenue(inputParams.src);
+                    return getWeeklyRevenue((DateTime)inputParams.src);
                 case "getMonthlyRevenue":
-                    return getMonthlyRevenue(inputParams.src);
+                    return getMonthlyRevenue((DateTime)inputParams.src);
                 case "getYearlyRevenue":
                     return getYearlyRevenue();
                 case "getDailyProfit":
-                    return getDailyProfit(inputParams.src);
+                    return getDailyProfit((DateTime)inputParams.src);
                 case "getWeeklyProfit":
-                    return getWeeklyProfit(inputParams.src);
+                    return getWeeklyProfit((DateTime)inputParams.src);
                 case "getMonthlyProfit":
-                    return getMonthlyProfit(inputParams.src);
+                    return getMonthlyProfit((DateTime)inputParams.src);
                 case "getYearlyProfit":
                     return getYearlyProfit();
                 case "getDailyQuantityOfSpecificProduct":
-                    return getDailyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                    return getDailyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
                 case "getWeeklyQuantityOfSpecificProduct":
-                    return getWeeklyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                    return getWeeklyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
                 case "getMonthlyQuantityOfSpecificProduct":
-                    return getMonthlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                    return getMonthlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
                 case "getYearlyQuantityOfSpecificProduct":
                     return getYearlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID);
                 case "getProductQuantityInCategory":

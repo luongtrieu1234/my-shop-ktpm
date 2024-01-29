@@ -8,7 +8,7 @@ namespace ProjectMyShop.SDAO
     {
         public SqlConnection _connection;
         private string? username;
-        private string password;
+        private String password;
 
         public SDAO() => ResetConnection();
 
@@ -17,7 +17,7 @@ namespace ProjectMyShop.SDAO
             try
             {
                 username = AppConfig.GetValue(AppConfig.Username);
-                password = AppConfig.GetValue(AppConfig.Password);
+                password = "";
 
                 string? connectionString = AppConfig.ConnectionString(username, password);
                 _connection = new SqlConnection(connectionString);

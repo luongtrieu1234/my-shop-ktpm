@@ -3,32 +3,46 @@ using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
 using System.Text;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace ProjectMyShop
 {
     public class SOjectManager
     {
+        public static ServerConnector server;
         public static Dictionary<int, SObject> Objects = new Dictionary<int, SObject>();
         public static Dictionary<string, SObject> Prototypes = new Dictionary<string, SObject>();
         static SOjectManager()
         {
             InitPrototypes();
+            server= new ServerConnector();
         }
 
+        public SOjectManager()
+        {
+        }
+
+        
 
         private static void InitPrototypes()
         {
-            Prototypes.Add("SAccountDAO",new SAccountDAO());
-            Prototypes.Add("SCategoryDAO",new SCategoryDAO());
-            Prototypes.Add("SOrderDAO",new SOrderDAO());
-            Prototypes.Add("SProductDAO",new SProductDAO());
-            Prototypes.Add("SStatisticsDAO",new SStatisticsDAO());
-            Prototypes.Add("SAccountBUS",new SAccountBUS());
-            Prototypes.Add("SCategoryBUS",new SCategoryBUS());
-            Prototypes.Add("SOrderBUS",new SOrderBUS());
-            Prototypes.Add("SProductBUS",new SProductBUS());
+            Prototypes.Add("SAccountDAO", new SAccountDAO());
+            Prototypes.Add("SCategoryDAO", new SCategoryDAO());
+            Prototypes.Add("SOrderDAO", new SOrderDAO());
+            Prototypes.Add("SProductDAO", new SProductDAO());
+            Prototypes.Add("SStatisticsDAO", new SStatisticsDAO());
+            Prototypes.Add("SAccountBUS", new SAccountBUS());
+            Prototypes.Add("SCategoryBUS", new SCategoryBUS());
+            Prototypes.Add("SOrderBUS", new SOrderBUS());
+            Prototypes.Add("SProductBUS", new SProductBUS());
             Prototypes.Add("SStatisticsBUS", new SStatisticsBUS());
         }
 

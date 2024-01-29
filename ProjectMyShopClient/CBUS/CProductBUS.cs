@@ -1,5 +1,4 @@
 ﻿using ProjectMyShopClient.DTO;
-using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,15 +7,8 @@ namespace ProjectMyShopClient.CBUS
 {
     internal class CProductBUS : CBUS
     {
-        private SProductDAO _productDAO;
-
         public CProductBUS()
         {
-            //_productDAO = new SProductDAO();
-            //if (_productDAO.CanConnect())
-            //{
-            //    _productDAO.Connect();
-            //}
             this.ID = CObjectManager.CreateRemoteObject("SProductBUS");
         }
 
@@ -49,7 +41,6 @@ namespace ProjectMyShopClient.CBUS
             {
                 product.UploadDate = DateTime.Now.Date;
                 this.ExecuteMethod("Add", new { data = product });
-                product.ID = _productDAO.GetLastestInsertID();
             }
         }
         public void Remove(int ID)

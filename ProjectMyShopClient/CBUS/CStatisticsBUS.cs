@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using ProjectMyShop.SDAO;
-using ProjectMyShopClient;
-using ProjectMyShopClient.DTO;
 
 namespace ProjectMyShopClient.CBUS
 {
     internal class CStatisticsBUS : CBUS
     {
-        private SStatisticsDAO _statisticsDAO;
-
         public CStatisticsBUS()
         {
-            //_statisticsDAO = new SStatisticsDAO();
-            //if (_statisticsDAO.CanConnect())
-            //{
-            //    _statisticsDAO.Connect();
-            //}
             this.ID = CObjectManager.CreateRemoteObject("SStatisticsBUS");
         }
         public string GetObjectType()
@@ -25,32 +15,32 @@ namespace ProjectMyShopClient.CBUS
         }
         public string getTotalRevenueUntilDate(DateTime src)
         {
-            return this.ExecuteMethod("getTotalRevenueUntilDate", new { src });
+            return this.ExecuteMethod("getTotalRevenueUntilDate", new { src = src });
         }
 
         public string getTotalProfitUntilDate(DateTime src)
         {
-            return this.ExecuteMethod("getTotalProfitUntilDate", new { src });
+            return this.ExecuteMethod("getTotalProfitUntilDate", new { src= src });
         }
 
         public int getTotalOrdersUntilDate(DateTime src)
         {
-            return this.ExecuteMethod("getTotalOrdersUntilDate", new { src });
+            return this.ExecuteMethod("getTotalOrdersUntilDate", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getDailyRevenue(DateTime src)
         {
-            return this.ExecuteMethod("getDailyRevenue", new { src });
+            return this.ExecuteMethod("getDailyRevenue", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getWeeklyRevenue(DateTime src)
         {
-            return this.ExecuteMethod("getWeeklyRevenue", new { src });
+            return this.ExecuteMethod("getWeeklyRevenue", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getMonthlyRevenue(DateTime src)
         {
-            return this.ExecuteMethod("getMonthlyRevenue", new { src });
+            return this.ExecuteMethod("getMonthlyRevenue", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getYearlyRevenue()
@@ -60,17 +50,17 @@ namespace ProjectMyShopClient.CBUS
 
         public List<Tuple<string, decimal>> getDailyProfit(DateTime src)
         {
-            return this.ExecuteMethod("getDailyProfit", new { src });
+            return this.ExecuteMethod("getDailyProfit", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getWeeklyProfit(DateTime src)
         {
-            return this.ExecuteMethod("getWeeklyProfit", new { src });
+            return this.ExecuteMethod("getWeeklyProfit", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getMonthlyProfit(DateTime src)
         {
-            return this.ExecuteMethod("getMonthlyProfit", new { src });
+            return this.ExecuteMethod("getMonthlyProfit", new { src= src });
         }
 
         public List<Tuple<string, decimal>> getYearlyProfit()

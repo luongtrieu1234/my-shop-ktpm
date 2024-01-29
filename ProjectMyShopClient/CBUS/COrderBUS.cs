@@ -1,22 +1,14 @@
 ﻿using ProjectMyShopClient.DTO;
-using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ProjectMyShopClient.CBUS
 {
     internal class COrderBUS : CBUS
     {
-        private SOrderDAO _orderDAO;
 
         public COrderBUS()
         {
-            //_orderDAO = new SOrderDAO();
-            //if (_orderDAO.CanConnect())
-            //{
-            //    _orderDAO.Connect();
-            //}
             this.ID = CObjectManager.CreateRemoteObject("SOrderBUS");
         }
         public List<Data> GetAll()

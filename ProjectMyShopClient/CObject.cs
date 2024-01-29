@@ -14,33 +14,33 @@ namespace ProjectMyShopClient
         //public static int NextID = 1;
         //public int ID { get; set; }
 
-        protected int ID;
+        public int ID { get; set; }
 
         //public CObject()
         //{
         //    ID = COjectManager.Register(this);
         //}
 
-        public bool SetAttributeValue(string attributeName, object attributeValue)
-        {
-            return CObjectManager.SetAttributeValue(ID, attributeName, attributeValue);
-        }
-        public object GetAttributeValue(string attributeName)
-        {
-            return CObjectManager.GetAttributeValue(ID, attributeName);
-        }
+        //public bool SetAttributeValue(string attributeName, object attributeValue)
+        //{
+        //    return CObjectManager.SetAttributeValue(ID, attributeName, attributeValue);
+        //}
+        //public object GetAttributeValue(string attributeName)
+        //{
+        //    return CObjectManager.GetAttributeValue(ID, attributeName);
+        //}
 
-        public object this[string attributeName]
-        {
-            get
-            {
-                return GetAttributeValue(attributeName);
-            }
-            set
-            {
-                SetAttributeValue(attributeName, value);
-            }
-        }
+        //public object this[string attributeName]
+        //{
+        //    get
+        //    {
+        //        return GetAttributeValue(attributeName);
+        //    }
+        //    set
+        //    {
+        //        SetAttributeValue(attributeName, value);
+        //    }
+        //}
 
         public dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
