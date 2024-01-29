@@ -1,4 +1,4 @@
-﻿using ProjectMyShopClient.DTO;
+﻿using ProjectMyShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

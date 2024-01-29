@@ -1,4 +1,4 @@
-﻿using ProjectMyShopClient.DTO;
+﻿using ProjectMyShop.DTO;
 using ProjectMyShopClient.CBUS;
 using ProjectMyShopClient.ViewModels;
 using System;

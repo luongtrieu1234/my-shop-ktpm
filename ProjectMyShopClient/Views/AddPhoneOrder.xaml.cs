@@ -1,4 +1,4 @@
-﻿using ProjectMyShopClient.DTO;
+﻿using ProjectMyShop.DTO;
 using ProjectMyShopClient.CBUS;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

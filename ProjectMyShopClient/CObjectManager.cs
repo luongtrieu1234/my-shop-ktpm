@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using ProjectMyShop;
+using System.Diagnostics;
 
 namespace ProjectMyShopClient
 {
@@ -26,11 +27,16 @@ namespace ProjectMyShopClient
 
         public static dynamic ExecuteRemoteMethod(int ID, string methodName, dynamic inputParams)
         {
-            return SOjectManager.ExecuteRemoteMethod(ID, methodName, inputParams);
+            Debug.WriteLine("CObjectManager.ExecuteRemoteMethod " + ID + " " + methodName);
+            return SOjectManager.ExecuteRemoteMethod(ID, methodName, (dynamic)inputParams);
         }
         public static int CreateRemoteObject(string typeName)
         {
             return SOjectManager.CreateRemoteObject(typeName);
+        }
+        public static object CreateRemoteDTO(string typeName)
+        {
+            return SOjectManager.CreateRemoteDTO(typeName);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ProjectMyShopClient.Config;
-using ProjectMyShopClient.DTO;
+using ProjectMyShop.DTO;
 using ProjectMyShopClient.CBUS;
 using System;
 using System.Collections.Generic;

@@ -3,6 +3,7 @@ using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace ProjectMyShop.SBUS
 {
@@ -105,7 +106,18 @@ namespace ProjectMyShop.SBUS
         {
             _orderDAO.ExecuteMethod("DeleteDetailOrder", new { detail });
         }
+        static object GetPropertyValue(object obj, string propertyName)
+        {
+            // Use reflection to get the value of the property
+            PropertyInfo property = obj.GetType().GetProperty(propertyName);
 
+            if (property != null)
+            {
+                return property.GetValue(obj);
+            }
+
+            return null;
+        }
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
             switch (methodName)
@@ -138,7 +150,7 @@ namespace ProjectMyShop.SBUS
                     return GetObjects(inputParams.offset, inputParams.size);
                 case "AddDetailOrder":
                     Debug.WriteLine("AddDetailOrder Order called");
-                    AddDetailOrder(inputParams.detail);
+                    AddDetailOrder(GetPropertyValue(inputParams, "detail"));
                     return true;
                 case "UpdateDetailOrder":
                     Debug.WriteLine("UpdateDetailOrder Order called");
@@ -150,7 +162,8 @@ namespace ProjectMyShop.SBUS
                     return true;
                 case "GetAllOrdersByDate":
                     Debug.WriteLine("GetAllOrdersByDate Order called");
-                    return GetAllOrdersByDate(inputParams.fromDate, inputParams.toDate);
+                    return GetAllOrdersByDate(GetPropertyValue(inputParams, "fromDate"),
+                        GetPropertyValue(inputParams, "toDate"));
                 case "GetStatus":
                     Debug.WriteLine("GetStatus Order called");
                     return GetStatus(inputParams.status);

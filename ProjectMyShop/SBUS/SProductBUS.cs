@@ -3,6 +3,7 @@ using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace ProjectMyShop.SBUS
 {
@@ -91,6 +92,18 @@ namespace ProjectMyShop.SBUS
         {
             return _productDAO.ExecuteMethod("GetByID", new { productID = ProductID });
         }
+        static object GetPropertyValue(object obj, string propertyName)
+        {
+            // Use reflection to get the value of the property
+            PropertyInfo property = obj.GetType().GetProperty(propertyName);
+
+            if (property != null)
+            {
+                return property.GetValue(obj);
+            }
+
+            return null;
+        }
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
             switch (methodName)
@@ -126,16 +139,16 @@ namespace ProjectMyShop.SBUS
                     return GetTop5OutStock();
                 case "getProductsAccordingToSpecificCategory":
                     Debug.WriteLine("getProductsAccordingToSpecificCategory Product called");
-                    return getProductsAccordingToSpecificCategory(inputParams.srcCategoryID);
+                    return getProductsAccordingToSpecificCategory(GetPropertyValue(inputParams, "srcCategoryID"));
                 case "getBestSellingProductsInWeek":
                     Debug.WriteLine("getBestSellingProductsInWeek Product called");
-                    return getBestSellingProductsInWeek(inputParams.src);
+                    return getBestSellingProductsInWeek(GetPropertyValue(inputParams, "src"));
                 case "getBestSellingProductsInMonth":
                     Debug.WriteLine("getBestSellingProductsInMonth Product called");
-                    return getBestSellingProductsInMonth(inputParams.src);
+                    return getBestSellingProductsInMonth(GetPropertyValue(inputParams, "src"));
                 case "getBestSellingProductsInYear":
                     Debug.WriteLine("getBestSellingProductsInYear Product called");
-                    return getBestSellingProductsInYear(inputParams.src);
+                    return getBestSellingProductsInYear(GetPropertyValue(inputParams, "src"));
             }
             return false;
         }

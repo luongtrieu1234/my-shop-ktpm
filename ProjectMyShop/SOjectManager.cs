@@ -1,4 +1,5 @@
-﻿using ProjectMyShop.SBUS;
+﻿using ProjectMyShop.DTO;
+using ProjectMyShop.SBUS;
 using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace ProjectMyShop
         {
             SObject o = FindObjectByID(ID);
             if (o == null) return false;
-            return o.ExecuteMethod(methodName, inputParams);
+            return o.ExecuteMethod(methodName, (dynamic)inputParams);
         }
         public static int Register(SObject sObject)
         {
@@ -94,6 +95,29 @@ namespace ProjectMyShop
 
             }
             return 0;
+        }
+        public static object CreateRemoteDTO(string typeName)
+        {
+            switch (typeName)
+            {
+                case "AccountDTO":
+                    return new Account();
+                case "CategoryDTO":
+                    return new Category();
+                case "OrderDTO":
+                    return new Order();
+                case "ProductDTO":
+                    return new Product();
+                case "DetailOrderDTO":
+                    return new DetailOrder();
+                case "VoucherDTO":
+                    return new Voucher();
+                case "BestSellingProductDTO":
+                    return new BestSellingProduct();
+
+
+            }
+            return null;
         }
     }
 }

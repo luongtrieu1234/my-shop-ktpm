@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using ProjectMyShopClient.DTO;
+using ProjectMyShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

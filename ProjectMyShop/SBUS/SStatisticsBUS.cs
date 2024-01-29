@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Controls;
 using ProjectMyShop.SDAO;
 
 namespace ProjectMyShop.SBUS
@@ -11,13 +16,52 @@ namespace ProjectMyShop.SBUS
         public SStatisticsBUS()
         {
             _statisticsDAO = new SStatisticsDAO();
+            //_statisticsDAO = (SStatisticsDAO)SOjectManager.Prototypes["SStatisticsDAO"];
             if (_statisticsDAO.CanConnect())
             {
                 _statisticsDAO.Connect();
             }
         }
+        static IEnumerable<string> GetDynamicObjectKeys(dynamic dynamicObject)
+        {
+            // Use reflection to get the keys of the dynamic object
+            var dynamicObjectDictionary = dynamicObject as IDictionary<string, object>;
+            if (dynamicObjectDictionary != null)
+            {
+                return dynamicObjectDictionary.Keys;
+            }
+
+            // If it's not a dictionary, you can use reflection to get the properties
+            return ((IEnumerable<PropertyInfo>)dynamicObject.GetType().GetProperties()).Select(property => property.Name);
+
+        }
+        static object GetPropertyValue(object obj, string propertyName)
+        {
+            // Use reflection to get the value of the property
+            PropertyInfo property = obj.GetType().GetProperty(propertyName);
+
+            if (property != null)
+            {
+                return property.GetValue(obj);
+            }
+
+            return null;
+        }
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
+            IEnumerable<string> keys = GetDynamicObjectKeys(inputParams);
+            Debug.WriteLine("debug " + (object)inputParams.GetType());
+            Debug.WriteLine("debug 2 " + methodName.GetType());
+            object value = GetPropertyValue(inputParams, "src");
+            Debug.WriteLine("Value of MyDate property: " + value);
+            Debug.WriteLine("Keys of the dynamic object:");
+            foreach (string key in keys)
+            {
+                Debug.WriteLine("key " + key);
+            }
+            //int srcProductID = GetPropertyValue(inputParams, "srcProductID");
+            //int srcCategoryID = GetPropertyValue(inputParams, "srcCategoryID");
+            //DateTime srcDate = GetPropertyValue(inputParams, "srcDate");
             switch (methodName)
             {
                 case "GetObjectType":
@@ -25,37 +69,46 @@ namespace ProjectMyShop.SBUS
                 case "Clone":
                     return Clone();
                 case "getTotalRevenueUntilDate":
-                    return getTotalRevenueUntilDate(inputParams.src);
+                    string str = inputParams.ToString();
+                    Debug.WriteLine("SStatisticsBUS.ExecuteMethod " + methodName + " " + str);
+                    return getTotalRevenueUntilDate(GetPropertyValue(inputParams, "src"));
                 case "getTotalProfitUntilDate":
-                    return getTotalProfitUntilDate(inputParams.src);
+                    return getTotalProfitUntilDate(GetPropertyValue(inputParams, "src"));
                 case "getTotalOrdersUntilDate":
-                    return getTotalOrdersUntilDate(inputParams.src);
+                    return getTotalOrdersUntilDate(GetPropertyValue(inputParams, "src"));
                 case "getDailyRevenue":
-                    return getDailyRevenue(inputParams.src);
+                    return getDailyRevenue(GetPropertyValue(inputParams, "src"));
                 case "getWeeklyRevenue":
-                    return getWeeklyRevenue(inputParams.src);
+                    return getWeeklyRevenue(GetPropertyValue(inputParams, "src"));
                 case "getMonthlyRevenue":
-                    return getMonthlyRevenue(inputParams.src);
+                    return getMonthlyRevenue(GetPropertyValue(inputParams, "src"));
                 case "getYearlyRevenue":
                     return getYearlyRevenue();
                 case "getDailyProfit":
-                    return getDailyProfit(inputParams.src);
+                    return getDailyProfit(GetPropertyValue(inputParams, "src"));
                 case "getWeeklyProfit":
-                    return getWeeklyProfit(inputParams.src);
+                    return getWeeklyProfit(GetPropertyValue(inputParams, "src"));
                 case "getMonthlyProfit":
-                    return getMonthlyProfit(inputParams.src);
+                    return getMonthlyProfit(GetPropertyValue(inputParams, "src"));
                 case "getYearlyProfit":
                     return getYearlyProfit();
                 case "getDailyQuantityOfSpecificProduct":
-                    return getDailyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                    return getDailyQuantityOfSpecificProduct(GetPropertyValue(inputParams, "srcProductID"),
+                        GetPropertyValue(inputParams, "srcCategoryID"),
+                        GetPropertyValue(inputParams, "srcDate"));
                 case "getWeeklyQuantityOfSpecificProduct":
-                    return getWeeklyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                    return getWeeklyQuantityOfSpecificProduct(GetPropertyValue(inputParams, "srcProductID"),
+                        GetPropertyValue(inputParams, "srcCategoryID"),
+                        GetPropertyValue(inputParams, "srcDate"));
                 case "getMonthlyQuantityOfSpecificProduct":
-                    return getMonthlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, inputParams.srcDate);
+                    return getMonthlyQuantityOfSpecificProduct(GetPropertyValue(inputParams, "srcProductID"),
+                        GetPropertyValue(inputParams, "srcCategoryID"),
+                        GetPropertyValue(inputParams, "srcDate"));
                 case "getYearlyQuantityOfSpecificProduct":
-                    return getYearlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID);
+                    return getYearlyQuantityOfSpecificProduct(GetPropertyValue(inputParams, "srcProductID"),
+                        GetPropertyValue(inputParams, "srcCategoryID"));
                 case "getProductQuantityInCategory":
-                    return getProductQuantityInCategory(inputParams.srcCategoryID);
+                    return getProductQuantityInCategory(GetPropertyValue(inputParams, "srcCategoryID"));
                 default:
                     return false;
             }
@@ -71,6 +124,7 @@ namespace ProjectMyShop.SBUS
         }
         public string getTotalRevenueUntilDate(DateTime src)
         {
+            Debug.WriteLine("SStatisticsBUS.getTotalRevenueUntilDate " + src.ToString());
             return _statisticsDAO.getTotalRevenueUntilDate(src);
         }
 

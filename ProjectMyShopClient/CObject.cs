@@ -1,5 +1,5 @@
 ﻿using Microsoft.Graph;
-using ProjectMyShopClient.DTO;
+using ProjectMyShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +44,7 @@ namespace ProjectMyShopClient
 
         public dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
+            inputParams = (dynamic)inputParams;
             return CObjectManager.ExecuteRemoteMethod(ID, methodName,
                 inputParams);
         }

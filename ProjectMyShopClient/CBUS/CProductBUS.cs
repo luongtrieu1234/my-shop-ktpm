@@ -1,4 +1,4 @@
-﻿using ProjectMyShopClient.DTO;
+﻿using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace ProjectMyShopClient.CBUS
 
         public int GetTotalProduct()
         {
-            return this.ExecuteMethod("getTotalProduct", null);
+            return this.ExecuteMethod("GetTotalProduct", null);
         }
         public List<Product> GetTop5OutStock()
         {

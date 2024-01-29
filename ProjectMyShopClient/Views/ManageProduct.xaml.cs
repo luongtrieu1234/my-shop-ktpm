@@ -1,7 +1,7 @@
 ﻿using Aspose.Cells;
 using Microsoft.Win32;
 using ProjectMyShopClient.Config;
-using ProjectMyShopClient.DTO;
+using ProjectMyShop.DTO;
 using ProjectMyShopClient.CBUS;
 using ProjectMyShopClient.ViewModels;
 using System;

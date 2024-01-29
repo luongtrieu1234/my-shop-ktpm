@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using ProjectMyShopClient.DTO;
+using ProjectMyShop.DTO;
 using ProjectMyShopClient.CBUS;
 using System;
 using System.Windows;

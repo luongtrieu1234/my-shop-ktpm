@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ProjectMyShop.SDAO;
 using ProjectMyShopClient;
-using ProjectMyShopClient.DTO;
+using ProjectMyShop.DTO;
 
 namespace ProjectMyShopClient.CBUS
 {
@@ -25,7 +26,8 @@ namespace ProjectMyShopClient.CBUS
         }
         public string getTotalRevenueUntilDate(DateTime src)
         {
-            return this.ExecuteMethod("getTotalRevenueUntilDate", new { src });
+            Debug.WriteLine("CStatisticsBUS.getTotalRevenueUntilDate " + src.ToString());
+            return this.ExecuteMethod("getTotalRevenueUntilDate", new { src = src });
         }
 
         public string getTotalProfitUntilDate(DateTime src)

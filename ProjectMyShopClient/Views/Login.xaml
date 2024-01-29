@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:ProjectMyShopClient.Views" xmlns:dto="clr-namespace:ProjectMyShopClient.DTO" d:DataContext="{d:DesignInstance Type=dto:Account}"
+        xmlns:local="clr-namespace:ProjectMyShopClient.Views" xmlns:dto="clr-namespace:ProjectMyShop.DTO" d:DataContext="{d:DesignInstance Type=dto:Account}"
         mc:Ignorable="d"
         Title="Login" Height="500" Width="350" 
         ResizeMode="NoResize" 
