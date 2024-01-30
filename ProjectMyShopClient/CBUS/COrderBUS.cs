@@ -11,17 +11,23 @@ namespace ProjectMyShopClient.CBUS
         {
             this.ID = CObjectManager.CreateRemoteObject("SOrderBUS");
         }
-        public List<Data> GetAll()
+        public List<Order> GetAll()
         {
-            return this.ExecuteMethod("GetAll", null);
+            List<Data> datas = this.ExecuteMethod("GetAll", null);
+            List<Order> rs = CObject.ConvertData<Order>(datas);
+            return rs;
         }
         public List<Order> GetAllOrdersByDate(DateTime FromDate, DateTime ToDate)
         {
-            return this.ExecuteMethod("GetAllOrdersByDate", new { fromDate = FromDate, toDate = ToDate });
+            List<Data> datas = this.ExecuteMethod("GetAllOrdersByDate", new { fromDate = FromDate, toDate = ToDate });
+            List<Order> rs = CObject.ConvertData<Order>(datas);
+            return rs;
         }
-        public List<Data> GetObjects(int offset, int size)
+        public List<Order> GetObjects(int offset, int size)
         {
-            return this.ExecuteMethod("GetObjects", new { offset = offset, size = size });
+            List<Data> datas = this.ExecuteMethod("GetObjects", new { offset = offset, size = size });
+            List<Order> rs = CObject.ConvertData<Order>(datas);
+            return rs;
         }
 
         public static string StatusOpen = "Open";
@@ -39,16 +45,13 @@ namespace ProjectMyShopClient.CBUS
             }
         }
 
-        public void Add(Data data)
+        public void Add(Order data)
         {
-            Order order = (Order)data;
-            this.ExecuteMethod("Add", new { data = order });
-            order.ID = this.ExecuteMethod("GetLastestInsertID", null);
+            this.ExecuteMethod("Add", new { data });
         }
-        public void Update(int orderID, Data data)
+        public void Update(int orderID, Order data)
         {
-            Order order = (Order)data;
-            this.ExecuteMethod("Update", new { ID = orderID, data = order });
+            this.ExecuteMethod("Update", new { ID = orderID, data });
         }
         public void Remove(int orderID)
         {
@@ -73,7 +76,7 @@ namespace ProjectMyShopClient.CBUS
 
         public void AddDetailOrder(DetailOrder detail)
         {
-            this.ExecuteMethod("AddDetailOrder", new { detail = detail });
+            this.ExecuteMethod("AddDetailOrder", new { detail });
         }
 
         public void UpdateDetailOrder(int oldProductID, DetailOrder detail)

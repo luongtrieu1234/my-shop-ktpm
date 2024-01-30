@@ -20,30 +20,32 @@ namespace ProjectMyShopClient.CBUS
             return new CCategoryBUS();
         }
 
-        public Data GetByID(int id)
+        public Category GetByID(int id)
         {
-            //Category result = _categoryDAO.ExecuteMethod("GetByID", new { ID = id });
-            //return result;
-            return this.ExecuteMethod("GetByID", id);
+            Data rs = this.ExecuteMethod("GetByID", new {id});
+            Category cat = (Category)rs;
+            return cat;
         }
 
-        public List<Data> GetAll()
+        public List<Category> GetAll()
         {
-            return this.ExecuteMethod("GetAll", null);
+            List<Data> datas=  this.ExecuteMethod("GetAll", null);
+            List<Category> rs = CObject.ConvertData<Category>(datas);
+            return rs;
         }
-        public void Add(Data data)
+        public void Add(Category cat)
         {
-            this.ExecuteMethod("Add", data);
+            this.ExecuteMethod("Add", new {data=cat});
         }
 
         public void Remove(int id)
         {
-            this.ExecuteMethod("Remove", id);
+            this.ExecuteMethod("Remove", new {id});
         }
 
-        public void Update(int id, Data data)
+        public void Update(int id, Category cat)
         {
-            this.ExecuteMethod("Update", new { ID = id, Data = data });
+            this.ExecuteMethod("Update", new { id, data= cat });
         }
     }
 }

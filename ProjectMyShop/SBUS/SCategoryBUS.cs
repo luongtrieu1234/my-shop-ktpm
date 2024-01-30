@@ -94,7 +94,7 @@ namespace ProjectMyShop.SBUS
         public override void Update(int id, Data data)
         {
             Category category = (Category)data;
-            _categoryDAO.ExecuteMethod("Update", new { ID = id, data = category });
+            _categoryDAO.ExecuteMethod("Update", new { id = id, data = category });
         }
     }
 }

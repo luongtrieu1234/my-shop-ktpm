@@ -21,7 +21,6 @@ namespace ProjectMyShopClient.Views
 
         public Category newCategory { get; set; }
         public int catIndex { get; set; } = -1;
-        CCategoryBUS _categoryBUS { get; set; }
 
         private void chooseImageButton_Click(object sender, RoutedEventArgs e)
         {

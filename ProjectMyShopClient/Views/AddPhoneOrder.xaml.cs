@@ -48,7 +48,7 @@ namespace ProjectMyShopClient.Views
             _ProductBus = new CProductBUS();
             _categoryBus = new CCategoryBUS();
 
-            _categories = CObject.ConvertData<Category>(_categoryBus.ExecuteMethod("GetAll", null));
+            _categories = _categoryBus.GetAll();
 
             categoryCombobox.ItemsSource = _categories;
 

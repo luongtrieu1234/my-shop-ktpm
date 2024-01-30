@@ -84,7 +84,7 @@ namespace ProjectMyShopClient.Views
             _totalPages = 0;
             var catBUS = new CCategoryBUS();
             var ProductBUS = new CProductBUS();
-            _categories = CObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
+            _categories = catBUS.GetAll();
             categoriesListView.ItemsSource = _categories;
             foreach (var category in _categories)
             {
@@ -278,7 +278,7 @@ namespace ProjectMyShopClient.Views
                         CatName = tab.Name,
                         Products = new BindingList<Product>()
                     };
-                    _cateBUS.ExecuteMethod("Add", new { data = cat });
+                    _cateBUS.Add(cat);
 
                     // Bắt đầu từ ô B3
                     var column = 'C';
@@ -318,7 +318,7 @@ namespace ProjectMyShopClient.Views
                         cell = tab.Cells[$"{column}{row}"];
                     }
                 }
-                _categories = CObject.ConvertData<Category>(_cateBUS.ExecuteMethod("GetAll", null));
+                _categories = _cateBUS.GetAll();
                 Debug.WriteLine(_categories.Count);
                 foreach (var category in _categories)
                 {

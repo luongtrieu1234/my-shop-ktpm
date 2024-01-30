@@ -24,14 +24,8 @@ namespace ProjectMyShopClient.Views
 
         public ManageCategory()
         {
-
-
             InitializeComponent();
-            CCategoryBUS catBUS = new CCategoryBUS();
-            //List<Category> categories = CObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
             CategoryViewModel.Categories = new BindingList<Category>();
-
-
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -46,7 +40,7 @@ namespace ProjectMyShopClient.Views
 
                 try
                 {
-                    _categoryBUS.ExecuteMethod("Add", new { data = newCategory });
+                    _categoryBUS.Add(newCategory);
                     loadCategory();
                 }
                 catch (Exception ex)
@@ -60,7 +54,7 @@ namespace ProjectMyShopClient.Views
 
         void loadCategory()
         {
-            _categories = CObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
+            _categories = _categoryBUS.GetAll();
             categoriesListView.ItemsSource = _categories;
 
         }
@@ -77,7 +71,7 @@ namespace ProjectMyShopClient.Views
                 p.Avatar = info.Avatar;
                 try
                 {
-                    _categoryBUS.ExecuteMethod("Update", new { id = p.ID, data = p });
+                    _categoryBUS.Update(p.ID,p);
                     loadCategory();
 
                 }
@@ -97,7 +91,7 @@ namespace ProjectMyShopClient.Views
             if (MessageBoxResult.Yes == result)
             {
 
-                _categoryBUS.ExecuteMethod("Remove", new { id = p.ID });
+                _categoryBUS.Remove(p.ID);
                 loadCategory();
 
             }
