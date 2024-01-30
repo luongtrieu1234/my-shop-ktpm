@@ -13,7 +13,7 @@ namespace ProjectMyShopClient
         public static string id;
         public static Thread t;
         public static int port = 8080;
-        public static dynamic data =null;
+        public static dynamic data = null;
         public static Socket master;
         static SOjectManager()
         {
@@ -70,7 +70,7 @@ namespace ProjectMyShopClient
                     Debug.WriteLine("EXECUTE_PACKET");
                     dynamic ouputParams = (dynamic)packet.GetAttributeValue("outputParams");
                     //data = new { };
-                    data= ouputParams;
+                    data = ouputParams;
                     break;
 
             }
@@ -78,10 +78,10 @@ namespace ProjectMyShopClient
 
         public static int CreateRemoteObject(string typeName)
         {
-            Packet p = new Packet(PacketTypeEnum.CREATE_PACKET,id);
+            Packet p = new Packet(PacketTypeEnum.CREATE_PACKET, id);
             p.SetAttributeValue("typeName", typeName);
             master.Send(p.ToBytes());
-            for(; ; )
+            for (; ; )
             {
                 if (data != null && data is int)
                 {
@@ -100,13 +100,15 @@ namespace ProjectMyShopClient
             p.SetAttributeValue("methodName", methodName);
             p.SetAttributeValue("inputParams", inputParams);
             master.Send(p.ToBytes());
-            if (data != null)
+            for (; ; )
             {
-                dynamic data2 = data;
-                data = null;
-                return data2;
+                if (data != null)
+                {
+                    dynamic data2 = data;
+                    data = null;
+                    return data2;
+                }
             }
-            return "0";
         }
 
 

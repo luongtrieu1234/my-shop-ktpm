@@ -22,15 +22,15 @@ namespace ProjectMyShopClient.CBUS
 
         public Category GetByID(int id)
         {
-            Data rs = this.ExecuteMethod("GetByID", new {id});
-            Category cat = (Category)rs;
-            return cat;
+            dynamic cat = this.ExecuteMethod("GetByID", new {id});
+            Category rs = (Category)cat;
+            return rs;
         }
 
         public List<Category> GetAll()
         {
-            List<Data> datas=  this.ExecuteMethod("GetAll", null);
-            List<Category> rs = CObject.ConvertData<Category>(datas);
+            dynamic datas = this.ExecuteMethod("GetAll", null);
+            List<Category> rs = ConvertJArrayToList<Category>(datas);
             return rs;
         }
         public void Add(Category cat)
