@@ -67,17 +67,20 @@ namespace ProjectMyShopClient.CBUS
 
         public List<BestSellingProduct> getBestSellingProductsInWeek(DateTime src)
         {
-            return this.ExecuteMethod("getBestSellingProductsInWeek", new { src = src });
+            //return this.ExecuteMethod("getBestSellingProductsInWeek", new { src = src });
+            return new List<BestSellingProduct>();
         }
 
         public List<BestSellingProduct> getBestSellingProductsInMonth(DateTime src)
         {
-            return this.ExecuteMethod("getBestSellingProductsInMonth", new { src = src });
+            //return this.ExecuteMethod("getBestSellingProductsInMonth", new { src = src });
+            return new List<BestSellingProduct>();
         }
 
         public List<BestSellingProduct> getBestSellingProductsInYear(DateTime src)
         {
-            return this.ExecuteMethod("getBestSellingProductsInYear", new { src = src });
+            //return this.ExecuteMethod("getBestSellingProductsInYear", new { src = src });
+            return new List<BestSellingProduct>();
         }
         public Data GetByID(int ProductID)
         {

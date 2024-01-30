@@ -47,25 +47,36 @@ namespace ProjectMyShop
                 readBytes = clientSocket.Receive(Buffer);
                 if (readBytes > 0)
                 {
-                    string jsonData = Encoding.ASCII.GetString(Buffer, 0, readBytes);
-
-                    // Deserialize JSON to dynamic object
-                    dynamic receivedObject = RecieveObject(Buffer);
-                    if (ContainsKey(receivedObject, "CreateRemoteObject"))
-                    {
-                        int ID = SOjectManager.CreateRemoteObject(receivedObject["typeName"]);
-                        SendObject(clientSocket, new { ID });
-                    }
-                    else if (ContainsKey(receivedObject, "methodName"))
-                    {
-                        dynamic sendObject = SOjectManager.ExecuteRemoteMethod(receivedObject["ID"],
-                            receivedObject["methodName"], receivedObject["inputParams"]);
-                        SendObject(clientSocket, sendObject);
-                    }
+                    Packet packet = new Packet(Buffer);
+                    DataManager(clientSocket,packet);
                 }
             }
 
         }
+
+        public static void DataManager(Socket clientSocket,Packet packet)
+        {
+            switch (packet.PacketType)
+            {
+                case PacketTypeEnum.CREATE_PACKET:
+                    string typeName =(string) packet.GetAttributeValue("typeName");
+                    int ID = SOjectManager.CreateRemoteObject(typeName);
+                    Packet p1 = new Packet(PacketTypeEnum.CREATE_PACKET);
+                    p1.SetAttributeValue("ID", ID);
+                    clientSocket.Send(p1.ToBytes());
+                    break;
+                case PacketTypeEnum.EXECUTE_PACKET:
+                    int ID1 = (int)(long) packet.GetAttributeValue("ID");
+                    string methodName1 = (string)packet.GetAttributeValue("methodName");
+                    dynamic inputParams1 = (dynamic)packet.GetAttributeValue("inputParams");
+                    dynamic sendObject = SOjectManager.ExecuteRemoteMethod(ID1,methodName1,inputParams1);
+                    Packet p2 = new Packet(PacketTypeEnum.EXECUTE_PACKET);
+                    p2.SetAttributeValue("outputParams",sendObject);
+                    clientSocket.Send(p2.ToBytes());
+                    break;
+            }
+        }
+
         public static bool ContainsKey(dynamic obj,string key)
         {
             try

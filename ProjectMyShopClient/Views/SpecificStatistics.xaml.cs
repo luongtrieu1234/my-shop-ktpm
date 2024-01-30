@@ -25,8 +25,8 @@ namespace ProjectMyShopClient.Views
             _statisticsBUS = new CStatisticsBUS();
             _categoryBUS = new CCategoryBUS();
             _ProductBUS = new CProductBUS();
-
-            categories = CObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
+            List<Data> a = _categoryBUS.ExecuteMethod("GetAll", null);
+            categories = CObject.ConvertData<Category>(a);
             categoriesCombobox.ItemsSource = categories;
 
             if (categories.Count() > 0)
