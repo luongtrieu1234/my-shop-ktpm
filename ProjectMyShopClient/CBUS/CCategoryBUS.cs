@@ -6,9 +6,9 @@ namespace ProjectMyShopClient.CBUS
     internal class CCategoryBUS : CBUS
     {
 
-        public  CCategoryBUS()
+        public CCategoryBUS()
         {
-            this.ID = CObjectManager.CreateRemoteObject("SCategoryBUS");
+            ID = CObjectManager.CreateRemoteObject("SCategoryBUS");
         }
         public string GetObjectType()
         {

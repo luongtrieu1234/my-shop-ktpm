@@ -22,9 +22,9 @@ namespace ProjectMyShop
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static SOjectManager sOjectManager = new SOjectManager();
         public MainWindow()
         {
+            SOjectManager sOjectManager = new SOjectManager();
             InitializeComponent();
         }
 

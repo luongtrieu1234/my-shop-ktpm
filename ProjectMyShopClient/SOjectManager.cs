@@ -1,13 +1,9 @@
-﻿using Microsoft.Graph;
-using Newtonsoft.Json;
+﻿using MessagePack;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ProjectMyShopClient
 {
@@ -45,7 +41,9 @@ namespace ProjectMyShopClient
                 readBytes = master.Receive(Buffer);
                 if (readBytes > 0)
                 {
-                    dynamic recieveData = RecieveObject(Buffer, readBytes);
+                    Debug.WriteLine(readBytes);
+                    dynamic recieveData = RecieveObject(Buffer);
+
                     data = recieveData;
                 }
             }
@@ -54,60 +52,47 @@ namespace ProjectMyShopClient
         public static int CreateRemoteObject(string typeName)
         {
             SendObject(new { CreateRemoteObject = "CreateRemoteObject", typeName });
-
             if (data != null)
             {
-                int id = (int)data.ID;
+                int id = (int)data["ID"];
                 data = null;
                 return id;
             }
-            return 0;
-
+            return -1;
         }
 
         public static dynamic ExecuteRemoteMethod(int ID, string methodName, dynamic inputParams)
         {
             SendObject(new { ID, methodName, inputParams });
+            C: Debug.WriteLine(ID);
             if (data != null)
             {
                 dynamic data2 = data;
                 data = null;
                 return data2;
             }
-            return 0;
+            return new { };
         }
 
 
         public static void SendObject(dynamic data)
         {
-            byte[] bytes = ConvertDynamicToBytes(data);
+            byte[] bytes = ConvertObjectToBytes(data);
             master.Send(bytes);
         }
-        public static dynamic RecieveObject(byte[] buffer, int bytesRead)
+        public static dynamic RecieveObject(byte[] buffer)
         {
-            string json = ConvertBytesToJson(buffer, bytesRead);
-            dynamic data = ConvertJsonToDynamic(json);
+            dynamic data = ConvertBytesToObject(buffer);
             return data;
         }
-
-        public static byte[] ConvertDynamicToBytes(dynamic data)
+        public static byte[] ConvertObjectToBytes(dynamic obj)
         {
-
-            string responseJson = JsonConvert.SerializeObject(data);
-            byte[] responseBytes = Encoding.ASCII.GetBytes(responseJson);
-            return responseBytes;
+            return MessagePackSerializer.Serialize(obj);
         }
-        public static string ConvertBytesToJson(byte[] buffer, int bytesRead)
+
+        public static dynamic ConvertBytesToObject(byte[] bytes)
         {
-            // Convert received data to string
-            string jsonData = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            return jsonData;
-        }
-        public static dynamic ConvertJsonToDynamic(String jsonData)
-        {
-            // Deserialize JSON to dynamic object
-            dynamic receivedObject = JsonConvert.DeserializeObject(jsonData);
-            return receivedObject;
+            return MessagePackSerializer.Deserialize<dynamic>(bytes);
         }
     }
 }

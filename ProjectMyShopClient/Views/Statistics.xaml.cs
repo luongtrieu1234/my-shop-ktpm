@@ -59,7 +59,7 @@ namespace ProjectMyShopClient.Views
 
         public void configureGeneral()
         {
-            TotalRevenueTextBlock.Text = _statisticsBUS.getTotalRevenueUntilDate(selectedDate).ToString();
+            TotalRevenueTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalRevenueUntilDate",new { src = selectedDate }).ToString();
             TotalProfitTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalProfitUntilDate", new { src = selectedDate }).ToString();
             TotalOrdersTextBlock.Text = _statisticsBUS.ExecuteMethod("getTotalOrdersUntilDate", new { src = selectedDate }).ToString();
         }

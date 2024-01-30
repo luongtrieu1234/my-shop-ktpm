@@ -1,14 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using MessagePack;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Windows.Input;
 
 namespace ProjectMyShop
 {
@@ -54,69 +50,58 @@ namespace ProjectMyShop
                     string jsonData = Encoding.ASCII.GetString(Buffer, 0, readBytes);
 
                     // Deserialize JSON to dynamic object
-                    dynamic receivedObject = RecieveObject(Buffer, readBytes);
+                    dynamic receivedObject = RecieveObject(Buffer);
                     if (ContainsKey(receivedObject, "CreateRemoteObject"))
                     {
-                        int ID = SOjectManager.CreateRemoteObject(receivedObject?.typeName);
-                        SendObject(clientSocket, new {ID});
+                        int ID = SOjectManager.CreateRemoteObject(receivedObject["typeName"]);
+                        SendObject(clientSocket, new { ID });
                     }
                     else if (ContainsKey(receivedObject, "methodName"))
                     {
-                        dynamic sendObject = SOjectManager.ExecuteRemoteMethod(receivedObject?.ID, 
-                            receivedObject?.methodName, receivedObject?.inputParams);
-                        SendObject(clientSocket,sendObject);
+                        dynamic sendObject = SOjectManager.ExecuteRemoteMethod(receivedObject["ID"],
+                            receivedObject["methodName"], receivedObject["inputParams"]);
+                        SendObject(clientSocket, sendObject);
                     }
                 }
             }
 
         }
-
-        public static void SendObject(Socket socket, dynamic data)
-        {
-            byte[] bytes = ConvertDynamicToBytes(data);
-            socket.Send(bytes);
-        }
-        public static dynamic RecieveObject(byte[] buffer, int bytesRead)
-        {
-            string json = ConvertBytesToJson(buffer, bytesRead);
-            dynamic data = ConvertJsonToDynamic(json);
-            return data;
-        }
-
-        public static byte[] ConvertDynamicToBytes(dynamic data)
-        {
-
-            string responseJson = JsonConvert.SerializeObject(data);
-            byte[] responseBytes = Encoding.ASCII.GetBytes(responseJson);
-            return responseBytes;
-        }
-        public static string ConvertBytesToJson(byte[] buffer, int bytesRead)
-        {
-            // Convert received data to string
-            string jsonData = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-            return jsonData;
-        }
-        public static dynamic ConvertJsonToDynamic(String jsonData)
-        {
-            // Deserialize JSON to dynamic object
-            dynamic receivedObject = JsonConvert.DeserializeObject< ExpandoObject>(jsonData);
-            return receivedObject;
-
-        }
-        public static bool ContainsKey(dynamic obj, string key)
+        public static bool ContainsKey(dynamic obj,string key)
         {
             try
             {
-                // Thử truy cập thuộc tính, nếu không có, sẽ ném ngoại lệ
-                var value = obj[key];
-                return true;
-            }
-            catch (Exception)
+                if (obj[key])
+                {
+                    return true;
+                }
+            }catch(Exception e)
             {
-                // Nếu có ngoại lệ, key không tồn tại
                 return false;
             }
+            return false;
         }
+
+        public static void SendObject(Socket socket, dynamic data)
+        {
+            byte[] buffer = ConvertObjectToBytes(data);
+            socket.Send(buffer);
+        }
+        public static dynamic RecieveObject(byte[] buffer)
+        {
+            dynamic data = ConvertBytesToObject(buffer);
+            return data;
+        }
+
+        public static byte[] ConvertObjectToBytes(dynamic obj)
+        {
+            return MessagePackSerializer.Serialize(obj);
+        }
+
+        public static dynamic ConvertBytesToObject(byte[] bytes)
+        {
+            return MessagePackSerializer.Deserialize<dynamic>(bytes);
+        }
+
 
 
     }

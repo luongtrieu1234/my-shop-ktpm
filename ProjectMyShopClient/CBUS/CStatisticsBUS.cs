@@ -7,7 +7,7 @@ namespace ProjectMyShopClient.CBUS
     {
         public CStatisticsBUS()
         {
-            this.ID = CObjectManager.CreateRemoteObject("SStatisticsBUS");
+            ID = CObjectManager.CreateRemoteObject("SStatisticsBUS");
         }
         public string GetObjectType()
         {
