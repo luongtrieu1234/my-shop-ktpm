@@ -1,4 +1,5 @@
-﻿using ProjectMyShopClient.Config;
+﻿using ProjectMyShop;
+using ProjectMyShopClient.Config;
 using ProjectMyShopClient.Views;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace ProjectMyShopClient
         public MainWindow()
         {
             InitializeComponent();
+            var client = new Client();
+            //client.StartListening();
         }
 
         Dashboard dashboard;
@@ -35,7 +38,6 @@ namespace ProjectMyShopClient
         Configuration _configPage;
         Login login;
         Button[] buttons;
-
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using ProjectMyShop.DTO;
 
@@ -96,5 +97,17 @@ namespace ProjectMyShop
             return list;
         }
 
+        public static object GetPropertyValue(object obj, string propertyName)
+        {
+            // Use reflection to get the value of the property
+            PropertyInfo property = obj.GetType().GetProperty(propertyName);
+
+            if (property != null)
+            {
+                return property.GetValue(obj);
+            }
+
+            return null;
+        }
     }
 }

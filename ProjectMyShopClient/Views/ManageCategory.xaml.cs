@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using ProjectMyShop;
 
 namespace ProjectMyShopClient.Views
 {
@@ -20,12 +21,12 @@ namespace ProjectMyShopClient.Views
         List<Category>? _categories = null;
         CategoryViewModel CategoryViewModel = new CategoryViewModel();
         private CCategoryBUS _categoryBUS = new CCategoryBUS();
-
-
+        Client client = new Client();
         public ManageCategory()
         {
 
-
+            //client.StartClient();
+            client.MessageReceived += Client_MessageReceived;
             InitializeComponent();
             CCategoryBUS catBUS = new CCategoryBUS();
             //List<Category> categories = CObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null));
@@ -33,7 +34,12 @@ namespace ProjectMyShopClient.Views
 
 
         }
-
+        private void Client_MessageReceived(string message)
+        {
+            // React to the message
+            MessageBox.Show("Received: " + message, "Login", MessageBoxButton.OK, MessageBoxImage.Information);
+            loadCategory();
+        }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var screen = new AddCategoryScreen();
@@ -62,7 +68,7 @@ namespace ProjectMyShopClient.Views
         {
             _categories = CObject.ConvertData<Category>(_categoryBUS.ExecuteMethod("GetAll", null));
             categoriesListView.ItemsSource = _categories;
-
+            CommonClass.NotifyEvent += CategoryViewModel.Common_NotifyEvent;
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e)

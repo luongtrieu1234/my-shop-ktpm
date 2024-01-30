@@ -20,12 +20,14 @@ namespace ProjectMyShop.Views
         List<Category>? _categories = null;        
         CategoryViewModel CategoryViewModel = new CategoryViewModel();
         private SCategoryBUS _categoryBUS = new SCategoryBUS();
-        
+        //Server server = new Server();
+        Server server = Server.Instance;
 
+        ProductViewModel _vm = new ProductViewModel();
         public ManageCategory()
         {
 
-
+            this.CategoryViewModel.Attach(_vm);
             InitializeComponent();
             SCategoryBUS catBUS = new SCategoryBUS();
             List<Category> categories = SObject.ConvertData<Category>(catBUS.ExecuteMethod("GetAll", null)) ;
@@ -87,6 +89,10 @@ namespace ProjectMyShop.Views
                     MessageBox.Show(screen, ex.Message);
                 }
             }
+            Debug.WriteLine("Selection changed");
+            this.CategoryViewModel.SomeBusinessLogic();
+            server.SendMessage("New category added: " + p.CatName);
+            Debug.WriteLine(CategoryViewModel._observers);
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -134,7 +140,7 @@ namespace ProjectMyShop.Views
 
         private void categoriesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            
         }
 
  

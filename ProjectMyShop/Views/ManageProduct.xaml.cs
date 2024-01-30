@@ -36,7 +36,7 @@ namespace ProjectMyShop.Views
         private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string search_text = searchTextBox.Text;
-            if(search_text.Length > 0)
+            if (search_text.Length > 0)
             {
                 _currentPage = 1;
                 previousButton.IsEnabled = false;
@@ -45,7 +45,7 @@ namespace ProjectMyShop.Views
                 BindingList<Product> Products = new BindingList<Product>();
                 foreach (Product Product in _vm.Products)
                 {
-                    if(Product.ProductName.ToLower().Contains(search_text.ToLower()))
+                    if (Product.ProductName.ToLower().Contains(search_text.ToLower()))
                     {
                         Products.Add(Product);
                     }
@@ -55,7 +55,7 @@ namespace ProjectMyShop.Views
                 .Skip((_currentPage - 1) * _rowsPerPage)
                 .Take(_rowsPerPage).ToList();
 
-                if(_vm.SelectedProducts.Count > 0)
+                if (_vm.SelectedProducts.Count > 0)
                 {
                     _currentPage = 1;
                     _totalItems = Products.Count;
@@ -64,7 +64,7 @@ namespace ProjectMyShop.Views
                     ProductsListView.ItemsSource = _vm.SelectedProducts;
                     currentPagingTextBlock.Text = $"{_currentPage}/{_totalPages}";
                 }
-                if(_totalPages <= 1)
+                if (_totalPages <= 1)
                 {
                     nextButton.IsEnabled = false;
                 }
@@ -74,7 +74,7 @@ namespace ProjectMyShop.Views
                 loadProducts();
             }
         }
-        
+
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -90,7 +90,7 @@ namespace ProjectMyShop.Views
             {
                 category.Products = new BindingList<Product>(ProductBUS.getProductsAccordingToSpecificCategory(category.ID));
             }
-            if(_categories.Count > 0)
+            if (_categories.Count > 0)
             {
                 loadProducts();
             }
@@ -105,13 +105,13 @@ namespace ProjectMyShop.Views
         void loadProducts()
         {
             i = categoriesListView.SelectedIndex;
-            if(i < 0)
+            if (i < 0)
             {
                 i = 0;
             }
 
 
-            if(_categories == null)
+            if (_categories == null)
             {
                 return;
             }
@@ -128,17 +128,17 @@ namespace ProjectMyShop.Views
             _currentPage = _totalPages > 0 ? 1 : 0;
             currentPagingTextBlock.Text = $"{_currentPage}/{_totalPages}";
 
-            if(_totalPages > 1)
+            if (_totalPages > 1)
             {
                 nextButton.IsEnabled = true;
             }
             else
             {
-                nextButton.IsEnabled=false;
+                nextButton.IsEnabled = false;
             }
 
             ProductsListView.ItemsSource = _vm.SelectedProducts;
-            
+
         }
 
         private void categoriesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -278,7 +278,7 @@ namespace ProjectMyShop.Views
                         CatName = tab.Name,
                         Products = new BindingList<Product>()
                     };
-                    _cateBUS.ExecuteMethod("Add",new{data=cat });
+                    _cateBUS.ExecuteMethod("Add", new { data = cat });
 
                     // Bắt đầu từ ô B3
                     var column = 'C';
@@ -320,7 +320,7 @@ namespace ProjectMyShop.Views
                 }
                 _categories = SObject.ConvertData<Category>(_cateBUS.ExecuteMethod("GetAll", null));
                 Debug.WriteLine(_categories.Count);
-                foreach(var category in _categories)
+                foreach (var category in _categories)
                 {
                     category.Products = new BindingList<Product>(_ProductBUS.getProductsAccordingToSpecificCategory(category.ID));
                 }
@@ -328,7 +328,7 @@ namespace ProjectMyShop.Views
                 loadProducts();
             }
         }
-        
+
         private void AddMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var screen = new AddProductScreen(_categories!);
@@ -338,14 +338,14 @@ namespace ProjectMyShop.Views
                 var newProduct = screen.newProduct;
                 Debug.WriteLine(newProduct.ProductName);
                 var catIndex = screen.catIndex;
-                if(catIndex >= 0)
+                if (catIndex >= 0)
                 {
                     try
                     {
-                    newProduct.Category = _categories[catIndex];
-                    _ProductBus.Add(newProduct);
-                    _categories[catIndex].Products.Add(newProduct);
-                    loadProducts();
+                        newProduct.Category = _categories[catIndex];
+                        _ProductBus.Add(newProduct);
+                        _categories[catIndex].Products.Add(newProduct);
+                        loadProducts();
                     }
                     catch (Exception ex)
                     {
@@ -374,7 +374,7 @@ namespace ProjectMyShop.Views
                     }
                 }
 
-                if(Products.Count <= 0)
+                if (Products.Count <= 0)
                 {
                     MessageBox.Show("Product not found!");
                     return;
@@ -400,7 +400,7 @@ namespace ProjectMyShop.Views
             }
             else
             {
-               
+
                 MessageBox.Show("Product not found!");
             }
         }

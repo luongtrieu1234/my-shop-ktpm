@@ -1,5 +1,6 @@
 ﻿using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -11,7 +12,8 @@ namespace ProjectMyShop.SBUS
 
         public SCategoryBUS()
         {
-            _categoryDAO = new SCategoryDAO();
+            //_categoryDAO = new SCategoryDAO();
+            _categoryDAO = (SCategoryDAO)SOjectManager.Prototypes["SCategoryDAO"];
             if (_categoryDAO.CanConnect())
             {
                 _categoryDAO.Connect();
@@ -26,22 +28,24 @@ namespace ProjectMyShop.SBUS
                 case "Clone":
                     return Clone();
                 case "GetByID":
-                    return GetByID(inputParams.id);
+                    return GetByID(GetPropertyValue(inputParams, "id"));
                 case "GetAll":
                     return GetAll();
                 case "Add":
-                    Add(inputParams.data);
+                    Add(GetPropertyValue(inputParams, "data"));
                     return true;
                 case "Remove":
-                    Remove(inputParams.id); 
+                    Remove(GetPropertyValue(inputParams, "id")); 
                     return true;
                 case "Update":
-                    Update(inputParams.id, inputParams.data);
+                    Update(GetPropertyValue(inputParams, "id"), 
+                        GetPropertyValue(inputParams, "data"));
                     return true;
                 default:
                     return false;
             }
         }
+
         public override string GetObjectType()
         {
             return "SCategoryBUS";
@@ -60,7 +64,7 @@ namespace ProjectMyShop.SBUS
 
         public override List<Data> GetAll()
         {
-            Debug.WriteLine("getCategoryList:");
+            //Debug.WriteLine("getCategoryList:");
             List<Data> datas = _categoryDAO.ExecuteMethod("GetAll", null);
             List<Category> result = new List<Category>();
             foreach (Data data in datas)

@@ -9,7 +9,8 @@ namespace ProjectMyShop.SBUS
 
         public SAccountBUS()
         {
-            _accountDAO = new SAccountDAO();
+            //_accountDAO = new SAccountDAO();
+            _accountDAO = (SAccountDAO)SOjectManager.Prototypes["SAccountDAO"];
         }
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {

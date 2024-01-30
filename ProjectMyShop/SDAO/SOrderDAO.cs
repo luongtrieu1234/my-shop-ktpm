@@ -204,14 +204,14 @@ namespace ProjectMyShop.SDAO
 
             var dataTable = new DataTable();
             dataTable.Load(reader);
-            Debug.WriteLine("reader datatable ");
+            //Debug.WriteLine("reader datatable ");
             foreach (DataRow row in dataTable.Rows)
             {
                 foreach (DataColumn col in dataTable.Columns)
                 {
                     string columnName = col.ColumnName;
-                    Debug.WriteLine(columnName);
-                    Debug.WriteLine(row[columnName]);
+                    //Debug.WriteLine(columnName);
+                    //Debug.WriteLine(row[columnName]);
                 }
             }
 
@@ -223,7 +223,7 @@ namespace ProjectMyShop.SDAO
             var _productBUS = new SProductBUS();
             foreach (var detailOrder in result)
             {
-                Debug.WriteLine("ad " + detailOrder.ProductID.ToString());
+                //Debug.WriteLine("ad " + detailOrder.ProductID.ToString());
                 var productID = detailOrder.ProductID;
                 var product = _productBUS.GetByID(productID);
                 detailOrder.Product = (Product)product;

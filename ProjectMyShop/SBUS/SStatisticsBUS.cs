@@ -15,8 +15,8 @@ namespace ProjectMyShop.SBUS
 
         public SStatisticsBUS()
         {
-            _statisticsDAO = new SStatisticsDAO();
-            //_statisticsDAO = (SStatisticsDAO)SOjectManager.Prototypes["SStatisticsDAO"];
+            //_statisticsDAO = new SStatisticsDAO();
+            _statisticsDAO = (SStatisticsDAO)SOjectManager.Prototypes["SStatisticsDAO"];
             if (_statisticsDAO.CanConnect())
             {
                 _statisticsDAO.Connect();
@@ -50,8 +50,8 @@ namespace ProjectMyShop.SBUS
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
             IEnumerable<string> keys = GetDynamicObjectKeys(inputParams);
-            Debug.WriteLine("debug " + (object)inputParams.GetType());
-            Debug.WriteLine("debug 2 " + methodName.GetType());
+            //Debug.WriteLine("debug " + (object)inputParams.GetType());
+            //Debug.WriteLine("debug 2 " + methodName.GetType());
             object value = GetPropertyValue(inputParams, "src");
             Debug.WriteLine("Value of MyDate property: " + value);
             Debug.WriteLine("Keys of the dynamic object:");

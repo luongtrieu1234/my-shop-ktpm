@@ -13,7 +13,8 @@ namespace ProjectMyShop.SBUS
 
         public SOrderBUS()
         {
-            _orderDAO = new SOrderDAO();
+            //_orderDAO = new SOrderDAO();
+            _orderDAO = (SOrderDAO)SOjectManager.Prototypes["SOrderDAO"];
             if (_orderDAO.CanConnect())
             {
                 _orderDAO.Connect();
@@ -106,18 +107,18 @@ namespace ProjectMyShop.SBUS
         {
             _orderDAO.ExecuteMethod("DeleteDetailOrder", new { detail });
         }
-        static object GetPropertyValue(object obj, string propertyName)
-        {
-            // Use reflection to get the value of the property
-            PropertyInfo property = obj.GetType().GetProperty(propertyName);
+        //static object GetPropertyValue(object obj, string propertyName)
+        //{
+        //    // Use reflection to get the value of the property
+        //    PropertyInfo property = obj.GetType().GetProperty(propertyName);
 
-            if (property != null)
-            {
-                return property.GetValue(obj);
-            }
+        //    if (property != null)
+        //    {
+        //        return property.GetValue(obj);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
             switch (methodName)
@@ -130,35 +131,37 @@ namespace ProjectMyShop.SBUS
                     return Clone();
                 case "GetByID":
                     Debug.WriteLine("GetByID Order called");
-                    return GetByID(inputParams.ID);
+                    return GetByID(GetPropertyValue(inputParams, "ID"));
                 case "GetAll":
                     Debug.WriteLine("GetAll Order called");
                     return GetAll();
                 case "Add":
                     Debug.WriteLine("Add Order called");
-                    Add(inputParams.data);
+                    Add(GetPropertyValue(inputParams, "data"));
                     return true;
                 case "Update":
                     Debug.WriteLine("Update Order called");
-                    Update(inputParams.ID, inputParams.data);
+                    Update(GetPropertyValue(inputParams, "ID"), GetPropertyValue(inputParams, "data"));
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Order called");
-                    return Remove(inputParams.ID);
+                    return Remove(GetPropertyValue(inputParams, "ID"));
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Order called");
-                    return GetObjects(inputParams.offset, inputParams.size);
+                    return GetObjects(GetPropertyValue(inputParams, "offset"),
+                        GetPropertyValue(inputParams, "size"));
                 case "AddDetailOrder":
                     Debug.WriteLine("AddDetailOrder Order called");
                     AddDetailOrder(GetPropertyValue(inputParams, "detail"));
                     return true;
                 case "UpdateDetailOrder":
                     Debug.WriteLine("UpdateDetailOrder Order called");
-                    UpdateDetailOrder(inputParams.oldProductID, inputParams.detail);
+                    UpdateDetailOrder(GetPropertyValue(inputParams, "oldProductID"),
+                        GetPropertyValue(inputParams, "detail"));
                     return true;
                 case "DeleteDetailOrder":
                     Debug.WriteLine("DeleteDetailOrder Order called");
-                    DeleteDetailOrder(inputParams.detail);
+                    DeleteDetailOrder(GetPropertyValue(inputParams, "detail"));
                     return true;
                 case "GetAllOrdersByDate":
                     Debug.WriteLine("GetAllOrdersByDate Order called");
@@ -166,7 +169,7 @@ namespace ProjectMyShop.SBUS
                         GetPropertyValue(inputParams, "toDate"));
                 case "GetStatus":
                     Debug.WriteLine("GetStatus Order called");
-                    return GetStatus(inputParams.status);
+                    return GetStatus(GetPropertyValue(inputParams, "status"));
                 case "CountOrders":
                     Debug.WriteLine("CountOrders Order called");
                     return CountOrders();

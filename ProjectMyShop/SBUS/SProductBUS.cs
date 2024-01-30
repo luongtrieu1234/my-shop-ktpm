@@ -13,7 +13,8 @@ namespace ProjectMyShop.SBUS
 
         public SProductBUS()
         {
-            _productDAO = new SProductDAO();
+            //_productDAO = new SProductDAO();
+            _productDAO = (SProductDAO)SOjectManager.Prototypes["SProductDAO"];
             if (_productDAO.CanConnect())
             {
                 _productDAO.Connect();
@@ -92,18 +93,18 @@ namespace ProjectMyShop.SBUS
         {
             return _productDAO.ExecuteMethod("GetByID", new { productID = ProductID });
         }
-        static object GetPropertyValue(object obj, string propertyName)
-        {
-            // Use reflection to get the value of the property
-            PropertyInfo property = obj.GetType().GetProperty(propertyName);
+        //static object GetPropertyValue(object obj, string propertyName)
+        //{
+        //    // Use reflection to get the value of the property
+        //    PropertyInfo property = obj.GetType().GetProperty(propertyName);
 
-            if (property != null)
-            {
-                return property.GetValue(obj);
-            }
+        //    if (property != null)
+        //    {
+        //        return property.GetValue(obj);
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
             switch (methodName)
@@ -116,21 +117,22 @@ namespace ProjectMyShop.SBUS
                     return Clone();
                 case "GetByID":
                     Debug.WriteLine("GetByID Product called");
-                    return GetByID(inputParams.productID);
+                    return GetByID(GetPropertyValue(inputParams, "productID"));
                 case "Add":
                     Debug.WriteLine("Add Product called");
-                    Add(inputParams.data);
+                    Add(GetPropertyValue(inputParams, "data"));
                     return true;
                 case "Update":
                     Debug.WriteLine("Update Product called");
-                    Update(inputParams.id, inputParams.data);
+                    Update(GetPropertyValue(inputParams, "id"), GetPropertyValue(inputParams, "data"));
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Product called");
-                    return Remove(inputParams.productid);
+                    return Remove(GetPropertyValue(inputParams, "productid"));
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Product called");
-                    return GetObjects(inputParams.offset, inputParams.size);
+                    return GetObjects(GetPropertyValue(inputParams, "offset"),
+                        GetPropertyValue(inputParams, "size"));
                 case "GetTotalProduct":
                     Debug.WriteLine("GetTotalProduct Product called");
                     return GetTotalProduct();
