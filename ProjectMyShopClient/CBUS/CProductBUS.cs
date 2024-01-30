@@ -23,7 +23,9 @@ namespace ProjectMyShopClient.CBUS
 
         public List<Product> getProductsAccordingToSpecificCategory(int srcCategoryID)
         {
-            return this.ExecuteMethod("getProductsAccordingToSpecificCategory", new { srcCategoryID = srcCategoryID });
+            dynamic datas= this.ExecuteMethod("getProductsAccordingToSpecificCategory", new { srcCategoryID = srcCategoryID });
+            List<Product> products = ConvertJArrayToList<Product>(datas);
+            return products;
         }
 
         public void Add(Data data)

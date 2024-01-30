@@ -21,16 +21,16 @@ namespace ProjectMyShop.SBUS
 
         public int GetTotalProduct()
         {
-            return _productDAO.ExecuteMethod("getTotalProduct", null);
+            return _productDAO.getTotalProduct();
         }
         public List<Product> GetTop5OutStock()
         {
-            return _productDAO.ExecuteMethod("GetTop5OutStock", null);
+            return _productDAO.GetTop5OutStock();
         }
 
         public List<Product> getProductsAccordingToSpecificCategory(int srcCategoryID)
         {
-            return _productDAO.ExecuteMethod("getProductsAccordingToSpecificCategory", new { srcCategoryID = srcCategoryID });
+            return _productDAO.getProductsAccordingToSpecificCategory(srcCategoryID);
         }
 
         public override void Add(Data data)
@@ -126,7 +126,7 @@ namespace ProjectMyShop.SBUS
                     return GetTop5OutStock();
                 case "getProductsAccordingToSpecificCategory":
                     Debug.WriteLine("getProductsAccordingToSpecificCategory Product called");
-                    return getProductsAccordingToSpecificCategory(inputParams.srcCategoryID);
+                    return getProductsAccordingToSpecificCategory((int)inputParams.srcCategoryID);
                 case "getBestSellingProductsInWeek":
                     Debug.WriteLine("getBestSellingProductsInWeek Product called");
                     return getBestSellingProductsInWeek(inputParams.src);

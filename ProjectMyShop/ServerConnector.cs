@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using ProjectMyShop.DTO;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -70,6 +71,15 @@ namespace ProjectMyShop
                     string methodName1 = (string)packet.GetAttributeValue("methodName");
                     dynamic inputParams1 = (dynamic)packet.GetAttributeValue("inputParams");
                     dynamic sendObject = SOjectManager.ExecuteRemoteMethod(ID1,methodName1,inputParams1);
+                    if(sendObject is Data)
+                    {
+                        sendObject.Avatar = null;
+                    }else if(sendObject is List<Data> || sendObject is List<Product>) { 
+                        foreach(var item in sendObject)
+                        {
+                            item.Avatar = null;
+                        }
+                    }
                     Packet p2 = new Packet(PacketTypeEnum.EXECUTE_PACKET);
                     p2.SetAttributeValue("outputParams",sendObject);
                     clientSocket.Send(p2.ToBytes());
