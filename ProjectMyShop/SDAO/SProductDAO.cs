@@ -567,7 +567,8 @@ namespace ProjectMyShop.SDAO
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Product called");
-                    return Remove(inputParams.productid);
+                    Remove(inputParams.productid);
+                    return true;
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Product called");
                     return GetObjects(inputParams.offset, inputParams.size);

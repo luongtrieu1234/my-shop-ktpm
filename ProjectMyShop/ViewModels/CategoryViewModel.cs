@@ -47,10 +47,10 @@ namespace ProjectMyShop.ViewModels
                 observer.Update(this);
             }
         }
-        public void SomeBusinessLogic()
+        public void SomeBusinessLogic(int type)
         {
             Debug.WriteLine("\nSubject: I'm doing something important.");
-            this.State = new Random().Next(0, 10);
+            this.State = type;
 
             Thread.Sleep(15);
 

@@ -20,6 +20,7 @@ namespace ProjectMyShop.Views
     /// </summary>
     public partial class ManageProduct : Page
     {
+        Server server = Server.Instance;
         public ManageProduct()
         {
             InitializeComponent();
@@ -166,6 +167,7 @@ namespace ProjectMyShop.Views
                 {
                     _ProductBus.Update(p.ID, p);
                     searchTextBox_TextChanged(sender, null);
+                    server.SendMessage("Product edited: " + p.ProductName);
                 }
                 catch (Exception ex)
                 {
@@ -194,6 +196,7 @@ namespace ProjectMyShop.Views
                 _categories[i].Products.Remove(p);
                 _ProductBus.Remove(p.ID);
                 searchTextBox_TextChanged(sender, null);
+                server.SendMessage("Product deleted: " + p.ProductName);
                 //_vm.SelectedProducts.Remove(p);
 
                 //_vm.SelectedProducts = _vm.Products
@@ -346,6 +349,7 @@ namespace ProjectMyShop.Views
                         _ProductBus.Add(newProduct);
                         _categories[catIndex].Products.Add(newProduct);
                         loadProducts();
+                        server.SendMessage("New Product added: " + newProduct.ProductName);
                     }
                     catch (Exception ex)
                     {

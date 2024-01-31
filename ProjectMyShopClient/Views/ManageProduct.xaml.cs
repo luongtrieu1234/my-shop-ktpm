@@ -20,8 +20,11 @@ namespace ProjectMyShopClient.Views
     /// </summary>
     public partial class ManageProduct : Page
     {
+        Client client = new Client();
         public ManageProduct()
         {
+            InitializeComponent();
+            client.MessageReceived += Client_MessageReceived;
             InitializeComponent();
         }
         private CProductBUS _ProductBus = new CProductBUS();
@@ -32,6 +35,13 @@ namespace ProjectMyShopClient.Views
         int _totalPages = 0;
         int _rowsPerPage = int.Parse(AppConfig.GetValue(AppConfig.NumberProductPerPage));
         int i = 0;
+        private void Client_MessageReceived(string message)
+        {
+            // React to the message
+            TextChangedEventArgs e= new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None);
+            MessageBox.Show("Received: " + message, "Server's message", MessageBoxButton.OK, MessageBoxImage.Information);
+            Page_Loaded("", e);
+        }
 
         private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {

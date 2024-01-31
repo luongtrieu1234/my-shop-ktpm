@@ -22,7 +22,6 @@ namespace ProjectMyShopClient
         {
             ConnectToServerAsync();
         }
-
         private async void ConnectToServerAsync()
         {
             try
@@ -37,7 +36,6 @@ namespace ProjectMyShopClient
                 Debug.WriteLine("Error connecting to server: " + ex.Message);
             }
         }
-
         private async void ListenForMessagesAsync()
         {
             byte[] buffer = new byte[1024];
@@ -64,5 +62,4 @@ namespace ProjectMyShopClient
             }
         }
     }
-
 }

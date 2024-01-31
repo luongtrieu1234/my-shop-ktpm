@@ -37,7 +37,7 @@ namespace ProjectMyShopClient.Views
         private void Client_MessageReceived(string message)
         {
             // React to the message
-            MessageBox.Show("Received: " + message, "Login", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Received: " + message, "Server's message", MessageBoxButton.OK, MessageBoxImage.Information);
             loadCategory();
         }
         private void AddButton_Click(object sender, RoutedEventArgs e)

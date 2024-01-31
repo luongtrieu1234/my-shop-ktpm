@@ -26,7 +26,6 @@ namespace ProjectMyShop
             Debug.WriteLine("Server started on " + server.LocalEndpoint);
             AcceptClientAsync();
         }
-
         private async void AcceptClientAsync()
         {
             while (true)
@@ -36,7 +35,6 @@ namespace ProjectMyShop
                 Console.WriteLine("Accepted client " + client.Client.RemoteEndPoint);
             }
         }
-
         public static Server Instance
         {
             get
@@ -48,7 +46,6 @@ namespace ProjectMyShop
                 return _instance;
             }
         }
-
         public void SendMessage(string message)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
@@ -61,7 +58,6 @@ namespace ProjectMyShop
                 }
             }
         }
-
         public void StopServer()
         {
             foreach (TcpClient client in clients)

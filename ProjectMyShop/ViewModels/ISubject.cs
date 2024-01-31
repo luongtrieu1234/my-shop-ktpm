@@ -17,6 +17,5 @@ namespace ProjectMyShop.ViewModels
 
         // Notify all observers about an event.
         public void Notify();
-        public void SomeBusinessLogic();
     }
 }

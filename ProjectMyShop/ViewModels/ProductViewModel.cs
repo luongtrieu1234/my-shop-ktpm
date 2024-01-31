@@ -19,15 +19,21 @@ namespace ProjectMyShop.ViewModels
 
         public void Update(ISubject subject)
         {
-            //if ((subject as CategoryViewModel).State == 0 || (subject as CategoryViewModel).State >= 2)
-            //{
-            //foreach (var item in Products)
-            //{
-            MessageBox.Show("Product: Reacted to the event", "Login", MessageBoxButton.OK, MessageBoxImage.Information);
-            Debug.WriteLine("Product: Reacted to the event.");
-                    //Debug.WriteLine("Product: " + item.ProductName);
-            //}
-            //}
+            if ((subject as CategoryViewModel).State == 1)
+            {
+                MessageBox.Show($"Product: Reacted to the event\nProducts with this category have been changed", 
+                    "Message", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Information);
+                Debug.WriteLine("Product: Reacted to the event.");
+            } else if ((subject as CategoryViewModel).State == 2)
+            {
+                MessageBox.Show($"Product: Reacted to the event\nProducts with this category have been deleted",
+                    "Message",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                Debug.WriteLine("Product: Reacted to the event.");
+            }
         }
     }
 }

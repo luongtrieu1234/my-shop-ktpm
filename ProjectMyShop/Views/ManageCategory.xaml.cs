@@ -50,6 +50,7 @@ namespace ProjectMyShop.Views
                 {
                     _categoryBUS.ExecuteMethod("Add",new {data = newCategory });           
                     loadCategory();
+                    server.SendMessage("New category added: " + newCategory.CatName);
                 }
                 catch (Exception ex)
                 {
@@ -90,8 +91,8 @@ namespace ProjectMyShop.Views
                 }
             }
             Debug.WriteLine("Selection changed");
-            this.CategoryViewModel.SomeBusinessLogic();
-            server.SendMessage("New category added: " + p.CatName);
+            this.CategoryViewModel.SomeBusinessLogic(1);
+            server.SendMessage("Category edited: " + p.CatName);
             Debug.WriteLine(CategoryViewModel._observers);
         }
 
@@ -105,6 +106,8 @@ namespace ProjectMyShop.Views
 
                 _categoryBUS.ExecuteMethod("Remove",new { id = p.ID });
                 loadCategory();
+                server.SendMessage("Category deleted: " + p.CatName);
+                this.CategoryViewModel.SomeBusinessLogic(2);
 
             }
         }
