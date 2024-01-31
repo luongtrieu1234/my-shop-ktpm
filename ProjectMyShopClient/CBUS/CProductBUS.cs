@@ -9,21 +9,25 @@ namespace ProjectMyShopClient.CBUS
     {
         public CProductBUS()
         {
-            this.ID = CObjectManager.CreateRemoteObject("SProductBUS");
+            ID = CObjectManager.CreateRemoteObject("SProductBUS");
         }
 
         public int GetTotalProduct()
         {
-            return this.ExecuteMethod("getTotalProduct", null);
+            dynamic data = this.ExecuteMethod("GetTotalProduct", null);
+            int rs = (int)data;
+            return rs;
         }
         public List<Product> GetTop5OutStock()
         {
-            return this.ExecuteMethod("GetTop5OutStock", null);
+            dynamic datas = this.ExecuteMethod("GetTop5OutStock", null);
+            List<Product> rs = ConvertJArrayToList<Product>(datas);
+            return rs;
         }
 
         public List<Product> getProductsAccordingToSpecificCategory(int srcCategoryID)
         {
-            dynamic datas= this.ExecuteMethod("getProductsAccordingToSpecificCategory", new { srcCategoryID = srcCategoryID });
+            dynamic datas= this.ExecuteMethod("getProductsAccordingToSpecificCategory", new {  srcCategoryID });
             List<Product> products = ConvertJArrayToList<Product>(datas);
             return products;
         }
@@ -31,6 +35,7 @@ namespace ProjectMyShopClient.CBUS
         public void Add(Data data)
         {
             Product product = (Product)data;
+            product.Avatar = null;
             if (product.Stock < 0)
             {
                 throw new Exception("Invalid stock");
@@ -52,6 +57,7 @@ namespace ProjectMyShopClient.CBUS
         public void Update(int ID, Data data)
         {
             Product product = (Product)data;
+            product.Avatar = null;
             Debug.WriteLine(product.Stock);
             if (product.Stock < 0)
             {
@@ -69,24 +75,31 @@ namespace ProjectMyShopClient.CBUS
 
         public List<BestSellingProduct> getBestSellingProductsInWeek(DateTime src)
         {
-            //return this.ExecuteMethod("getBestSellingProductsInWeek", new { src = src });
-            return new List<BestSellingProduct>();
+            dynamic datas = this.ExecuteMethod("getBestSellingProductsInWeek", new { src });
+            List<BestSellingProduct> rs = ConvertJArrayToList<BestSellingProduct>(datas);
+            return rs;
+
         }
 
         public List<BestSellingProduct> getBestSellingProductsInMonth(DateTime src)
         {
-            //return this.ExecuteMethod("getBestSellingProductsInMonth", new { src = src });
-            return new List<BestSellingProduct>();
+            dynamic datas = this.ExecuteMethod("getBestSellingProductsInMonth", new { src });
+            List<BestSellingProduct> rs = ConvertJArrayToList<BestSellingProduct>(datas);
+            return rs;
         }
 
         public List<BestSellingProduct> getBestSellingProductsInYear(DateTime src)
         {
-            //return this.ExecuteMethod("getBestSellingProductsInYear", new { src = src });
-            return new List<BestSellingProduct>();
+            dynamic datas = this.ExecuteMethod("getBestSellingProductsInYear", new { src });
+            List<BestSellingProduct> rs = ConvertJArrayToList<BestSellingProduct>(datas);
+            return rs;
         }
-        public Data GetByID(int ProductID)
+        public Product GetByID(int ProductID)
         {
-            return this.ExecuteMethod("GetByID", new { productID = ProductID });
+
+            dynamic data = this.ExecuteMethod("GetByID", new { productID = ProductID });
+            Product rs = (Product)data;
+            return rs;
         }
     }
 }

@@ -35,6 +35,7 @@ namespace ProjectMyShopClient.CBUS
         }
         public void Add(Category cat)
         {
+            cat.Avatar = null;
             this.ExecuteMethod("Add", new {data=cat});
         }
 
@@ -45,6 +46,7 @@ namespace ProjectMyShopClient.CBUS
 
         public void Update(int id, Category cat)
         {
+            cat.Avatar = null;
             this.ExecuteMethod("Update", new { id, data= cat });
         }
     }

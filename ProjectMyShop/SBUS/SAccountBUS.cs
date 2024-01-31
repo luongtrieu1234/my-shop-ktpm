@@ -20,7 +20,7 @@ namespace ProjectMyShop.SBUS
                 case "Clone":
                     return Clone();
                 case "validate":
-                    return validate(inputParams.username, inputParams.password);
+                    return validate((string)inputParams.username,(string) inputParams.password);
                 default:
                     return false;
             }

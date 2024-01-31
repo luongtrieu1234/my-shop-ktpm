@@ -1,4 +1,5 @@
-﻿using ProjectMyShop.DTO;
+﻿using Newtonsoft.Json.Linq;
+using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Diagnostics;
 
 namespace ProjectMyShop.SBUS
 {
-    internal class SProductBUS:SBUS
+    internal class SProductBUS : SBUS
     {
         private SProductDAO _productDAO;
 
@@ -47,13 +48,13 @@ namespace ProjectMyShop.SBUS
             else
             {
                 product.UploadDate = DateTime.Now.Date;
-                _productDAO.ExecuteMethod("Add", new { data = product });
+                _productDAO.Add(product);
                 product.ID = _productDAO.GetLastestInsertID();
             }
         }
         public override void Remove(int ID)
         {
-            _productDAO.ExecuteMethod("Remove", new { productid = ID });
+            _productDAO.Remove(ID);
         }
         public override void Update(int ID, Data data)
         {
@@ -69,27 +70,27 @@ namespace ProjectMyShop.SBUS
             }
             else
             {
-                _productDAO.ExecuteMethod("Update", new { id = ID, data = product });
+                _productDAO.Update(ID, product);
             }
         }
 
         public List<BestSellingProduct> getBestSellingProductsInWeek(DateTime src)
         {
-            return _productDAO.ExecuteMethod("getBestSellingProductsInWeek", new { src = src });
+            return _productDAO.getBestSellingProductsInWeek(src);
         }
 
         public List<BestSellingProduct> getBestSellingProductsInMonth(DateTime src)
         {
-            return _productDAO.ExecuteMethod("getBestSellingProductsInMonth", new { src = src });
+            return _productDAO.getBestSellingProductsInMonth(src);
         }
 
         public List<BestSellingProduct> getBestSellingProductsInYear(DateTime src)
         {
-            return _productDAO.ExecuteMethod("getBestSellingProductsInYear", new { src = src });
+            return _productDAO.getBestSellingProductsInYear(src);
         }
         public override Data GetByID(int ProductID)
         {
-            return _productDAO.ExecuteMethod("GetByID", new { productID = ProductID });
+            return _productDAO.GetByID(ProductID);
         }
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
         {
@@ -103,21 +104,22 @@ namespace ProjectMyShop.SBUS
                     return Clone();
                 case "GetByID":
                     Debug.WriteLine("GetByID Product called");
-                    return GetByID(inputParams.productID);
+                    return GetByID((int)inputParams.productID);
                 case "Add":
                     Debug.WriteLine("Add Product called");
-                    Add(inputParams.data);
+                    Add(((JObject)inputParams.data).ToObject<Product>());
                     return true;
                 case "Update":
                     Debug.WriteLine("Update Product called");
-                    Update(inputParams.id, inputParams.data);
+                    Update((int)inputParams.id, ((JObject)inputParams.data).ToObject<Product>());
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Product called");
-                    return Remove(inputParams.productid);
+                    Remove((int)inputParams.productid);
+                    return true;
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Product called");
-                    return GetObjects(inputParams.offset, inputParams.size);
+                    return GetObjects((int)inputParams.offset, (int)inputParams.size);
                 case "GetTotalProduct":
                     Debug.WriteLine("GetTotalProduct Product called");
                     return GetTotalProduct();
@@ -129,13 +131,13 @@ namespace ProjectMyShop.SBUS
                     return getProductsAccordingToSpecificCategory((int)inputParams.srcCategoryID);
                 case "getBestSellingProductsInWeek":
                     Debug.WriteLine("getBestSellingProductsInWeek Product called");
-                    return getBestSellingProductsInWeek(inputParams.src);
+                    return getBestSellingProductsInWeek((DateTime)inputParams.src);
                 case "getBestSellingProductsInMonth":
                     Debug.WriteLine("getBestSellingProductsInMonth Product called");
-                    return getBestSellingProductsInMonth(inputParams.src);
+                    return getBestSellingProductsInMonth((DateTime)inputParams.src);
                 case "getBestSellingProductsInYear":
                     Debug.WriteLine("getBestSellingProductsInYear Product called");
-                    return getBestSellingProductsInYear(inputParams.src);
+                    return getBestSellingProductsInYear((DateTime)inputParams.src);
             }
             return false;
         }

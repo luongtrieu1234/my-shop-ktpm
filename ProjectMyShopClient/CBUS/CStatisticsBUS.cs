@@ -15,31 +15,31 @@ namespace ProjectMyShopClient.CBUS
         }
         public string getTotalRevenueUntilDate(DateTime src)
         {
-            //dynamic data = this.ExecuteMethod("getTotalRevenueUntilDate", new { src = src });
-            //string rs = (string)data;
-            //return rs;
-            return "0";
+            dynamic data = this.ExecuteMethod("getTotalRevenueUntilDate", new { src });
+            string rs = (string)data;
+            return rs;
+            //return "0";
         }
 
         public string getTotalProfitUntilDate(DateTime src)
         {
-            //dynamic data = this.ExecuteMethod("getTotalProfitUntilDate", new { src = src });
-            //string rs = (string)data;
-            //return rs;
-            return "0";
+            dynamic data = this.ExecuteMethod("getTotalProfitUntilDate", new {  src });
+            string rs = (string)data;
+            return rs;
+            //return "0";
         }
 
         public int getTotalOrdersUntilDate(DateTime src)
         {
-            //dynamic data = this.ExecuteMethod("getTotalOrdersUntilDate", new { src = src });
-            //int rs = (int)data;
-            //return rs;
-            return 0;
+            dynamic data = this.ExecuteMethod("getTotalOrdersUntilDate", new { src });
+            int rs = (int)data;
+            return rs;
+            //return 0;
         }
 
         public List<Tuple<string, decimal>> getDailyRevenue(DateTime src)
         {
-            //dynamic data =  this.ExecuteMethod("getDailyRevenue", new { src = src });
+            //dynamic data =  this.ExecuteMethod("getDailyRevenue", new { src });
             return new List<Tuple<string, decimal>>();
         }
 

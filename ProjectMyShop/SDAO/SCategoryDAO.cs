@@ -65,29 +65,11 @@ namespace ProjectMyShop.SDAO
 
             Category? result = null;
 
-            //if (reader.Read()) // ORM - Object relational mapping
-            //{
-            //    var catId = (int)reader["ID"];
-            //    var catName = (string)reader["category_name"];
-
-            //    result = new Category()
-            //    {
-            //        ID = catId,
-            //        CatName = catName,
-            //    };
-            //}
-
-            //reader.Close();
-            //return result;
-
             var dataTable = new DataTable();
             dataTable.Load(reader);
             var resultList = DataMappingHelper.MappingDataTableToObjectList<Category>(dataTable);
 
-            // Since it's a single record, get the first item from the list
             result = resultList.FirstOrDefault();
-            //Debug.WriteLine("result " + result.ToString());
-            //}
 
             reader.Close();
             return result;
@@ -100,48 +82,10 @@ namespace ProjectMyShop.SDAO
             var command = new SqlCommand(sql, _connection);
 
             var reader = command.ExecuteReader();
-
-            //var resultList = new List<Category>();
-            //while (reader.Read())
-            //{
-            //    Category category = new Category()
-            //    {
-            //        ID = (int)reader["ID"],
-            //        CatName = (string)reader["CatName"],
-            //    };
-
-
-            //    byte[] byteAvatar = new byte[5];
-            //    if (reader["Avatar"] != System.DBNull.Value)
-            //    {
-
-            //        byteAvatar = (byte[])reader["Avatar"];
-
-            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
-            //        {
-            //            var image = new BitmapImage();
-            //            image.BeginInit();
-            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            //            image.CacheOption = BitmapCacheOption.OnLoad;
-            //            image.UriSource = null;
-            //            image.StreamSource = ms;
-            //            image.EndInit();
-            //            image.Freeze();
-            //            category.Avatar = image;
-            //        }
-            //    }
-
-            //    resultList.Add(category);
-            //}
-            //reader.Close();
-            //return new List<Data>(resultList);
-
             var dataTable = new DataTable();
             dataTable.Load(reader);
             reader.Close();
             var resultList = DataMappingHelper.MappingDataTableToObjectList<Category>(dataTable);
-            //var categoryNames = resultList.Select(c => c.CatName).ToList();
-            //Debug.WriteLine("asdsadsada " + string.Join(", ", categoryNames));
 
             return new List<Data>(resultList);
         }

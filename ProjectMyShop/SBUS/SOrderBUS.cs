@@ -1,4 +1,5 @@
-﻿using ProjectMyShop.DTO;
+﻿using Newtonsoft.Json.Linq;
+using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
 using System;
 using System.Collections.Generic;
@@ -18,24 +19,38 @@ namespace ProjectMyShop.SBUS
                 _orderDAO.Connect();
             }
         }
+        public override void Add(Data data)
+        {
+            Order order = (Order)data;
+            _orderDAO.Add(order);
+            order.ID = _orderDAO.GetLastestInsertID();
+        }
+        public override void Update(int orderID, Data data)
+        {
+            _orderDAO.Update(orderID, data);
+        }
+        public override void Remove(int orderID)
+        {
+            if (orderID > -1)
+            {
+                _orderDAO.Remove(orderID);
+            }
+        }
         public override List<Data> GetAll()
         {
-            return _orderDAO.ExecuteMethod("GetAll", null);
-            //List<Data> datas = _orderDAO.ExecuteMethod("GetAll", null);
-            //List<Order> result = new List<Order>();
-            //foreach (Data data in datas)
-            //{
-            //    result.Add((Order)data);
-            //}
-            //return new List<Data>(result);
-        }
-        public List<Order> GetAllOrdersByDate(DateTime FromDate, DateTime ToDate)
-        {
-            return _orderDAO.ExecuteMethod("GetAllOrdersByDate", new { fromDate = FromDate , toDate = ToDate });
+
+            List<Data> datas = _orderDAO.GetAll();
+            return datas;
         }
         public override List<Data> GetObjects(int offset, int size)
         {
-            return _orderDAO.ExecuteMethod("GetObjects", new { offset = offset, size = size });
+            List<Data> datas = _orderDAO.GetObjects(offset,  size );
+            return datas;
+        }
+        public List<Order> GetAllOrdersByDate(DateTime FromDate, DateTime ToDate)
+        {
+            List<Order> datas = _orderDAO.GetAllOrdersByDate(FromDate , ToDate );
+            return datas;
         }
 
         public static string StatusOpen = "Open";
@@ -53,48 +68,32 @@ namespace ProjectMyShop.SBUS
             }
         }
 
-        public override void Add(Data data)
-        {
-            Order order = (Order)data;
-            _orderDAO.ExecuteMethod("Add", new { data = order });
-            order.ID = _orderDAO.ExecuteMethod("GetLastestInsertID", null);
-        }
-        public override void Update(int orderID, Data data)
-        {
-            Order order = (Order)data;
-            _orderDAO.ExecuteMethod("Update", new { ID = orderID, data = order });
-        }
-        public override void Remove(int orderID)
-        {
-            if (orderID > -1)
-            {
-                _orderDAO.ExecuteMethod("Remove", new { ID = orderID });
-            }
-        }
+        
 
         public int CountOrders()
         {
-            return _orderDAO.ExecuteMethod("CountOrders", null);
+            int rs = _orderDAO.CountOrders();
+            return rs;
         }
         public int CountOrderByWeek()
         {
-            return _orderDAO.ExecuteMethod("CountOrderByWeek", null);
+            return _orderDAO.CountOrderByWeek();
         }
         public int CountOrderByMonth()
         {
-            return _orderDAO.ExecuteMethod("CountOrderByMonth", null);
+            return _orderDAO.CountOrderByMonth();
         }
 
         public void AddDetailOrder(DetailOrder detail)
         {
-            _orderDAO.ExecuteMethod("AddDetailOrder", new { detail = detail });
+            _orderDAO.AddDetailOrder(detail);
         }
 
         public void UpdateDetailOrder(int oldProductID, DetailOrder detail)
         {
             if(detail.Quantity >= 0)
             {
-                _orderDAO.ExecuteMethod("UpdateDetailOrder", new { oldProductID, detail });
+                _orderDAO.UpdateDetailOrder( oldProductID, detail);
             }
             else
             {
@@ -103,7 +102,7 @@ namespace ProjectMyShop.SBUS
         }
         public void DeleteDetailOrder(DetailOrder detail)
         {
-            _orderDAO.ExecuteMethod("DeleteDetailOrder", new { detail });
+            _orderDAO.DeleteDetailOrder(detail );
         }
 
         public override dynamic ExecuteMethod(string methodName, dynamic inputParams)
@@ -118,42 +117,43 @@ namespace ProjectMyShop.SBUS
                     return Clone();
                 case "GetByID":
                     Debug.WriteLine("GetByID Order called");
-                    return GetByID(inputParams.ID);
+                    return GetByID((int)inputParams.ID);
                 case "GetAll":
                     Debug.WriteLine("GetAll Order called");
                     return GetAll();
                 case "Add":
                     Debug.WriteLine("Add Order called");
-                    Add(inputParams.data);
+                    Add(((JObject)inputParams.data).ToObject<Order>());
                     return true;
                 case "Update":
                     Debug.WriteLine("Update Order called");
-                    Update(inputParams.ID, inputParams.data);
+                    Update((int)inputParams.ID, ((JObject)inputParams.data).ToObject<Order>());
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Order called");
-                    return Remove(inputParams.ID);
+                    Remove((int)inputParams.ID);
+                    return true;
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Order called");
-                    return GetObjects(inputParams.offset, inputParams.size);
+                    return GetObjects((int)inputParams.offset, (int)inputParams.size);
                 case "AddDetailOrder":
                     Debug.WriteLine("AddDetailOrder Order called");
-                    AddDetailOrder(inputParams.detail);
+                    AddDetailOrder(((JObject)inputParams.detail).ToObject<DetailOrder>());
                     return true;
                 case "UpdateDetailOrder":
                     Debug.WriteLine("UpdateDetailOrder Order called");
-                    UpdateDetailOrder(inputParams.oldProductID, inputParams.detail);
+                    UpdateDetailOrder((int)inputParams.oldProductID, ((JObject)inputParams.detail).ToObject<DetailOrder>());
                     return true;
                 case "DeleteDetailOrder":
                     Debug.WriteLine("DeleteDetailOrder Order called");
-                    DeleteDetailOrder(inputParams.detail);
+                    DeleteDetailOrder(((JObject)inputParams.detail).ToObject<DetailOrder>());
                     return true;
                 case "GetAllOrdersByDate":
                     Debug.WriteLine("GetAllOrdersByDate Order called");
-                    return GetAllOrdersByDate(inputParams.fromDate, inputParams.toDate);
+                    return GetAllOrdersByDate((DateTime)inputParams.fromDate, (DateTime)inputParams.toDate);
                 case "GetStatus":
                     Debug.WriteLine("GetStatus Order called");
-                    return GetStatus(inputParams.status);
+                    return GetStatus((int)inputParams.status);
                 case "CountOrders":
                     Debug.WriteLine("CountOrders Order called");
                     return CountOrders();

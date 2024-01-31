@@ -31,57 +31,11 @@ namespace ProjectMyShop.SDAO
             var reader = command.ExecuteReader();
 
             Product? product = null;
-            //if (reader.Read())
-            //{
-            //    var ID = (int)reader["ID"];
-            //    var ProductName = (String)reader["ProductName"];
-            //    var Manufacturer = (String)reader["Manufacturer"];
-
-            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
-            //    //var SoldPrice = (int)reader["SoldPrice"];
-            //    var Stock = (int)reader["Stock"];
-
-            //    product = new Product()
-            //    {
-            //        ID = ID,
-            //        ProductName = ProductName,
-            //        Manufacturer = Manufacturer,
-            //        SoldPrice = SoldPrice,
-            //        Stock = Stock,
-            //    };
-
-            //    byte[] byteAvatar = new byte[5];
-            //    if (reader["Avatar"] != System.DBNull.Value)
-            //    {
-
-            //        byteAvatar = (byte[])reader["Avatar"];
-
-            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
-            //        {
-            //            var image = new BitmapImage();
-            //            image.BeginInit();
-            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            //            image.CacheOption = BitmapCacheOption.OnLoad;
-            //            image.UriSource = null;
-            //            image.StreamSource = ms;
-            //            image.EndInit();
-            //            image.Freeze();
-            //            product.Avatar = image;
-            //        }
-            //    }
-            //}
-            //reader.Close();
-            //return product;
-
+            
             var dataTable = new DataTable();
             dataTable.Load(reader);
 
-            // Use the helper to convert DataTable to List<Product>
             var productList = DataMappingHelper.MappingDataTableToObjectList<Product>(dataTable);
-            //var categoryNames = productList.Select(c => c.ProductName).ToList();
-            //Debug.WriteLine("asdsadsada " + string.Join(", ", categoryNames));
-
-            // Since it's a single record, get the first item from the list
             product = productList.FirstOrDefault();
             reader.Close();
             return product;
@@ -211,38 +165,11 @@ namespace ProjectMyShop.SDAO
             var command = new SqlCommand(sql, _connection);
             var reader = command.ExecuteReader();
 
-            //List<Product> list = new List<Product>();
-            //while (reader.Read())
-            //{
-            //    var ID = (int)reader["ID"];
-            //    var ProductName = (String)reader["ProductName"];
-            //    var Manufacturer = (String)reader["Manufacturer"];
-
-            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
-            //    //var SoldPrice = (int)reader["SoldPrice"];
-            //    var Stock = (int)reader["Stock"];
-
-            //    Product product = new Product()
-            //    {
-            //        ID = ID,
-            //        ProductName = ProductName,
-            //        Manufacturer = Manufacturer,
-            //        SoldPrice = SoldPrice,
-            //        Stock = Stock,
-            //    };
-            //    if (product.ProductName != "")
-            //        list.Add(product);
-            //}
-            //reader.Close();
-            //return list;
-
             var dataTable = new DataTable();
             dataTable.Load(reader);
 
-            // Use the helper to convert DataTable to List<Product>
             var productList = DataMappingHelper.MappingDataTableToObjectList<Product>(dataTable);
 
-            // Filter out products with an empty product name
             var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
 
             reader.Close();
@@ -261,58 +188,11 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            //List<Product> list = new List<Product>();
-            //while (reader.Read())
-            //{
-            //    var ID = (int)reader["ID"];
-            //    var ProductName = (String)reader["ProductName"];
-            //    var Manufacturer = (String)reader["Manufacturer"];
-
-            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
-            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-            //    var Description = (String)reader["Description"];
-            //    //var SoldPrice = (int)reader["SoldPrice"];
-            //    var Stock = (int)reader["Stock"];
-
-            //    Product product = new Product()
-            //    {
-            //        ID = ID,
-            //        ProductName = ProductName,
-            //        Manufacturer = Manufacturer,
-            //        SoldPrice = SoldPrice,
-            //        Stock = Stock,
-            //        BoughtPrice = BoughtPrice,
-            //        Description = Description
-            //    };
-            //    if(!reader["Avatar"].Equals(DBNull.Value))
-            //    {
-            //        var byteAvatar = (byte[])reader["Avatar"];
-            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
-            //        {
-            //            var image = new BitmapImage();
-            //            image.BeginInit();
-            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            //            image.CacheOption = BitmapCacheOption.OnLoad;
-            //            image.UriSource = null;
-            //            image.StreamSource = ms;
-            //            image.EndInit();
-            //            image.Freeze();
-            //            product.Avatar = image;
-            //        }
-            //    }
-            //    if (product.ProductName != "")
-            //        list.Add(product);
-            //}
-            //reader.Close();
-            //return list;
-
             var dataTable = new DataTable();
             dataTable.Load(reader);
 
-            // Use the helper to convert DataTable to List<Product>
             var productList = DataMappingHelper.MappingDataTableToObjectList<Product>(dataTable);
 
-            // Filter out products with an empty product name
             var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
 
             reader.Close();
@@ -341,52 +221,6 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            //List<BestSellingProduct> list = new List<BestSellingProduct>();
-            //while (reader.Read())
-            //{
-            //    var ID = (int)reader["ID"];
-            //    var ProductName = (String)reader["ProductName"];
-            //    var Manufacturer = (String)reader["Manufacturer"];
-
-            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
-            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-            //    var Description = (String)reader["Description"];
-            //    var Stock = (int)reader["Stock"];
-            //    var Quantity = (int)reader["Quantity"];
-
-            //    BestSellingProduct product = new BestSellingProduct()
-            //    {
-            //        ID = ID,
-            //        ProductName = ProductName,
-            //        Manufacturer = Manufacturer,
-            //        SoldPrice = SoldPrice,
-            //        Stock = Stock,
-            //        BoughtPrice = BoughtPrice,
-            //        Description = Description,
-            //        Quantity = Quantity
-            //    };
-            //    if (!reader["Avatar"].Equals(DBNull.Value))
-            //    {
-            //        var byteAvatar = (byte[])reader["Avatar"];
-            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
-            //        {
-            //            var image = new BitmapImage();
-            //            image.BeginInit();
-            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            //            image.CacheOption = BitmapCacheOption.OnLoad;
-            //            image.UriSource = null;
-            //            image.StreamSource = ms;
-            //            image.EndInit();
-            //            image.Freeze();
-            //            product.Avatar = image;
-            //        }
-            //    }
-            //    if (product.ProductName != "")
-            //        list.Add(product);
-            //}
-            //reader.Close();
-            //return list;
-
             var dataTable = new DataTable();
             dataTable.Load(reader);
 
@@ -413,52 +247,6 @@ namespace ProjectMyShop.SDAO
             command.Parameters.Add(sqlParameter);
 
             var reader = command.ExecuteReader();
-
-            //List<BestSellingProduct> list = new List<BestSellingProduct>();
-
-            //while (reader.Read())
-            //{
-            //    var ID = (int)reader["ID"];
-            //    var ProductName = (String)reader["ProductName"];
-            //    var Manufacturer = (String)reader["Manufacturer"];
-            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
-            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-            //    var Description = (String)reader["Description"];
-            //    var Stock = (int)reader["Stock"];
-            //    var Quantity = (int)reader["Quantity"];
-
-            //    BestSellingProduct product = new BestSellingProduct()
-            //    {
-            //        ID = ID,
-            //        ProductName = ProductName,
-            //        Manufacturer = Manufacturer,
-            //        SoldPrice = SoldPrice,
-            //        Stock = Stock,
-            //        BoughtPrice = BoughtPrice,
-            //        Description = Description,
-            //        Quantity = Quantity
-            //    };
-            //    if (!reader["Avatar"].Equals(DBNull.Value))
-            //    {
-            //        var byteAvatar = (byte[])reader["Avatar"];
-            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
-            //        {
-            //            var image = new BitmapImage();
-            //            image.BeginInit();
-            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            //            image.CacheOption = BitmapCacheOption.OnLoad;
-            //            image.UriSource = null;
-            //            image.StreamSource = ms;
-            //            image.EndInit();
-            //            image.Freeze();
-            //            product.Avatar = image;
-            //        }
-            //    }
-            //    if (product.ProductName != "")
-            //        list.Add(product);
-            //}
-            //reader.Close();
-            //return list;
 
             var dataTable = new DataTable();
             dataTable.Load(reader);
@@ -487,58 +275,11 @@ namespace ProjectMyShop.SDAO
 
             var reader = command.ExecuteReader();
 
-            //List<BestSellingProduct> list = new List<BestSellingProduct>();
-            //while (reader.Read())
-            //{
-            //    var ID = (int)reader["ID"];
-            //    var ProductName = (String)reader["ProductName"];
-            //    var Manufacturer = (String)reader["Manufacturer"];
-            //    var SoldPrice = (int)(decimal)reader["SoldPrice"];
-            //    var BoughtPrice = (int)(decimal)reader["BoughtPrice"];
-            //    var Description = (String)reader["Description"];
-            //    var Stock = (int)reader["Stock"];
-            //    var Quantity = (int)reader["Quantity"];
-
-            //    BestSellingProduct product = new BestSellingProduct()
-            //    {
-            //        ID = ID,
-            //        ProductName = ProductName,
-            //        Manufacturer = Manufacturer,
-            //        SoldPrice = SoldPrice,
-            //        Stock = Stock,
-            //        BoughtPrice = BoughtPrice,
-            //        Description = Description,
-            //        Quantity = Quantity
-            //    };
-            //    if (!reader["Avatar"].Equals(DBNull.Value))
-            //    {
-            //        var byteAvatar = (byte[])reader["Avatar"];
-            //        using (MemoryStream ms = new MemoryStream(byteAvatar))
-            //        {
-            //            var image = new BitmapImage();
-            //            image.BeginInit();
-            //            image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-            //            image.CacheOption = BitmapCacheOption.OnLoad;
-            //            image.UriSource = null;
-            //            image.StreamSource = ms;
-            //            image.EndInit();
-            //            image.Freeze();
-            //            product.Avatar = image;
-            //        }
-            //    }
-            //    if (product.ProductName != "")
-            //        list.Add(product);
-            //}
-            //reader.Close();
-            //return list;
-
             var dataTable = new DataTable();
             dataTable.Load(reader);
 
-            // Use the helper to convert DataTable to List<BestSellingProduct>
             var productList = DataMappingHelper.MappingDataTableToObjectList<BestSellingProduct>(dataTable);
 
-            // Filter out products with an empty product name
             var filteredList = productList.Where(p => !string.IsNullOrEmpty(p.ProductName)).ToList();
 
             reader.Close();
@@ -567,7 +308,8 @@ namespace ProjectMyShop.SDAO
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Product called");
-                    return Remove(inputParams.productid);
+                    Remove(inputParams.productid);
+                    return true;
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Product called");
                     return GetObjects(inputParams.offset, inputParams.size);

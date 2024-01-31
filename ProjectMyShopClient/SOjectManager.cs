@@ -102,8 +102,12 @@ namespace ProjectMyShopClient
             master.Send(p.ToBytes());
             for (; ; )
             {
-                if (data != null)
+                if (data != null )
                 {
+                    //if(data is bool && methodName.Contains("get")) {
+                    //    data = null;
+                    //    continue;
+                    //}
                     dynamic data2 = data;
                     data = null;
                     return data2;

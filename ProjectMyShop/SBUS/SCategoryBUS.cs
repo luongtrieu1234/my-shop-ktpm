@@ -1,4 +1,5 @@
-﻿using ProjectMyShop.DTO;
+﻿using Newtonsoft.Json.Linq;
+using ProjectMyShop.DTO;
 using ProjectMyShop.SDAO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,17 +27,17 @@ namespace ProjectMyShop.SBUS
                 case "Clone":
                     return Clone();
                 case "GetByID":
-                    return GetByID(inputParams.id);
+                    return GetByID((int)inputParams.id);
                 case "GetAll":
                     return GetAll();
                 case "Add":
-                    Add(inputParams.data);
+                    Add(((JObject)inputParams.data).ToObject<Category>());
                     return true;
                 case "Remove":
-                    Remove(inputParams.id); 
+                    Remove((int)inputParams.id); 
                     return true;
                 case "Update":
-                    Update(inputParams.id, inputParams.data);
+                    Update((int)inputParams.id,((JObject)inputParams.data).ToObject<Category>());
                     return true;
                 default:
                     return false;
@@ -54,20 +55,14 @@ namespace ProjectMyShop.SBUS
 
         public override Data GetByID(int id)
         {
-            Category result = _categoryDAO.ExecuteMethod("GetByID", new { ID = id });
-            return result;
+            Data data= _categoryDAO.GetByID(id);
+            return data;
         }
 
         public override List<Data> GetAll()
         {
-            Debug.WriteLine("getCategoryList:");
-            List<Data> datas = _categoryDAO.ExecuteMethod("GetAll", null);
-            List<Category> result = new List<Category>();
-            foreach (Data data in datas)
-            {
-                result.Add((Category)data);
-            }
-            return new List<Data>(result);
+            List<Data> datas = _categoryDAO.GetAll();
+            return datas;
         }
         public override void Add(Data data)
         {
@@ -93,8 +88,7 @@ namespace ProjectMyShop.SBUS
 
         public override void Update(int id, Data data)
         {
-            Category category = (Category)data;
-            _categoryDAO.ExecuteMethod("Update", new { id = id, data = category });
+            _categoryDAO.Update(id, data);
         }
     }
 }

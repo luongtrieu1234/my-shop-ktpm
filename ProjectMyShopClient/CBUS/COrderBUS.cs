@@ -13,20 +13,20 @@ namespace ProjectMyShopClient.CBUS
         }
         public List<Order> GetAll()
         {
-            List<Data> datas = this.ExecuteMethod("GetAll", null);
-            List<Order> rs = CObject.ConvertData<Order>(datas);
+            dynamic datas = this.ExecuteMethod("GetAll", null);
+            List<Order> rs = ConvertJArrayToList<Order>(datas);
             return rs;
         }
         public List<Order> GetAllOrdersByDate(DateTime FromDate, DateTime ToDate)
         {
-            List<Data> datas = this.ExecuteMethod("GetAllOrdersByDate", new { fromDate = FromDate, toDate = ToDate });
-            List<Order> rs = CObject.ConvertData<Order>(datas);
+            dynamic datas = this.ExecuteMethod("GetAllOrdersByDate", new { fromDate = FromDate, toDate = ToDate });
+            List<Order> rs = ConvertJArrayToList<Order>(datas);
             return rs;
         }
         public List<Order> GetObjects(int offset, int size)
         {
-            List<Data> datas = this.ExecuteMethod("GetObjects", new { offset = offset, size = size });
-            List<Order> rs = CObject.ConvertData<Order>(datas);
+            dynamic datas = this.ExecuteMethod("GetObjects", new { offset,size });
+            List<Order> rs = ConvertJArrayToList<Order>(datas);
             return rs;
         }
 
@@ -47,10 +47,17 @@ namespace ProjectMyShopClient.CBUS
 
         public void Add(Order data)
         {
+            foreach(DetailOrder detailOrder in data.DetailOrderList) {
+                detailOrder.Product.Avatar = null;
+            }
             this.ExecuteMethod("Add", new { data });
         }
         public void Update(int orderID, Order data)
         {
+            foreach (DetailOrder detailOrder in data.DetailOrderList)
+            {
+                detailOrder.Product.Avatar = null;
+            }
             this.ExecuteMethod("Update", new { ID = orderID, data });
         }
         public void Remove(int orderID)
@@ -63,24 +70,32 @@ namespace ProjectMyShopClient.CBUS
 
         public int CountOrders()
         {
-            return this.ExecuteMethod("CountOrders", null);
+            dynamic data= this.ExecuteMethod("CountOrders", null);
+            int rs = (int)data;
+            return rs;
         }
         public int CountOrderByWeek()
         {
-            return this.ExecuteMethod("CountOrderByWeek", null);
+            dynamic data = this.ExecuteMethod("CountOrderByWeek", null);
+            int rs = (int)data;
+            return rs;
         }
         public int CountOrderByMonth()
         {
-            return this.ExecuteMethod("CountOrderByMonth", null);
+            dynamic data = this.ExecuteMethod("CountOrderByMonth", null);
+            int rs = (int)data;
+            return rs;
         }
 
         public void AddDetailOrder(DetailOrder detail)
         {
+            detail.Product.Avatar = null;
             this.ExecuteMethod("AddDetailOrder", new { detail });
         }
 
         public void UpdateDetailOrder(int oldProductID, DetailOrder detail)
         {
+            detail.Product.Avatar = null;
             if (detail.Quantity >= 0)
             {
                 this.ExecuteMethod("UpdateDetailOrder", new { oldProductID, detail });
@@ -92,6 +107,7 @@ namespace ProjectMyShopClient.CBUS
         }
         public void DeleteDetailOrder(DetailOrder detail)
         {
+            detail.Product.Avatar = null;
             this.ExecuteMethod("DeleteDetailOrder", new { detail });
         }
     }

@@ -99,12 +99,12 @@ namespace ProjectMyShopClient.Views
 
         private void timeCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            configureBestSellingProductsDataGrid();
+            //configureBestSellingProductsDataGrid();
         }
 
         private void statisticsDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            configureBestSellingProductsDataGrid();
+            //configureBestSellingProductsDataGrid();
         }
     }
 }

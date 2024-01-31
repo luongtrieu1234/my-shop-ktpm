@@ -94,7 +94,7 @@ namespace ProjectMyShop.SDAO
                 "Order by OrderDate DESC, ID ASC ";
 
             var command = new SqlCommand(sql, _connection);
-            return new List<Data>(Select(command));
+            return new List<Data>(Select(command));//chua
         }
         public override List<Data> GetObjects(int offset, int size)
         {
@@ -108,7 +108,7 @@ namespace ProjectMyShop.SDAO
             command.Parameters.AddWithValue("@Off", offset);
             command.Parameters.AddWithValue("@Size", size);
 
-            return new List<Data>(Select(command));
+            return new List<Data>(Select(command));//chua
         }
         public void AddDetailOrder(DetailOrder detail)
         {
@@ -178,30 +178,7 @@ namespace ProjectMyShop.SDAO
             
             var reader = command.ExecuteReader();
 
-            //var result = new List<DetailOrder>();
-
-            //var _productBUS = new SProductBUS();
-            //while (reader.Read())
-            //{
-            //    var OrderID = reader.GetInt32("OrderID");
-            //    var ProductID = reader.GetInt32("ProductID");
-            //    var Quantity = reader.GetInt32("Quantity");
-
-            //    var Product = _productBUS.getProductByID(ProductID);
-
-            //    DetailOrder _order = new DetailOrder()
-            //    {
-            //        OrderID = OrderID,
-            //        Product = Product,
-            //        Quantity = Quantity
-            //    };
-
-            //    result.Add(_order);
-            //}
-
-            //reader.Close();
-            //return result;
-
+            
             var dataTable = new DataTable();
             dataTable.Load(reader);
             Debug.WriteLine("reader datatable ");
@@ -217,8 +194,6 @@ namespace ProjectMyShop.SDAO
 
             // Use the helper to convert DataTable to List<DetailOrder>
             var result = DataMappingHelper.MappingDataTableToObjectList<DetailOrder>(dataTable);
-            //var categoryNames = result.Select(c => c.ProductID).ToList();
-            //Debug.WriteLine("asdsadsada " + string.Join(", ", categoryNames));
 
             var _productBUS = new SProductBUS();
             foreach (var detailOrder in result)
@@ -227,7 +202,6 @@ namespace ProjectMyShop.SDAO
                 var productID = detailOrder.ProductID;
                 var product = _productBUS.GetByID(productID);
                 detailOrder.Product = (Product)product;
-                //Debug.WriteLine(product.GetType());
             }
 
             return result;

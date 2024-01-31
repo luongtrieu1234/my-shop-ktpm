@@ -48,15 +48,15 @@ namespace ProjectMyShop.SBUS
                 case "getYearlyProfit":
                     return getYearlyProfit();
                 case "getDailyQuantityOfSpecificProduct":
-                    return getDailyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
+                    return getDailyQuantityOfSpecificProduct((int)inputParams.srcProductID, (int) inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
                 case "getWeeklyQuantityOfSpecificProduct":
-                    return getWeeklyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
+                    return getWeeklyQuantityOfSpecificProduct((int)inputParams.srcProductID, (int)inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
                 case "getMonthlyQuantityOfSpecificProduct":
-                    return getMonthlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
+                    return getMonthlyQuantityOfSpecificProduct((int)inputParams.srcProductID, (int)inputParams.srcCategoryID, (DateTime) inputParams.srcDate);
                 case "getYearlyQuantityOfSpecificProduct":
-                    return getYearlyQuantityOfSpecificProduct(inputParams.srcProductID, inputParams.srcCategoryID);
+                    return getYearlyQuantityOfSpecificProduct((int)inputParams.srcProductID, (int)inputParams.srcCategoryID);
                 case "getProductQuantityInCategory":
-                    return getProductQuantityInCategory(inputParams.srcCategoryID);
+                    return getProductQuantityInCategory((int)inputParams.srcCategoryID);
                 default:
                     return false;
             }
