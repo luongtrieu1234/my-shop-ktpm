@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="MainWindow" Height="650" Width="1100"
+        Title="MainWindow" Height="300" Width="500"
         Loaded="Window_Loaded">
     <Grid x:Name="layoutContainer" Background="#F5F5F5">
         <!--<Grid.ColumnDefinitions>
@@ -60,6 +60,6 @@
         --><!--Content page--><!--
         <Frame Name="pageNavigation" 
                NavigationUIVisibility="Hidden" Margin="10,10,10,10" Grid.Row="2" Grid.ColumnSpan="3"/>-->
-        <TextBlock>abc</TextBlock>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50">Server</TextBlock>
     </Grid>
 </Window>
