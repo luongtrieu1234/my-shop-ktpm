@@ -382,7 +382,8 @@ namespace ProjectMyShop.SDAO
                     return true;
                 case "Remove":
                     Debug.WriteLine("Remove Order called");
-                    return Remove(inputParams.ID);
+                    Remove(inputParams.ID);
+                    return true;
                 case "GetObjects":
                     Debug.WriteLine("GetObjects Order called");
                     return GetObjects(inputParams.offset, inputParams.size);
